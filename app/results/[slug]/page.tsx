@@ -1,0 +1,97 @@
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getPrismaClient } from "@/lib/prisma";
+import ResultsClient from "./ResultsClient";
+
+interface Props {
+  params: { slug: string };
+}
+
+// Dynamic Open Graph metadata per audit
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  let savings = 0;
+  let company = "Your Company";
+
+  try {
+    const prisma = getPrismaClient();
+    const audit = await prisma.audit.findUnique({ where: { publicSlug: slug } });
+    if (audit) {
+      savings = audit.savings * 12; // annual
+      company = "Your AI Stack";
+    }
+  } catch {
+    // DB unavailable — use defaults
+  }
+
+  const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | Credex`;
+  const description = `See exactly where ${company} is overspending on AI tools and how to save $${savings.toLocaleString()} annually. Powered by Credex.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${slug}`,
+      siteName: "Credex AI Spend Audit",
+      type: "website",
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
+export default async function ResultsPage({ params }: Props) {
+  const { slug } = await params;
+
+  // Try to load from DB
+  try {
+    const prisma = getPrismaClient();
+    const audit = await prisma.audit.findUnique({
+      where: { publicSlug: slug, isPublic: true },
+      include: { tools: true },
+    });
+
+    if (!audit) return notFound();
+
+    // Reconstruct result shape for the client component
+    const result = {
+      publicSlug: slug,
+      companyName: audit.lead ? "Your Company" : "Your Company",
+      totalCurrentSpend: audit.totalSpend,
+      totalOptimizedSpend: audit.optimizedSpend,
+      monthlySavings: audit.savings,
+      annualSavings: audit.savings * 12,
+      aiSummary: audit.aiSummary ?? "",
+      recommendations: audit.tools.map(t => ({
+        originalTool: t.toolName,
+        originalPlan: t.currentPlan,
+        originalSeats: t.seats,
+        originalMonthlyCost: t.monthlySpend,
+        action: t.suggestedTool ? "REPLACE" as const : "KEEP" as const,
+        suggestedTool: t.suggestedTool ?? undefined,
+        suggestedPlan: t.suggestedPlan ?? undefined,
+        suggestedTotalCost: t.suggestedSpend ?? undefined,
+        savings: t.monthlySpend - (t.suggestedSpend ?? t.monthlySpend),
+        newCost: t.suggestedSpend ?? t.monthlySpend,
+        reasoning: t.reasoning ?? "",
+      })),
+    };
+
+    return <ResultsClient result={result} isShared={true} />;
+  } catch {
+    return notFound();
+  }
+}
