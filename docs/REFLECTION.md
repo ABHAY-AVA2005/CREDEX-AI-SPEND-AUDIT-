@@ -118,4 +118,4 @@ Claude suggested using a "probabilistic recommendation engine" (ML-based) to sco
 
 ## Summary
 
-This week forced me to balance speed (7-day build) with rigor (documentation, interviews, testing). The hardest part wasn't code — it was resisting the urge to build features instead of documenting decisions. The most valuable decision I made was talking to real users early; it validated the post-results lead capture approach and revealed the marketplace angle as the true unlock. If I had more time, I'd focus on integrations (Ramp, Slack) and personalization (custom rules) to deepen the product moat.
+This week forced me to balance speed (5-day build) with rigor (documentation, interviews, testing). The hardest part wasn't code — it was resisting the urge to build features instead of documenting decisions. The most valuable decision I made was talking to real users early; it validated the post-results lead capture approach and revealed the marketplace angle as the true unlock. If I had more time, I'd focus on integrations (Ramp, Slack) and personalization (custom rules) to deepen the product moat.

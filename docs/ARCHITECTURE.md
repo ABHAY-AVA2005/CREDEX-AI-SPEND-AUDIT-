@@ -144,7 +144,7 @@ graph TB
 
 ## Why This Stack for MVP
 
-1. **Speed:** Shipped in 7 days with Next.js boilerplate
+1. **Speed:** Shipped in 5 days with Next.js 15 template
 2. **Cost:** All services have free/cheap tiers for early stage
 3. **Credibility:** TypeScript + Prisma + deterministic engine = auditable financial logic
 4. **Scalability:** Serverless-first means we don't manage servers; scales with traffic
