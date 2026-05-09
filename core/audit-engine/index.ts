@@ -64,6 +64,17 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       suggestedTotalCost = newCost;
       reasoning = `With ${tool.seats} seats, moving to a shared team API gateway (like TypingMind or LibreChat) could save ~60% compared to individual per-seat consumer subscriptions.`;
     }
+    // Rule 4: Price Anomaly (Cost per seat > $50)
+    else if (tool.seats > 0 && (currentCost / tool.seats) > 50) {
+      const avgMarketRate = 30; // Average premium SaaS per-seat cost
+      action = "DOWNGRADE";
+      suggestedTool = tool.toolName;
+      suggestedPlan = "Standard / Direct";
+      suggestedCostPerSeat = avgMarketRate;
+      newCost = avgMarketRate * tool.seats;
+      suggestedTotalCost = newCost;
+      reasoning = `Your current cost of $${Math.round(currentCost / tool.seats)}/seat is significantly above the market average for ${tool.toolName}. Switching to a direct subscription or standard plan could save you substantial costs.`;
+    }
 
     const savings = currentCost - newCost;
     totalOptimizedSpend += newCost;
