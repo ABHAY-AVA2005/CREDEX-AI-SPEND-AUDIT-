@@ -58,5 +58,5 @@ Deploy to **Vercel** with one click:
 - **[PROMPTS.md](./PROMPTS.md)**: AI prompts and fallback logic documentation.
 
 ## 🔗 Links
-- **Deployed URL:** [https://ai-spend-audit.vercel.app](https://ai-spend-audit.vercel.app) (Placeholder — replace with actual deployed URL)
+- **Deployed URL:** To be added after deployment
 - **Marketplace:** [https://credex.rocks](https://credex.rocks)

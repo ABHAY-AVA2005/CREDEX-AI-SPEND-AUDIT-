@@ -101,22 +101,25 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="bg-slate-50 rounded-2xl border border-slate-200 p-8 shadow-sm">
-                 {/* Visual Representation of Audit */}
                  <div className="space-y-4">
                     <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                       <span className="font-semibold text-slate-900">Audit Status</span>
-                       <span className="text-emerald-600 bg-emerald-50 px-3 py-1 rounded text-sm font-bold">100% Deterministic</span>
+                       <span className="font-semibold text-slate-900">Audit Preview</span>
+                       <span className="text-emerald-600 bg-emerald-50 px-3 py-1 rounded text-sm font-bold">Deterministic results</span>
                     </div>
-                    {[
-                      { item: "Cursor Licenses", status: "12 Overlapping", type: "warning" },
-                      { item: "ChatGPT Enterprise", status: "45 Inactive", type: "danger" },
-                      { item: "AWS Credits", status: "Unoptimized", type: "warning" },
-                    ].map((row, idx) => (
-                      <div key={idx} className="flex justify-between items-center bg-white p-4 rounded border border-slate-100 shadow-sm">
-                         <span className="font-medium text-slate-700">{row.item}</span>
-                         <span className={`text-sm font-bold ${row.type === 'danger' ? 'text-red-600' : 'text-amber-600'}`}>{row.status}</span>
-                      </div>
-                    ))}
+                    <p className="text-slate-600 leading-relaxed">
+                      Enter your current tool stack to get a real audit based on your own data. This preview explains the types of insights the system surfaces instead of showing estimated numbers.
+                    </p>
+                    <ul className="space-y-3">
+                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
+                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Potential overlap across coding and AI tools
+                      </li>
+                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
+                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Inactive seats and underutilized licenses
+                      </li>
+                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
+                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Unoptimized API or cloud spend by tool category
+                      </li>
+                    </ul>
                  </div>
               </div>
             </div>
