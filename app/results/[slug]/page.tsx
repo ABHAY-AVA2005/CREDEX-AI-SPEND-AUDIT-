@@ -69,7 +69,7 @@ export default async function ResultsPage({ params }: Props) {
     // Reconstruct result shape for the client component
     const result = {
       publicSlug: slug,
-      companyName: audit.lead ? "Your Company" : "Your Company",
+      companyName: "Your Company",
       totalCurrentSpend: audit.totalSpend,
       totalOptimizedSpend: audit.optimizedSpend,
       monthlySavings: audit.savings,
