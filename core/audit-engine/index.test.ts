@@ -15,7 +15,7 @@ describe('Audit Engine', () => {
         useCases: ['writing']
       }]
     };
-    const result = runAuditEngine(input);
+    const result = runAuditEngine(input as any);
     expect(result.recommendations.length).toBe(1);
     expect(result.recommendations[0].action).toBe('REPLACE');
     expect(result.recommendations[0].suggestedTool).toBe('Claude');
@@ -35,7 +35,7 @@ describe('Audit Engine', () => {
         useCases: ['coding']
       }]
     };
-    const result = runAuditEngine(input);
+    const result = runAuditEngine(input as any);
     expect(result.recommendations[0].action).toBe('REPLACE');
     expect(result.recommendations[0].suggestedTool).toBe('Cursor');
   });
@@ -62,7 +62,7 @@ describe('Audit Engine', () => {
         }
       ]
     };
-    const result = runAuditEngine(input);
+    const result = runAuditEngine(input as any);
     expect(result.recommendations[0].action).toBe('REPLACE');
     expect(result.recommendations[1].action).toBe('CONSOLIDATE');
     expect(result.recommendations[1].newCost).toBe(0);
@@ -81,7 +81,7 @@ describe('Audit Engine', () => {
         useCases: ['mixed']
       }]
     };
-    const result = runAuditEngine(input);
+    const result = runAuditEngine(input as any);
     expect(result.recommendations[0].action).toBe('REPLACE');
     expect(result.recommendations[0].suggestedPlan).toContain('Team / API');
     expect(result.recommendations[0].newCost).toBeLessThan(400); // Should be ~60% savings
@@ -100,7 +100,7 @@ describe('Audit Engine', () => {
         useCases: ['design']
       }]
     };
-    const result = runAuditEngine(input);
+    const result = runAuditEngine(input as any);
     expect(result.recommendations[0].action).toBe('KEEP');
     expect(result.totalCurrentSpend).toBe(30);
     expect(result.totalOptimizedSpend).toBe(30);
