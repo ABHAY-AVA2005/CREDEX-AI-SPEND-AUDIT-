@@ -53,9 +53,9 @@ Deploy to **Vercel** with one click:
 5. **Tailwind vs. Component Library**: We built the UI with Vanilla Tailwind and Framer Motion instead of a heavy pre-built dashboard template. This ensured maximum performance (90+ Lighthouse scores) and a unique "Credex" brand aesthetic.
 
 ## 📊 Documentation
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)**: Technical stack justification.
-- **[PRICING_DATA.md](./PRICING_DATA.md)**: Verified pricing sources and official URLs.
-- **[PROMPTS.md](./PROMPTS.md)**: AI prompts and fallback logic documentation.
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack justification.
+- **[PRICING_DATA.md](./docs/PRICING_DATA.md)**: Verified pricing sources and official URLs.
+- **[PROMPTS.md](./docs/PROMPTS.md)**: AI prompts and fallback logic documentation.
 
 ## 🔗 Links
 - **Deployed URL:** To be added after deployment
