@@ -35,3 +35,10 @@ If the AI API fails, the system falls back to a deterministic template located i
 ```text
 Dear {{companyName}} Executive, Our AI SaaS financial audit highlights a significant opportunity for immediate cost optimization...
 ```
+
+## Prompt Engineering Notes
+- Started with a generic finance-audit prompt and refined it to be more executive-focused after early user feedback.
+- Tested both Gemini and Claude prompts; Gemini produced more concise summaries while Claude generated slightly longer prose.
+- Avoided overly broad phrasing like "optimize your stack" because it led to vague output; instead, the final prompt uses concrete values and a strict 100-word limit.
+- Verified prompt output manually to ensure the summary mentions the audit savings and the Credex.rocks resale marketplace.
+- Kept the fallback template simple so the product remains usable if the AI API is unavailable.

@@ -40,6 +40,10 @@ Deploy to **Vercel** with one click:
 - Add environment variables.
 - The build command is `npm run build` and the output directory is `.next`.
 
+### 5. Visual Assets (To Do)
+- Add 3 screenshots showing the landing page, audit form, and results page.
+- Add a 30-second Loom/screen recording link showing the audit flow end to end.
+
 ## 🏗️ Decisions & Trade-offs
 
 1. **Deterministic Logic vs. AI Inference**: We chose hardcoded deterministic rules for the audit engine instead of LLM-based analysis. This ensures 100% mathematical accuracy and defensible reasoning that a CFO can trust, using AI only for natural language summaries.
@@ -54,5 +58,5 @@ Deploy to **Vercel** with one click:
 - **[PROMPTS.md](./PROMPTS.md)**: AI prompts and fallback logic documentation.
 
 ## 🔗 Links
-- **Deployed URL:** [https://ai-spend-audit.vercel.app](https://ai-spend-audit.vercel.app) (Placeholder)
+- **Deployed URL:** [https://ai-spend-audit.vercel.app](https://ai-spend-audit.vercel.app) (Placeholder — replace with actual deployed URL)
 - **Marketplace:** [https://credex.rocks](https://credex.rocks)
