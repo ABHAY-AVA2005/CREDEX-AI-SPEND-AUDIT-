@@ -164,8 +164,11 @@ export default function AuditForm() {
               <div className="flex justify-end pt-2">
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
-                  className="flex items-center px-6 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                  onClick={async () => {
+                    const isValid = await form.trigger(["companyName", "companySize"]);
+                    if (isValid) setStep(2);
+                  }}
+                  className="flex items-center px-6 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all active:scale-95 shadow-sm"
                 >
                   Next: Add Tools <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
@@ -286,8 +289,11 @@ export default function AuditForm() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setStep(3)}
-                  className="flex items-center px-6 py-2.5 bg-slate-900 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                  onClick={async () => {
+                    const isValid = await form.trigger("tools");
+                    if (isValid) setStep(3);
+                  }}
+                  className="flex items-center px-6 py-2.5 bg-slate-900 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all active:scale-95 text-sm shadow-sm"
                 >
                   Review & Analyze <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
@@ -326,17 +332,21 @@ export default function AuditForm() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex items-center px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg disabled:opacity-50 text-base"
+                  className="flex items-center justify-center min-w-[240px] px-8 py-3.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 active:bg-blue-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-base transform hover:-translate-y-0.5 active:translate-y-0"
                 >
                   {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <span className="flex items-center gap-3">
+                      <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V8z"/>
                       </svg>
-                      Analyzing...
+                      Analyzing Stack...
                     </span>
-                  ) : "Generate Free Audit Report"}
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      Generate Free Audit Report <CheckCircle2 className="w-5 h-5" />
+                    </span>
+                  )}
                 </button>
               </div>
             </motion.div>
