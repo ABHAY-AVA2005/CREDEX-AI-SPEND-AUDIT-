@@ -71,6 +71,10 @@ export default function AuditForm() {
     try {
       const results = await processAuditAction(data);
       sessionStorage.setItem("latest_audit_result", JSON.stringify(results));
+      
+      // Clear the saved form draft after successful submission
+      localStorage.removeItem(FORM_STORAGE_KEY);
+      
       router.push('/dashboard');
     } catch (e) {
       console.error(e);
