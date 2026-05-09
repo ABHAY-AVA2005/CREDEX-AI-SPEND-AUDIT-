@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   ArrowLeft, ArrowRight, AlertTriangle, CheckCircle2, XCircle,
-  BarChart3, Users, Zap, RefreshCcw, ShieldCheck, TrendingDown, Download, Store, Tag
+  BarChart3, Users, Zap, RefreshCcw, ShieldCheck, TrendingDown, Download
 } from "lucide-react";
 
 const tools = [

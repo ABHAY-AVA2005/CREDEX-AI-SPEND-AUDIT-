@@ -123,7 +123,7 @@ export default function AuditForm() {
             >
               <div>
                 <h2 className="text-2xl font-bold mb-1 text-slate-900">Company Details</h2>
-                <p className="text-slate-500 text-sm mb-6">No account needed. We'll show your results instantly.</p>
+                <p className="text-slate-500 text-sm mb-6">No account needed. We&apos;ll show your results instantly.</p>
 
                 <div className="mb-4">
                   <label className="block text-sm font-semibold text-slate-700 mb-1">Company Name</label>
@@ -311,7 +311,7 @@ export default function AuditForm() {
               </div>
               <h2 className="text-3xl font-bold text-slate-900">Ready to Analyze!</h2>
               <p className="text-slate-500 max-w-md mx-auto text-lg">
-                We'll audit your <strong className="text-slate-900">${form.watch("tools").reduce((acc, t) => acc + (t.monthlySpend || 0), 0).toLocaleString()}/mo</strong> AI stack and surface every cost-saving opportunity instantly.
+                We&apos;ll audit your <strong className="text-slate-900">${form.watch("tools").reduce((acc, t) => acc + (t.monthlySpend || 0), 0).toLocaleString()}/mo</strong> AI stack and surface every cost-saving opportunity instantly.
               </p>
               <p className="text-slate-400 text-sm">No account required. Results shown immediately.</p>
 

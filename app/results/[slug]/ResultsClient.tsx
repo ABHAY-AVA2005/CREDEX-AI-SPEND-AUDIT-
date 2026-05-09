@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet, ArrowRight,
-  CheckCircle2, XCircle, AlertTriangle, Layers, Store,
+  CheckCircle2, XCircle, AlertTriangle, Layers,
   Share2, Mail, Calendar, Copy, Check
 } from "lucide-react";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { captureLeadEmail } from "@/app/actions/audit";
 import { AuditRecommendation } from "@/schemas/audit";
 import { ProcessedAuditResult } from "@/app/actions/audit";
 
-const CONSULTATION_THRESHOLD = 5000; // Show booking CTA if annual savings > $5k
+
 
 const actionConfig: Record<string, { label: string; color: string; borderColor: string; icon: React.ReactNode }> = {
   REPLACE:     { label: "Replace",     color: "bg-red-50 text-red-700 border-red-200",       borderColor: "border-red-200",     icon: <XCircle className="w-4 h-4" /> },
@@ -351,9 +351,9 @@ export default function ResultsClient({
               <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                 className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
                 <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-                <h3 className="font-extrabold text-slate-900 text-lg mb-2">You're spending well.</h3>
+                <h3 className="font-extrabold text-slate-900 text-lg mb-2">You&apos;re spending well.</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
-                  Our audit shows your AI stack is already highly optimized. We don't manufacture fake savings. Enter your email below to be notified if new optimization rules apply to your stack in the future.
+                  Our audit shows your AI stack is already highly optimized. We don&apos;t manufacture fake savings. Enter your email below to be notified if new optimization rules apply to your stack in the future.
                 </p>
               </motion.div>
             )}
