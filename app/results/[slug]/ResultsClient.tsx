@@ -379,6 +379,7 @@ export default function ResultsClient({
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} opacity={0.2} />
                   <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => `$${v}`} />
                   <YAxis dataKey="name" type="category" width={70} tick={{ fontSize: 12 }} />
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <Tooltip cursor={{fill: 'transparent'}} formatter={(val: any) => [`$${val?.toLocaleString()}`, "Monthly"]} />
                   <Bar dataKey="amount" radius={[0, 6, 6, 0]}>
                     {chartData.map((e, i) => <Cell key={i} fill={e.fill} />)}
