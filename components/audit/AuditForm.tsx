@@ -235,6 +235,9 @@ export default function AuditForm() {
                             <option key={t.plan} value={t.plan}>{t.plan} — ${t.costPerSeat}/seat</option>
                           ))}
                       </select>
+                      {form.formState.errors.tools?.[index]?.currentPlan && (
+                        <p className="text-red-500 text-xs mt-1">{form.formState.errors.tools[index]?.currentPlan?.message}</p>
+                      )}
                     </div>
 
                     <div>
@@ -244,6 +247,9 @@ export default function AuditForm() {
                         {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
                         className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
+                      {form.formState.errors.tools?.[index]?.seats && (
+                        <p className="text-red-500 text-xs mt-1">{form.formState.errors.tools[index]?.seats?.message}</p>
+                      )}
                     </div>
 
                     <div>
@@ -253,6 +259,9 @@ export default function AuditForm() {
                         {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
                         className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
+                      {form.formState.errors.tools?.[index]?.monthlySpend && (
+                        <p className="text-red-500 text-xs mt-1">{form.formState.errors.tools[index]?.monthlySpend?.message}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-2">
@@ -266,6 +275,9 @@ export default function AuditForm() {
                         placeholder="e.g. Coding, Copywriting, General Chat"
                         className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
+                      {form.formState.errors.tools?.[index]?.useCases && (
+                        <p className="text-red-500 text-xs mt-1">{form.formState.errors.tools[index]?.useCases?.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>

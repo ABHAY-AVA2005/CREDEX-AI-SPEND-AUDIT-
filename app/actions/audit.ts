@@ -53,7 +53,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
             currentPlan: rec.originalPlan ?? "",
             seats: rec.originalSeats ?? 1,
             monthlySpend: rec.originalMonthlyCost ?? 0,
-            useCases: [],
+            useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
             suggestedTool: rec.suggestedTool,
             suggestedPlan: rec.suggestedPlan,
             suggestedSpend: rec.suggestedTotalCost,
