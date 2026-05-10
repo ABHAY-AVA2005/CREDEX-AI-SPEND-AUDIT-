@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, ShieldCheck, Zap, CheckCircle2, Search, Database, Fingerprint } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -106,89 +106,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Section 1: Core Feature */}
-        <section className="py-24 bg-white relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div>
-                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded flex items-center justify-center mb-6">
-                  <Database className="w-6 h-6" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 text-slate-900">Deterministic AI Spend Intelligence</h2>
-                <p className="text-lg text-slate-500 mb-6 leading-relaxed">
-                  Credex analyzes your enterprise AI and SaaS stack to detect:
-                </p>
-                <ul className="space-y-4 mb-8">
-                  {["Inactive licenses", "Duplicate tools", "Overlapping AI capabilities", "Underutilized seats", "Excessive API or cloud spending"].map((feature, i) => (
-                    <li key={i} className="flex items-center text-slate-700 font-medium">
-                      <CheckCircle2 className="w-5 h-5 text-blue-500 mr-3" /> {feature}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-slate-600 font-medium bg-slate-50 p-4 rounded-lg border border-slate-200">
-                  Unlike traditional analytics tools, Credex uses deterministic analysis instead of probabilistic usage estimates.
-                </p>
-              </div>
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-8 shadow-sm">
-                 <div className="space-y-4">
-                    <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                       <span className="font-semibold text-slate-900">Audit Preview</span>
-                       <span className="text-emerald-600 bg-emerald-50 px-3 py-1 rounded text-sm font-bold">Deterministic results</span>
-                    </div>
-                    <p className="text-slate-600 leading-relaxed">
-                      Enter your current tool stack to get a real audit based on your own data. This preview explains the types of insights the system surfaces instead of showing estimated numbers.
-                    </p>
-                    <ul className="space-y-3">
-                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
-                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Potential overlap across coding and AI tools
-                      </li>
-                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
-                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Inactive seats and underutilized licenses
-                      </li>
-                      <li className="flex items-center gap-3 bg-white p-4 rounded border border-slate-100 shadow-sm text-slate-700">
-                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" /> Unoptimized API or cloud spend by tool category
-                      </li>
-                    </ul>
-                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Section 2: Optimization Layer */}
-        <section className="py-24 bg-slate-50 border-y border-slate-200 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-slate-900">Optimize before renewal cycles hit</h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-16">
-              Identify exactly where budget is being wasted across your entire infrastructure.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-3 mb-16">
-              {["ChatGPT Enterprise", "Claude Team", "GitHub Copilot", "Cursor", "AWS Credits", "OpenAI API", "Gemini API"].map((tool, idx) => (
-                <span key={idx} className="px-4 py-2 bg-white border border-slate-200 rounded text-slate-700 font-medium shadow-sm">
-                  {tool}
-                </span>
-              ))}
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 text-left">
-              {[
-                { title: "AI usage visibility", icon: <BarChart3 className="w-5 h-5"/> },
-                { title: "License utilization tracking", icon: <Fingerprint className="w-5 h-5"/> },
-                { title: "Redundant tool detection", icon: <Search className="w-5 h-5"/> },
-                { title: "API spend monitoring", icon: <Zap className="w-5 h-5"/> },
-                { title: "Team-level spend analytics", icon: <ShieldCheck className="w-5 h-5"/> }
-              ].map((feature, i) => (
-                <div key={i} className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex items-start gap-4">
-                   <div className="mt-1 bg-slate-100 p-2 rounded text-slate-700">
-                     {feature.icon}
-                   </div>
-                   <h3 className="text-lg font-semibold text-slate-900 mt-1.5">{feature.title}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
 
 
