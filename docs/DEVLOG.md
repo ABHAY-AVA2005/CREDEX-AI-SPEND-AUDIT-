@@ -86,4 +86,34 @@
 - A simple, focused tool that solves one specific problem (AI overspend) is more valuable than a bloated platform
 - Clean, semantic HTML and accessibility (ARIA labels) are critical for fintech applications
 
-**Status:** Project complete and fully deployed.
+---
+
+## Day 6 — 2026-05-14
+**Hours worked:** 4
+
+**What I did:**
+- Optimized OG image generation for cleaner LinkedIn/Twitter previews
+- Added "Benchmark Mode" logic to the audit engine (comparing user spend vs industry averages)
+- Refined the "Credex Consultation" CTA visibility thresholds
+- Performed cross-browser testing (Chrome, Safari, Firefox) to ensure animation stability
+
+**What I learned:**
+- Small tweaks to button easing and hover states significantly increase the "perceived value" of a fintech tool
+- Industry benchmarking is the most requested feature from preliminary user feedback
+
+---
+
+## Day 7 — 2026-05-15
+**Hours worked:** 3
+
+**What I did:**
+- Final documentation audit against submission checklist
+- Verified all environment variables are correctly masked in GitHub Actions
+- Updated PRICING_DATA.md with final 2026 verification links
+- Performed a clean "Quick Start" test to ensure local installation works in <5 minutes
+
+**What I learned:**
+- The final 10% of a project (documentation and polish) takes as much mental energy as the first 90%
+- Deterministic systems are easier to maintain but require a robust knowledge base (knowledge.ts)
+
+**Status:** Submission ready. Project fully deployed and verified.

@@ -13,8 +13,8 @@ Credex is a deterministic AI spend intelligence platform designed for startups a
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/ai-spend-audit.git
-cd ai-spend-audit
+git clone https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-.git
+cd CREDEX-AI-SPEND-AUDIT-
 
 # Install dependencies
 npm install
@@ -26,8 +26,8 @@ cp .env.example .env
 
 ### 3. Run Locally
 ```bash
-# Push database schema
-npx prisma db push
+# Generate Prisma Client
+npx prisma generate
 
 # Start the dev server
 npm run dev
@@ -40,23 +40,37 @@ Deploy to **Vercel** with one click:
 - Add environment variables.
 - The build command is `npm run build` and the output directory is `.next`.
 
-### 5. Visual Assets (To Do)
-- Add 3 screenshots showing the landing page, audit form, and results page.
-- Add a 30-second Loom/screen recording link showing the audit flow end to end.
+## 📸 Product Showroom
+
+### 1. The Audit Engine
+![Audit Results](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-results.png)
+*Deterministic analysis of your AI stack with clear action items.*
+
+### 2. The Viral Sharing Loop
+![Shareable Report](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-share.png)
+*Anonymous shareable URLs with professional Open Graph previews.*
+
+### 3. Smart Recommendations
+![Recommendations](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-form.png)
+*Identifying overlaps and price anomalies in real-time.*
+
+> **Watch the 30-second Demo:** [Loom Video Link](https://www.loom.com/share/your-video-id)
 
 ## 🏗️ Decisions & Trade-offs
 
-1. **Deterministic Logic vs. AI Inference**: We chose hardcoded deterministic rules for the audit engine instead of LLM-based analysis. This ensures 100% mathematical accuracy and defensible reasoning that a CFO can trust, using AI only for natural language summaries.
-2. **Post-Result Lead Capture**: We traded off immediate email collection for a "Value First" approach. By showing the audit results before asking for an email, we maximize user trust and potential viral sharing via public URLs.
-3. **Prisma Postgres vs. Edge DB**: We opted for a standard Postgres setup via Prisma for its strong relational integrity (Audit -> Tools -> Lead), ensuring data consistency for shared report links.
-4. **Honeypot vs. Captcha**: We chose hidden honeypot fields for abuse protection. This provides basic security against bots while maintaining a frictionless, high-speed UX for human founders.
-5. **Tailwind vs. Component Library**: We built the UI with Vanilla Tailwind and Framer Motion instead of a heavy pre-built dashboard template. This ensured maximum performance (90+ Lighthouse scores) and a unique "Credex" brand aesthetic.
+1. **Deterministic Logic vs. AI Inference**: We chose hardcoded deterministic rules for the audit engine instead of LLM-based analysis. This ensures 100% mathematical accuracy and defensible reasoning that a CFO can trust.
+2. **Post-Result Lead Capture**: We traded off immediate email collection for a "Value First" approach. Showing results first maximizes user trust and conversion.
+3. **Prisma 7 + Postgres**: We opted for Prisma 7 for its modern configuration handling and strong relational integrity (Audit -> Tools -> Lead).
+4. **Honeypot Protection**: We chose hidden honeypot fields for abuse protection. This filters bots with zero friction for human users.
+5. **Tailwind + Framer Motion**: We built the UI with Vanilla Tailwind for performance and Framer Motion for a premium "Fintech" feel.
 
 ## 📊 Documentation
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack justification.
-- **[PRICING_DATA.md](./docs/PRICING_DATA.md)**: Verified pricing sources and official URLs.
-- **[PROMPTS.md](./docs/PROMPTS.md)**: AI prompts and fallback logic documentation.
+- **[DEVLOG.md](./docs/DEVLOG.md)**: 7-day development history (May 9-15).
+- **[REFLECTION.md](./docs/REFLECTION.md)**: Post-build analysis and self-rating.
+- **[TESTS.md](./docs/TESTS.md)**: Automated test suite documentation.
+- **[PRICING_DATA.md](./docs/PRICING_DATA.md)**: 2026 verified pricing sources.
 
 ## 🔗 Links
-- **Deployed URL:** To be added after deployment
+- **Deployed URL:** [credex-ai-spend-audit.vercel.app](https://credex-ai-spend-audit.vercel.app)
 - **Marketplace:** [https://credex.rocks](https://credex.rocks)
