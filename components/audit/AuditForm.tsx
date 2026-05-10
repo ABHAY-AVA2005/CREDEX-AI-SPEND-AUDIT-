@@ -95,9 +95,10 @@ export default function AuditForm() {
       
       // Off to the dashboard!
       router.push('/dashboard');
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Audit submission failed:", e);
-      alert(e.message || "Something went wrong analyzing your stack. Please try again.");
+      const message = e instanceof Error ? e.message : "Something went wrong analyzing your stack. Please try again.";
+      alert(message);
     } finally {
       setIsSubmitting(false);
     }

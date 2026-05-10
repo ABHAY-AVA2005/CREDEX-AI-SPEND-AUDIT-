@@ -25,8 +25,8 @@ Fluxora operates on a **"Value-First"** funnel. We prove the financial leakage b
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-.git
-cd Fluxora-AI-SPEND-AUDIT-
+git clone https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-.git
+cd CREDEX-AI-SPEND-AUDIT-
 
 # Install dependencies
 npm install
@@ -58,15 +58,15 @@ Deploy to **Vercel** with one click:
 ## 📸 Product Showroom
 
 ### 1. The Audit Engine
-![Audit Results](https://raw.githubusercontent.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-/main/public/screenshot-results.png)
+![Audit Results](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-results.png)
 *Deterministic analysis of your AI stack with clear action items.*
 
 ### 2. The Viral Sharing Loop
-![Shareable Report](https://raw.githubusercontent.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-/main/public/screenshot-share.png)
+![Shareable Report](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-share.png)
 *Anonymous shareable URLs with professional Open Graph previews.*
 
 ### 3. Smart Recommendations
-![Recommendations](https://raw.githubusercontent.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-/main/public/screenshot-form.png)
+![Recommendations](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-form.png)
 *Identifying overlaps and price anomalies in real-time.*
 
 > **Watch the 30-second Demo:** [Loom Video Link](https://www.loom.com/share/your-video-id)
@@ -124,7 +124,7 @@ During the 7-day sprint, several critical decisions shaped the platform:
 
 
 ## 🔗 Links
-- **GitHub:** [https://github.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/Fluxora-AI-SPEND-AUDIT-)
+- **GitHub:** [https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-)
 - **Deployed URL:** [https://fluxora-credex-ai-spend-audit-tool.vercel.app/](https://fluxora-credex-ai-spend-audit-tool.vercel.app/)
 - **Run your audit here (no login):** [https://fluxora-credex-ai-spend-audit-tool.vercel.app/](https://fluxora-credex-ai-spend-audit-tool.vercel.app/)
 - **Marketplace:** [https://credex.rocks](https://credex.rocks)

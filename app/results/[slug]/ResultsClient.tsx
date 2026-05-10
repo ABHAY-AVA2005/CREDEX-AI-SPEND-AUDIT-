@@ -2,12 +2,11 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
 import {
-  ArrowLeft, TrendingDown, DollarSign, Wallet, ArrowRight,
+  ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Share2, Mail, Calendar, Copy, Check,
-  Download, Users, Shield
+  Shield
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -106,7 +105,6 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   const [teamSize, setTeamSize] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +113,9 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
       await captureLeadEmail(email, result.companyName || "Lead", result.publicSlug, result.monthlySavings, result.annualSavings, result.aiSummary, role, teamSize ? parseInt(teamSize) : undefined);
       setSubmitted(true);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Submission failed.");
+      console.error("Audit submission failed:", e);
+      const message = e instanceof Error ? e.message : "Something went wrong analyzing your stack. Please try again.";
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -173,13 +173,12 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
   );
 }
 
-export default function ResultsClient({ result, isShared = false }: { result: ProcessedAuditResult; isShared?: boolean; }) {
+export default function ResultsClient({ result }: { result: ProcessedAuditResult; isShared?: boolean; }) {
   const chartData = [
     { name: "Current", amount: result.totalCurrentSpend, fill: "#CF6679" },
     { name: "Optimized", amount: result.totalOptimizedSpend, fill: "#00A36C" },
   ];
 
-  const savingsPct = result.totalCurrentSpend > 0 ? Math.round((result.monthlySavings / result.totalCurrentSpend) * 100) : 0;
   const isSpendingWell = result.monthlySavings < 100;
 
   return (
