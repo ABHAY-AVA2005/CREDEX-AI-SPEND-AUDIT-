@@ -1,6 +1,6 @@
 # Pricing Data Sources
 
-All pricing information used in the Credex AI Spend Audit engine is current as of May 2026. Every number below traces back to an official vendor URL.
+All pricing information used in the Fluxora AI Spend Audit engine is current as of May 2026. Every number below traces back to an official vendor URL.
 
 ## AI Tools Pricing (Per User / Per Month)
 
@@ -45,4 +45,4 @@ All pricing information used in the Credex AI Spend Audit engine is current as o
 | **Gemini 3.1 Pro** | $1.25 | $5.00 | [ai.google.dev/pricing](https://ai.google.dev/pricing) | 2026-05-12 |
 
 ## Notes on Audit Engine Math
-The audit engine uses these deterministic values to calculate potential wastage. For organizations on annual contracts, we use the monthly retail equivalent as the benchmark to demonstrate immediate savings potential through Credex credits. Every price is verified against the latest 2026 data.
+The audit engine uses these deterministic values to calculate potential wastage. For organizations on annual contracts, we use the monthly retail equivalent as the benchmark to demonstrate immediate savings potential through Fluxora credits. Every price is verified against the latest 2026 data.

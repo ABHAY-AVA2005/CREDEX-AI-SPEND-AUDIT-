@@ -132,6 +132,7 @@ export default function AuditForm() {
               <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Company Name</label>
               <input
                 type="text"
+                required
                 {...form.register("companyName")}
                 placeholder="e.g. Acme Corp"
                 className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
@@ -145,6 +146,7 @@ export default function AuditForm() {
               <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Team Size</label>
               <input
                 type="number"
+                required
                 {...form.register("companySize", { valueAsNumber: true })}
                 className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
               />
@@ -200,6 +202,7 @@ export default function AuditForm() {
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Select Tool</label>
                     <select
+                      required
                       {...form.register(`tools.${index}.toolName`)}
                       className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all appearance-none"
                     >
@@ -216,6 +219,7 @@ export default function AuditForm() {
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Current Plan</label>
                     <select
+                      required
                       {...form.register(`tools.${index}.currentPlan`)}
                       className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all appearance-none"
                     >
@@ -235,6 +239,7 @@ export default function AuditForm() {
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Seats / Users</label>
                     <input
                       type="number"
+                      required
                       {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
                       className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
                     />
@@ -247,6 +252,7 @@ export default function AuditForm() {
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Monthly Bill ($)</label>
                     <input
                       type="number"
+                      required
                       {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
                       className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
                     />
@@ -258,6 +264,7 @@ export default function AuditForm() {
                   <div className="md:col-span-2">
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Use Cases</label>
                     <input
+                      required
                       onChange={(e) => {
                         // Turning the comma-separated string back into an array for the schema
                         const val = e.target.value.split(",").map(s => s.trim()).filter(Boolean);

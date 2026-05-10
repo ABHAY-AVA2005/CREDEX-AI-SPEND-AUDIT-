@@ -5,14 +5,14 @@
 
 
 ## 1. Converted Lead Value (LTV)
-A "Converted Lead" for Credex typically follows one of two paths:
+A "Converted Lead" for Fluxora typically follows one of two paths:
 1. **The Buyer:** Moves from an Audit to buying discounted credits on Credex.rocks.
    - *Avg. Transaction:* $5,000 in credits.
-   - *Credex Margin (Take Rate):* 15% ($750).
+   - *Fluxora Margin (Take Rate):* 15% ($750).
    - *Frequency:* 2x per year.
    - **Annual Value:** $1,500.
 2. **The Seller:** Realizes they have $20k in sunk cost via the audit and lists it for resale.
-   - *Credex Service Fee:* 10% ($2,000).
+   - *Fluxora Service Fee:* 10% ($2,000).
    - **Annual Value:** $2,000.
 
 **Estimated Blended LTV:** $1,750 per lead.
@@ -27,14 +27,14 @@ A "Converted Lead" for Credex typically follows one of two paths:
 To remain profitable while maintaining the free tool:
 - **Landing Page → Audit Completed:** 40% (Frictionless, no email gate).
 - **Audit Completed → Email Captured:** 15% (Value-first lead gen).
-- **Lead → Credex Consultation:** 10% (High-savings cases only).
+- **Lead → Fluxora Consultation:** 10% (High-savings cases only).
 - **Consultation → Credit Transaction:** 30%.
 
 **Final Conversion (Audit → Sale):** ~0.45%.
-With an LTV of $1,750, every completed audit is worth **$7.87** to Credex. As long as our hosting/API costs per audit are <$0.50 (currently ~$0.12 with Gemini Flash), the tool is highly profitable.
+With an LTV of $1,750, every completed audit is worth **$7.87** to Fluxora. As long as our hosting/API costs per audit are <$0.50 (currently ~$0.12 with Gemini Flash), the tool is highly profitable.
 
 ## 4. Road to $1M ARR in 18 Months
-To hit $1,000,000 ARR, Credex needs approximately **570 active transacting customers** per year (based on $1,750 LTV).
+To hit $1,000,000 ARR, Fluxora needs approximately **570 active transacting customers** per year (based on $1,750 LTV).
 
 **Requirements for Success:**
 1. **Volume:** We need ~125,000 audits completed over 18 months.

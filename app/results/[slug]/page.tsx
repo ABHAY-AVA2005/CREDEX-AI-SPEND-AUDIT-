@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | Credex`;
+  const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | Fluxora`;
   const description = `See exactly where ${company} is overspending on AI tools and how to recover $${savings.toLocaleString()} annually.`;
 
   return {
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${slug}`,
-      siteName: "Credex AI Spend Audit",
+      siteName: "Fluxora AI Spend Audit",
       type: "website",
       images: [
         {
@@ -89,12 +89,12 @@ export default async function ResultsPage({ params }: Props) {
           originalSeats: 120,
           originalMonthlyCost: 4320,
           action: "REPLACE",
-          suggestedTool: "Credex Exchange",
+          suggestedTool: "Fluxora Exchange",
           suggestedPlan: "Standard",
           suggestedTotalCost: 1728,
           savings: 2592,
           newCost: 1728,
-          reasoning: "Reclaim 72 inactive ChatGPT Enterprise seats. Downsize or resell via Credex Exchange."
+          reasoning: "Reclaim 72 inactive ChatGPT Enterprise seats. Downsize or resell via Fluxora Exchange."
         },
         {
           originalTool: "AWS Credits",

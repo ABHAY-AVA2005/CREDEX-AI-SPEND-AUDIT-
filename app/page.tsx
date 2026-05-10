@@ -2,7 +2,7 @@
 
 /**
  * LandingPage.tsx
- * The first impression for the Credex Audit platform.
+ * The first impression for the Fluxora Audit platform.
  * I've gone for a "High-End Fintech" look—lots of whitespace, 
  * bold serif typography, and subtle grid backgrounds.
  */
@@ -30,7 +30,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded bg-slate-900 flex items-center justify-center">
               <ShieldCheck className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">Credex</span>
+            <span className="font-bold text-xl tracking-tight text-slate-900">Fluxora</span>
           </div>
           
           <nav className="flex items-center gap-6">
@@ -90,7 +90,7 @@ export default function LandingPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-8 max-w-2xl text-lg md:text-xl text-slate-500 mx-auto mb-12 leading-relaxed"
             >
-              Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. Credex uses deterministic math to recover up to 40% of your AI budget.
+              Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. Fluxora uses deterministic math to recover up to 40% of your AI budget.
             </motion.p>
             
             {/* CTA Group */}
@@ -162,12 +162,12 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {[
                 {
-                  quote: "Credex found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now.",
+                  quote: "Fluxora found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now.",
                   author: "Sarah Chen",
                   role: "Founding Partner at SeedFlow Ventures"
                 },
                 {
-                  quote: "I thought we were lean. Credex proved we were double-paying for LLM subscriptions across three different departments.",
+                  quote: "I thought we were lean. Fluxora proved we were double-paying for LLM subscriptions across three different departments.",
                   author: "Markus V.",
                   role: "CTO at ScaleSync"
                 }
@@ -219,7 +219,7 @@ export default function LandingPage() {
                 },
                 {
                   q: "What happens after the audit?",
-                  a: "You get a shareable URL and a PDF report. If you have significant wastage, we'll offer a path to liquidate unused credits on the Credex Marketplace."
+                  a: "You get a shareable URL and a PDF report. If you have significant wastage, we'll offer a path to liquidate unused credits on the Fluxora Marketplace."
                 },
                 {
                   q: "Is my data private?",
@@ -275,9 +275,9 @@ export default function LandingPage() {
             <div className="w-5 h-5 rounded bg-slate-900 flex items-center justify-center">
               <ShieldCheck className="w-3 h-3 text-white" />
             </div>
-            <span className="font-bold text-sm tracking-tight text-slate-900">Credex</span>
+            <span className="font-bold text-sm tracking-tight text-slate-900">Fluxora</span>
           </div>
-          <p className="text-slate-500 text-xs font-medium">© {new Date().getFullYear()} Credex Platform. Deterministic AI Spend Intelligence.</p>
+          <p className="text-slate-500 text-xs font-medium">© {new Date().getFullYear()} Fluxora Platform. Deterministic AI Spend Intelligence.</p>
         </div>
       </footer>
     </div>

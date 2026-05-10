@@ -26,7 +26,7 @@
 **What I did:**
 - Wireframed the UI using paper and Figma to ensure a premium fintech feel
 - Chose the tech stack: Next.js 15 for speed and Prisma for type-safe database work
-- Drafted the "Economics" of the project (calculating potential LTV for Credex)
+- Drafted the "Economics" of the project (calculating potential LTV for Fluxora)
 
 **What I learned:**
 - A 3-step form converts much better than a single long page
@@ -92,17 +92,19 @@
 **Hours worked:** 7
 
 **What I did:**
-- Added the "Price Anomaly" rule (flags any tool costing >$50/seat)
-- Synced the knowledge base with the latest 2026 pricing for Cursor, Claude, and ChatGPT
-- Fixed a bug where tool "Use Cases" weren't saving to the database
-- Added real-time validation to the form steps to prevent empty submissions
+- **Global Rebranding**: Successfully transitioned the entire platform from 'Credex' to **Fluxora**.
+- **Architecture Deep Dive**: Expanded `ARCHITECTURE.md` with an 11-step journey, the 'Zod Bouncer' analogy, and a summary table.
+- **Script Hardening**: Added `test:watch` and `test:coverage` to `package.json` to resolve user test execution issues.
+- **PowerShell Support**: Updated `TESTS.md` with specific bypass instructions for Windows PowerShell security policies.
+- **Syncing Documentation**: Ensured all docs (README, GTM, Metrics) use the new Fluxora identity.
 
 **What I learned:**
-- Users sometimes pay 10x the retail price for AI tools via old API wrappers
-- Multi-tool audits need very clear error messages to avoid user frustration
+- Rebranding is more than just string replacement; it requires updating the "voice" of the AI summaries and the technical justification of the brand.
+- Windows-specific shell errors (PowerShell execution policy) are a common friction point for developers; proactive troubleshooting in docs is essential.
+- The 'Bouncer' analogy for Zod is much easier for non-technical users (like a CEO/CFO) to understand than 'Type Validation'.
 
 **Plan for tomorrow:**
-- Implement "Bonus" features: Benchmark Mode and Referral codes
+- Final verification of the referral system and cold-install test.
 
 ---
 
@@ -135,6 +137,6 @@
 
 **What I learned:**
 - Keeping documentation simple is just as important as the code
-- The "Credex Consultation" CTA is the most important business outcome of the app
+- The "Fluxora Consultation" CTA is the most important business outcome of the app
 
 **Status:** Project complete, fully documented, and ready for submission.

@@ -20,12 +20,12 @@ export default function SampleAuditPage() {
         originalSeats: 120,
         originalMonthlyCost: 4320,
         action: "REPLACE",
-        suggestedTool: "Credex Exchange / Team Plan",
+        suggestedTool: "Fluxora Exchange / Team Plan",
         suggestedPlan: "Standard",
         suggestedTotalCost: 1728,
         savings: 2592,
         newCost: 1728,
-        reasoning: "Reclaim 72 inactive ChatGPT Enterprise seats. Downsize or resell via Credex Exchange."
+        reasoning: "Reclaim 72 inactive ChatGPT Enterprise seats. Downsize or resell via Fluxora Exchange."
       },
       {
         originalTool: "AWS Credits",

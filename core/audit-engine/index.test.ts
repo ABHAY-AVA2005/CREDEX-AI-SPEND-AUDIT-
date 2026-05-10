@@ -107,4 +107,35 @@ describe('Audit Engine', () => {
     expect(result.totalOptimizedSpend).toBe(30);
     expect(result.monthlySavings).toBe(0);
   });
+
+  test('Rule 4 (Complex): Handles multi-tool scenario with mixed overlap', () => {
+    const input = {
+      companyName: 'Test',
+      companySize: '1-10' as const,
+      industry: 'Tech',
+      tools: [
+        { toolName: 'ChatGPT', currentPlan: 'Plus', seats: 3, monthlySpend: 60, useCases: ['mixed'] },
+        { toolName: 'GitHub Copilot', currentPlan: 'Business', seats: 3, monthlySpend: 57, useCases: ['coding'] },
+        { toolName: 'Jasper', currentPlan: 'Pro', seats: 1, monthlySpend: 25, useCases: ['writing'] }
+      ]
+    };
+    const result = runAuditEngine(input as any);
+    expect(result.recommendations.length).toBe(3);
+  });
+
+  test('Rule 5 (Edge Case): Team of 1 using everything (Consolidation)', () => {
+    const input = {
+      companyName: 'Solo',
+      companySize: '1-10' as const,
+      industry: 'Tech',
+      tools: [
+        { toolName: 'Cursor', currentPlan: 'Pro', seats: 1, monthlySpend: 20, useCases: ['coding'] },
+        { toolName: 'ChatGPT', currentPlan: 'Plus', seats: 1, monthlySpend: 20, useCases: ['coding'] },
+        { toolName: 'Claude', currentPlan: 'Pro', seats: 1, monthlySpend: 20, useCases: ['writing'] }
+      ]
+    };
+    const result = runAuditEngine(input as any);
+    expect(result.monthlySavings).toBe(40);
+    expect(result.recommendations.filter(r => r.action === 'CONSOLIDATE').length).toBe(2);
+  });
 });

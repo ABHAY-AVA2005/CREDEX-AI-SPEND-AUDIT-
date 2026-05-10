@@ -6,7 +6,7 @@
 - **The Pain**: They have 15 different developers who all signed up for Cursor, ChatGPT Plus, and Claude Pro on their individual corporate cards. The finance team is breathing down their neck to consolidate.
 
 ## 🔍 Search & Intent
-Right before using Credex, they are scrolling or searching for:
+Right before using Fluxora, they are scrolling or searching for:
 - "Cursor vs GitHub Copilot pricing for teams"
 - "How to cancel Claude Pro corporate seats"
 - "OpenAI Enterprise vs Team plan cost comparison"
@@ -21,9 +21,9 @@ Right before using Credex, they are scrolling or searching for:
 ## 🚀 The First 100 Users (30 Days, $0 Budget)
 1. **The "Comparison Engine" Post (Days 1-5)**: Create a highly detailed comparison chart (Infographic) of *Cursor vs Copilot vs Claude* and post it to `r/HeadOfEngineering`. The CTA is the free audit to see which one your team actually needs.
 2. **Cold Outreach to "Finance/Ops" on LinkedIn (Days 6-15)**: Reach out to "Founding Ops" or "Chief of Staff" roles. Messaging: "I built a free tool to see if your devs are double-paying for AI tools. Takes 60 seconds."
-3. **The "Waitlist Snippet" (Days 16-30)**: Identify 5 popular open-source AI repos. Submit a PR or comment in their Discord/Issues showing how a "Credex Audit" found $500/mo in savings for a similar stack.
+3. **The "Waitlist Snippet" (Days 16-30)**: Identify 5 popular open-source AI repos. Submit a PR or comment in their Discord/Issues showing how a "Fluxora Audit" found $500/mo in savings for a similar stack.
 
-## 🦄 The Unfair Channel: The "Credex Ledger"
+## 🦄 The Unfair Channel: The "Fluxora Ledger"
 Credex.rocks already has a database of secondary credit buyers. We can send a direct "Audit Invitation" to everyone who has ever bought a $500 AWS credit on our marketplace. These are people who *already* care about capital efficiency. This is a closed-loop acquisition channel that competitors cannot replicate.
 
 ## 📈 Week-1 Traction (If successful)

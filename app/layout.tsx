@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 /**
  * RootLayout.tsx
- * The global shell for the Credex platform.
+ * The global shell for the Fluxora platform.
  * 
  * We enforce a Light theme here to maintain that clean, 
  * paper-like "Audit Memo" aesthetic across the entire app.
@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Credex AI Spend Audit | Optimize your SaaS stack",
+  title: "Fluxora AI Spend Audit | Optimize your SaaS stack",
   description: "Audit your startup's AI tool spending, detect overspending, and discover how to save by buying and selling credits on Credex.rocks.",
 };
 

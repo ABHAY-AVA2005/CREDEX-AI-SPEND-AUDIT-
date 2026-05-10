@@ -1,6 +1,6 @@
 # Project Checklist (Status: COMPLETE ✅)
 
-Based on the Credex AI Spend Audit project brief, all deliverables are now finished and verified.
+Based on the Fluxora AI Spend Audit project brief, all deliverables are now finished and verified.
 
 ## 1. Required Files
 - [x] **`DEVLOG.md`**: Completed with 7 dated entries (May 7–13).
@@ -10,8 +10,8 @@ Based on the Credex AI Spend Audit project brief, all deliverables are now finis
 
 ## 2. Automated Tests
 - [x] Set up **Vitest** framework.
-- [x] Written **5 working automated tests** covering the core audit engine.
-- [x] Verified tests pass in the terminal.
+- [x] Written **7 working automated tests** covering core logic, complex overlaps, and solo-founder edge cases.
+- [x] Verified tests pass in the terminal (with PowerShell bypass instructions).
 
 ## 3. Section Updates
 - [x] **`README.md`**: 
@@ -20,11 +20,13 @@ Based on the Credex AI Spend Audit project brief, all deliverables are now finis
   - [x] Integrated test instructions into Quick Start.
 - [x] **`ARCHITECTURE.md`**: 
   - [x] Added Mermaid system diagram.
-  - [x] Detailed the multi-layer pipeline (Ingestion -> Engine -> AI -> Share).
+  - [x] Detailed the **11-Step Data Pipeline** (from Ingestion to viral sharing).
+  - [x] Added "Zod vs SQL" bouncer analogy for validation logic.
   - [x] Added "Future Scalability" section for 100k+ audits.
 
 ## 4. Final Polish
+- [x] **Global Rebranding**: Completed 100% rebranding to **Fluxora** across code and docs.
 - [x] Integrated Social Proof and FAQ into landing page.
 - [x] Enforced global leftmost "Back to Home" navigation.
 - [x] Hardened deterministic engine against 2026 pricing anomalies.
-- [x] Enabled PDF Export and Benchmark Mode.
+- [x] Enabled PDF Export, Benchmark Mode, and Windows Shell Support.

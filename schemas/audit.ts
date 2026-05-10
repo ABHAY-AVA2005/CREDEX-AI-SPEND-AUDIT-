@@ -19,9 +19,9 @@ export const AuditFormSchema = z.object({
 // Email capture schema — separate, after results are shown
 export const EmailCaptureSchema = z.object({
   email: z.string().email("Valid email is required"),
-  companyName: z.string().optional(),
-  role: z.string().optional(),
-  teamSize: z.number().optional(),
+  companyName: z.string().min(1, "Company name is required"),
+  role: z.string().min(1, "Role is required"),
+  teamSize: z.number().min(1, "Team size is required"),
 });
 
 export type AuditToolInput = z.infer<typeof AuditToolSchema>;

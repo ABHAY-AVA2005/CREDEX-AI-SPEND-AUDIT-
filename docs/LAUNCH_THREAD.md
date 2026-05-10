@@ -7,7 +7,7 @@ I just built a free tool that audits your AI stack (Cursor, Claude, ChatGPT, etc
 
 Average savings so far? $2,400/year.
 
-Run your audit here (no login): [credex-audit.vercel.app]
+Run your audit here (no login): [https://fluxora-credex-ai-spend-audit-tool.vercel.app/]
 
 ---
 
@@ -41,6 +41,6 @@ Identify details are stripped so you can share your "Savings Score" with your te
 Stop guessing. Start optimizing.
 100% free. 30 seconds. 
 
-[Link to Deployed URL]
+[https://fluxora-credex-ai-spend-audit-tool.vercel.app/]
 
 Let me know what your Savings Score is! 👇

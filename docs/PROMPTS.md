@@ -1,6 +1,6 @@
 # AI Prompts Documentation
 
-The following prompts are used in the Credex AI Spend Audit platform to generate personalized executive summaries.
+The following prompts are used in the Fluxora AI Spend Audit platform to generate personalized executive summaries.
 
 ## Executive Summary Generation
 **Tool:** Google Gemini 1.5 Flash (or Anthropic Claude 3.5 Sonnet)

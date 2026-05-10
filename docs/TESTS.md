@@ -102,26 +102,67 @@ All automated tests are located in the `core/audit-engine/` directory and cover 
 
 ---
 
-## How to Run Tests
+## 🚀 How to Run Tests (Step-by-Step)
 
-### Run All Tests
+If you are evaluating this project, follow these steps to verify the deterministic engine.
+
+### Step 1: Install Dependencies
+Ensure all packages are installed before running tests.
 ```bash
-npm run test
+npm install
 ```
 
-### Run Tests in Watch Mode (for development)
+### Step 2: Run the Test Command
+In your terminal, run the following command:
+```bash
+npm test
+```
+
+---
+
+## 🛠️ Troubleshooting: "Script Execution Disabled" (Windows)
+
+If you see an error like **`PSSecurityException`** or **`UnauthorizedAccess`** when running `npm test` on Windows PowerShell, it is because your system's security policy blocks running local scripts.
+**You can fix this with ONE of these three methods:**
+
+### Method A: Use Command Prompt (Easiest)
+Instead of using PowerShell, open **Command Prompt (cmd.exe)** and run:
+```cmd
+npm test
+```
+*Note: Command Prompt does not have the same script restrictions as PowerShell.*
+
+### Method B: Bypass for this session (Fastest)
+If you want to stay in PowerShell, run this exact command to bypass the restriction just for this run:
+```powershell
+powershell -ExecutionPolicy Bypass -Command "npm test"
+```
+
+### Method C: Fix permanently (Recommended for Developers)
+Run this command once in PowerShell as an **Administrator** to allow all local scripts:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+---
+
+## 🧪 Advanced Test Commands
+
+### Run in Watch Mode
+Automatically re-run tests as you edit code.
 ```bash
 npm run test:watch
 ```
 
-### Run Tests with Coverage Report
+### Run with Coverage
+See exactly which lines of the audit engine are tested.
 ```bash
 npm run test:coverage
 ```
 
-### Run Specific Test File
+### Run a Specific File
 ```bash
-npm run test -- core/audit-engine/index.test.ts
+npx vitest run core/audit-engine/index.test.ts
 ```
 
 ---

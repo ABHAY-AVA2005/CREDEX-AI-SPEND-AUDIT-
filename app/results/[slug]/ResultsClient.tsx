@@ -126,7 +126,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
         {/* Reasoning Block */}
         <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
           <p className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-1">Why</p>
-          <p className="text-sm text-slate-700 leading-relaxed italic">"{rec.reasoning}"</p>
+          <p className="text-sm text-slate-700 leading-relaxed italic">&quot;{rec.reasoning}&quot;</p>
         </div>
 
         {rec.savings > 0 && (
@@ -193,7 +193,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
         <Mail className="w-5 h-5 text-blue-600" />
         <h3 className="font-bold text-slate-900 text-sm">Get the full report delivered</h3>
       </div>
-      <p className="text-slate-500 text-xs mb-4">We'll send the executive summary and PDF to your work email.</p>
+      <p className="text-slate-500 text-xs mb-4">We&apos;ll send the executive summary and PDF to your work email.</p>
       
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Honeypot */}
@@ -211,6 +211,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
         <div className="grid grid-cols-2 gap-2">
           <input
             type="text"
+            required
             value={role}
             onChange={e => setRole(e.target.value)}
             placeholder="Role (e.g. CTO)"
@@ -218,6 +219,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
           />
           <input
             type="number"
+            required
             value={teamSize}
             onChange={e => setTeamSize(e.target.value)}
             placeholder="Team Size"
@@ -245,7 +247,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
 function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
   const totalSeats = result.recommendations.reduce((acc, r) => acc + (r.originalSeats || 1), 0);
   const spendPerSeat = totalSeats > 0 ? Math.round(result.totalCurrentSpend / totalSeats) : 0;
-  const industryAvg = 45; // Based on Credex 2026 dataset
+  const industryAvg = 45; // Based on Fluxora 2026 dataset
   
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
@@ -342,7 +344,7 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
       </div>
       
       <p className="text-blue-100 text-sm leading-relaxed mb-5">
-        Your stack has over <strong className="text-white">${Math.floor(annualSavings/12).toLocaleString()}/mo</strong> in wastage. Let's book a call to liquidate your unused enterprise credits on the Credex secondary market.
+        Your stack has over <strong className="text-white">${Math.floor(annualSavings/12).toLocaleString()}/mo</strong> in wastage. Let&apos;s book a call to liquidate your unused enterprise credits on the Fluxora secondary market.
       </p>
       
       <a
@@ -444,9 +446,9 @@ export default function ResultsClient({
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-12 h-12 text-slate-400 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're spending well.</h2>
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You&apos;re spending well.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm">
-                    Our audit confirms your stack is already lean. We don't manufacture fake savings.
+                    Our audit confirms your stack is already lean. We don&apos;t manufacture fake savings.
                   </p>
                 </>
               ) : (
@@ -470,7 +472,7 @@ export default function ResultsClient({
               <div className="flex justify-between items-start mb-8">
                 <div className="space-y-1">
                   <h2 className="text-xl font-serif font-black text-slate-900 italic tracking-tight underline decoration-slate-200 decoration-4 underline-offset-4">Executive Summary</h2>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Credex ID: {result.publicSlug.toUpperCase()}</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Fluxora ID: {result.publicSlug.toUpperCase()}</p>
                 </div>
                 <Shield className="w-8 h-8 text-slate-100" />
               </div>
@@ -484,9 +486,9 @@ export default function ResultsClient({
                   ))}
                 </div>
                 <div className="mt-8 pt-6 border-t border-slate-50 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold">CA</div>
+                  <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold">FA</div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900">Credex Audit Engine</p>
+                    <p className="text-xs font-bold text-slate-900">Fluxora Audit Engine</p>
                     <p className="text-[10px] text-slate-400 font-medium">Deterministic Intelligence</p>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 ## 🌟 The North Star Metric: "Identified Annual Recovery (IAR)"
 **Definition**: The total dollar amount of annual savings identified across all completed audits.
-**Why**: As a B2B lead-gen tool, our value isn't "Daily Active Users" (no one audits their spend every day). Our value is the **Financial Impact** we reveal. If IAR is high, our "Consultation" leads become extremely valuable to the Credex sales team.
+**Why**: As a B2B lead-gen tool, our value isn't "Daily Active Users" (no one audits their spend every day). Our value is the **Financial Impact** we reveal. If IAR is high, our "Consultation" leads become extremely valuable to the Fluxora sales team.
 
 ## 📈 3 Driver (Input) Metrics
 1. **Audit Completion Rate (ACR)**: The % of users who start the form and reach the results page. This measures the "Friction" of our ingestion flow.

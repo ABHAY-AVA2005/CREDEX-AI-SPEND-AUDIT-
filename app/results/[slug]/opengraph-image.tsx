@@ -47,9 +47,9 @@ export default async function OGImage({ params }: { params: { slug: string } }) 
             display: "flex", alignItems: "center", justifyContent: "center",
             marginRight: 16,
           }}>
-            <span style={{ color: "white", fontSize: 24, fontWeight: 900 }}>C</span>
+            <span style={{ color: "white", fontSize: 24, fontWeight: 900 }}>F</span>
           </div>
-          <span style={{ color: "#94a3b8", fontSize: 28, fontWeight: 700 }}>Credex AI Spend Audit</span>
+          <span style={{ color: "#94a3b8", fontSize: 28, fontWeight: 700 }}>Fluxora AI Spend Audit</span>
         </div>
 
         {/* Headline */}

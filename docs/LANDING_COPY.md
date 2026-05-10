@@ -9,10 +9,10 @@
 > [!NOTE]
 > *The following testimonials are mocked for the initial launch phase.*
 
-> "Credex found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now." 
+> "Fluxora found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now." 
 > — **Sarah Chen**, Founding Partner at *SeedFlow Ventures* (Mocked)
 
-> "I thought we were lean. Credex proved we were double-paying for LLM subscriptions across three different departments." 
+> "I thought we were lean. Fluxora proved we were double-paying for LLM subscriptions across three different departments." 
 > — **Markus V.**, CTO at *ScaleSync* (Mocked)
 
 ## ❓ FAQ (The Real Details)
@@ -27,7 +27,7 @@ Not for the initial audit. You can manually enter your tool stack to get an inst
 We look for **Functional Overlap**. For example, if you pay for Cursor (which includes Claude 3.5) and a separate Claude Pro subscription for the same user, we flag that as 100% wastage.
 
 ### 4. What happens after the audit?
-You get a shareable URL for your finance team and a PDF report. If you have significant wastage, we'll offer a path to liquidate unused credits on the **Credex Marketplace** or consolidate via our enterprise partners.
+You get a shareable URL for your finance team and a PDF report. If you have significant wastage, we'll offer a path to liquidate unused credits on the **Fluxora Marketplace** or consolidate via our enterprise partners.
 
 ### 5. Is my data private?
 Absolutely. Your audit is private by default. Only you can see the results unless you choose to generate a "Shareable Link." We never sell your company data to third parties.

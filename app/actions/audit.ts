@@ -140,9 +140,9 @@ export async function captureLeadEmail(
   if (resend) {
     try {
       await resend.emails.send({
-        from: "Credex Audit <onboarding@resend.dev>",
+        from: "Fluxora Audit <onboarding@resend.dev>",
         to: [email],
-        subject: `Your Credex AI Spend Audit: Save $${annualSavings.toLocaleString()}/yr`,
+        subject: `Your Fluxora AI Spend Audit: Save $${annualSavings.toLocaleString()}/yr`,
         html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -216,17 +216,17 @@ export async function captureLeadEmail(
 
       <div class="secondary-cta">
         <p style="color: #4b5563; margin-bottom: 15px;">
-          Ready to optimize your AI spending? Start reselling unused credits on Credex.
+          Ready to optimize your AI spending? Start reselling unused credits on Fluxora.
         </p>
         <a href="https://credex.rocks" class="cta-button" style="background: #1f2937;">
-          🚀 Visit Credex.rocks
+          🚀 Visit Credex Marketplace
         </a>
       </div>
     </div>
 
     <div class="footer">
       <p>
-        <strong>Credex</strong> - The marketplace for AI and cloud credits<br>
+        <strong>Fluxora</strong> - The marketplace for AI and cloud credits<br>
         Optimize your tech stack • Maximize your budget
       </p>
       <p style="margin-top: 15px;">

@@ -18,6 +18,13 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
   // Track capabilities we've already covered so we can find redundancies.
   const coveredCapabilities = new Set<string>();
 
+  // Pre-pass: Identify if the user already has our "Target" tools
+  input.tools.forEach(tool => {
+    const name = tool.toolName.toLowerCase();
+    if (name.includes("cursor")) coveredCapabilities.add("CODE");
+    if (name.includes("claude")) coveredCapabilities.add("WRITING");
+  });
+
   input.tools.forEach((tool) => {
     const currentCost = tool.monthlySpend;
     totalCurrentSpend += currentCost;
@@ -40,15 +47,29 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
      * of creative writing at a much lower price point.
      */
     if ((toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) && currentCost > 20) {
-      const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
-      action = "REPLACE";
-      suggestedTool = "Claude";
-      suggestedPlan = "Pro";
-      suggestedCostPerSeat = rec?.costPerSeat ?? 17;
-      newCost = suggestedCostPerSeat * tool.seats;
-      suggestedTotalCost = newCost;
-      reasoning = `Claude 3.5 Sonnet offers equivalent or better copywriting capabilities for a fraction of the cost of ${tool.toolName}.`;
-      coveredCapabilities.add("COPYWRITING");
+      if (!coveredCapabilities.has("WRITING")) {
+        const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
+        action = "REPLACE";
+        suggestedTool = "Claude";
+        suggestedPlan = "Pro";
+        suggestedCostPerSeat = rec?.costPerSeat ?? 17;
+        newCost = suggestedCostPerSeat * tool.seats;
+        suggestedTotalCost = newCost;
+        reasoning = `Claude 3.5 Sonnet offers equivalent or better copywriting capabilities for a fraction of the cost of ${tool.toolName}.`;
+        coveredCapabilities.add("WRITING");
+      } else {
+        action = "CONSOLIDATE";
+        newCost = 0;
+        suggestedTotalCost = 0;
+        reasoning = `This capability (Writing) is already covered by your existing stack.`;
+      }
+    }
+    // Also consolidate separate Claude if user has Cursor
+    else if (toolNameLower.includes("claude") && coveredCapabilities.has("CODE") && currentCost > 0) {
+       action = "CONSOLIDATE";
+       newCost = 0;
+       suggestedTotalCost = 0;
+       reasoning = `Your Cursor subscription already includes Claude 3.5 Sonnet natively. A separate subscription is likely redundant.`;
     }
 
     /**
