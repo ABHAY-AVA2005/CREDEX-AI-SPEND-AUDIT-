@@ -135,6 +135,7 @@ export default async function ResultsPage({ params }: Props) {
       monthlySavings: audit.savings,
       annualSavings: audit.savings * 12,
       aiSummary: audit.aiSummary ?? "",
+      isPersisted: true,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recommendations: audit.tools.map((t: any) => ({
         originalTool: t.toolName,

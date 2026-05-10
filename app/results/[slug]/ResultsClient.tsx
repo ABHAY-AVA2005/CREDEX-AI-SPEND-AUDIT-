@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Shield, Download, Copy, Check
+  Shield, Download, Copy, Check, AlertCircle
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -200,7 +200,9 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
       const saved = sessionStorage.getItem("latest_audit_result");
       if (saved) {
         try {
-          setResult(JSON.parse(saved));
+          const parsed = JSON.parse(saved);
+          // If we are recovering from session storage, it might not be persisted yet
+          setResult({ ...parsed, isPersisted: parsed.isPersisted ?? false });
         } catch (e) {
           console.error("Local recovery failed:", e);
         }
@@ -236,6 +238,12 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
+      {result.isPersisted === false && (
+        <div className="bg-amber-500/10 border-b border-amber-500/20 py-2 px-4 flex items-center justify-center gap-2 text-amber-500 text-[10px] font-bold uppercase tracking-wider">
+          <AlertCircle className="w-3 h-3" />
+          Offline Mode: This audit is stored locally. Shareable link may not work until database sync.
+        </div>
+      )}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">

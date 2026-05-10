@@ -23,6 +23,7 @@ export interface ProcessedAuditResult extends AuditResult {
   aiSummary: string;
   publicSlug: string;
   companyName: string;
+  isPersisted?: boolean;
 }
 
 /**
@@ -85,21 +86,27 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
             reasoning: rec.reasoning,
           })),
         },
-      });
-      console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
-    }
+      },
+    });
+    const isPersisted = true;
+    console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+    return {
+      ...result,
+      aiSummary,
+      publicSlug,
+      companyName: parsed.data.companyName,
+      isPersisted,
+    };
   } catch (dbError) {
-    // If the DB fails (e.g., connection issue on Vercel), we log it but DON'T kill the user's results.
-    // The user will still see the 'Aha!' moment on the dashboard from the returned object.
     console.error("[AuditAction] Critical Database Error (Persist Failed):", dbError);
+    return {
+      ...result,
+      aiSummary,
+      publicSlug,
+      companyName: parsed.data.companyName,
+      isPersisted: false,
+    };
   }
-
-  return {
-    ...result,
-    aiSummary,
-    publicSlug,
-    companyName: parsed.data.companyName,
-  };
 }
 
 /**
