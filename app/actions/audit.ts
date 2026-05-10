@@ -83,7 +83,8 @@ export async function captureLeadEmail(
   monthlySavings: number,
   annualSavings: number,
   aiSummary: string,
-  role?: string
+  role?: string,
+  teamSize?: number
 ): Promise<{ success: boolean }> {
   // Save lead to DB
   try {
@@ -92,8 +93,8 @@ export async function captureLeadEmail(
 
     const lead = await prisma.lead.upsert({
       where: { email },
-      update: { name: companyName, role: role || undefined },
-      create: { email, company: companyName, role: role || undefined },
+      update: { name: companyName, role: role || undefined, teamSize: teamSize || undefined },
+      create: { email, company: companyName, role: role || undefined, teamSize: teamSize || undefined },
     });
 
     // Link lead to audit

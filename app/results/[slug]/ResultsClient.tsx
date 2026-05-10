@@ -6,7 +6,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet, ArrowRight,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Share2, Mail, Calendar, Copy, Check
+  Share2, Mail, Calendar, Copy, Check,
+  Download, Code, Award, Users, Shield
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -124,29 +125,30 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
 function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-  const [honeypot, setHoneypot] = useState(""); // Bot protection
-  const [submitted, setSubmitted] = useState(false);
+  const [teamSize, setTeamSize] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [honeypot, setHoneypot] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (honeypot) { setSubmitted(true); return; } // Silently fail for bots
-    if (!email.includes("@")) { setError("Please enter a valid email."); return; }
+    if (honeypot) { setSubmitted(true); return; }
     setLoading(true);
     try {
       await captureLeadEmail(
         email,
-        result.companyName,
+        result.companyName || "Lead",
         result.publicSlug,
         result.monthlySavings,
         result.annualSavings,
         result.aiSummary,
-        role
+        role,
+        teamSize ? parseInt(teamSize) : undefined
       );
       setSubmitted(true);
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (e: any) {
+      setError(e.message || "Failed to send.");
     } finally {
       setLoading(false);
     }
@@ -168,7 +170,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
         <Mail className="w-5 h-5 text-blue-600" />
         <h3 className="font-bold text-slate-900 text-sm">Send this report to your inbox</h3>
       </div>
-      <p className="text-slate-500 text-xs mb-4">Get the full audit with recommendations delivered to your email.</p>
+      <p className="text-slate-500 text-xs mb-4">Get the full audit delivered. All fields below are optional except email.</p>
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Honeypot */}
         <input type="text" name="b_name" style={{display: 'none'}} value={honeypot} onChange={e => setHoneypot(e.target.value)} tabIndex={-1} autoComplete="off" />
@@ -181,22 +183,112 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
           placeholder="Work Email"
           className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
         />
-        <input
-          type="text"
-          value={role}
-          onChange={e => setRole(e.target.value)}
-          placeholder="Your Role (optional)"
-          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-        />
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="text"
+            value={role}
+            onChange={e => setRole(e.target.value)}
+            placeholder="Role (e.g. CTO)"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          />
+          <input
+            type="number"
+            value={teamSize}
+            onChange={e => setTeamSize(e.target.value)}
+            placeholder="Team Size"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          />
+        </div>
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors text-sm disabled:opacity-50"
+          className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all active:scale-[0.98] text-sm disabled:opacity-50"
         >
           {loading ? "Sending..." : "Get Full Report"}
         </button>
       </form>
       {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+    </div>
+  );
+}
+
+// ── Benchmark Card ──
+function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
+  const totalSeats = result.recommendations.reduce((acc, r) => acc + (r.originalSeats || 1), 0);
+  const spendPerSeat = totalSeats > 0 ? Math.round(result.totalCurrentSpend / totalSeats) : 0;
+  const industryAvg = 45; // Simulated industry average per seat
+  
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+      <div className="flex items-center gap-2 mb-4">
+        <Users className="w-5 h-5 text-indigo-600" />
+        <h3 className="font-bold text-slate-900 text-sm">Industry Benchmark</h3>
+      </div>
+      <div className="space-y-4">
+        <div className="flex justify-between items-end">
+          <span className="text-xs text-slate-500 font-medium">Your Spend / Seat</span>
+          <span className="text-xl font-bold text-slate-900">${spendPerSeat}<span className="text-xs font-normal opacity-50">/mo</span></span>
+        </div>
+        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+          <motion.div 
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min((spendPerSeat / 150) * 100, 100)}%` }}
+            className={`h-full ${spendPerSeat > industryAvg ? 'bg-orange-400' : 'bg-emerald-400'}`}
+          />
+        </div>
+        <p className="text-[11px] text-slate-500 leading-tight">
+          {spendPerSeat > industryAvg 
+            ? `Your team spends $${spendPerSeat - industryAvg} more per seat than the average high-growth startup.`
+            : `Great! Your per-seat spend is below the $${industryAvg} industry average.`}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Referral Card ──
+function ReferralCard() {
+  return (
+    <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-6 shadow-md border border-emerald-400">
+      <div className="flex items-center gap-2 mb-3">
+        <Award className="w-5 h-5 text-emerald-100" />
+        <h3 className="font-bold text-sm">Refer a Founder</h3>
+      </div>
+      <p className="text-emerald-50 text-[11px] leading-relaxed mb-4">
+        Share this tool with another founder. If they run an audit, you both get $100 off your next Credex purchase.
+      </p>
+      <button className="w-full py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg text-xs font-bold transition-all active:scale-95 border border-white/20">
+        Copy Referral Link
+      </button>
+    </div>
+  );
+}
+
+// ── Widget Snippet ──
+function WidgetSnippet() {
+  const [copied, setCopied] = useState(false);
+  const code = `<script src="https://credex-audit.vercel.app/widget.js" async></script>`;
+  
+  const copy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="bg-slate-900 text-slate-400 rounded-xl p-5 border border-slate-800">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Code className="w-4 h-4 text-blue-400" />
+          <h3 className="font-bold text-white text-[11px] uppercase tracking-wider">Embed on your blog</h3>
+        </div>
+        <button onClick={copy} className="text-[10px] hover:text-white transition-colors">
+          {copied ? "Copied!" : "Copy Code"}
+        </button>
+      </div>
+      <pre className="text-[10px] font-mono bg-black/30 p-2 rounded border border-white/5 overflow-x-auto">
+        {code}
+      </pre>
     </div>
   );
 }
@@ -358,6 +450,28 @@ export default function ResultsClient({
               </motion.div>
             )}
 
+            {/* Main KPI: Monthly Savings */}
+            <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.25 }}
+              className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-slate-50 border-slate-200' : 'bg-emerald-50 border-emerald-200'} shadow-sm flex flex-col items-center text-center`}>
+              {isSpendingWell ? (
+                <>
+                  <CheckCircle2 className="w-12 h-12 text-slate-400 mb-3" />
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're spending well.</h2>
+                  <p className="text-slate-500 text-sm mt-2 max-w-sm">
+                    Our audit shows your AI stack is already highly optimized. We don't manufacture fake savings. Enter your email below to be notified if new optimization rules apply to your stack in the future.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <TrendingDown className="w-12 h-12 text-emerald-500 mb-3" />
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're losing money.</h2>
+                  <p className="text-slate-500 text-sm mt-2 max-w-sm">
+                    We found <span className="font-bold text-emerald-600">${result.monthlySavings}/mo</span> in potential savings by optimizing your plans and consolidating tools.
+                  </p>
+                </>
+              )}
+            </motion.div>
+
             {/* Consultation CTA — only for high savings */}
             <ConsultationCTA annualSavings={result.annualSavings} />
 
@@ -392,10 +506,19 @@ export default function ResultsClient({
               </div>
             </motion.div>
 
-            {/* Email capture — AFTER results */}
-            <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.33 }}>
-              <EmailCaptureCard result={result} />
-            </motion.div>
+            <div className="space-y-4">
+              {/* Benchmark */}
+              {!isShared && (
+                <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.35 }}>
+                  <BenchmarkCard result={result} />
+                </motion.div>
+              )}
+
+              {/* Email capture — AFTER results */}
+              <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+                <EmailCaptureCard result={result} />
+              </motion.div>
+            </div>
 
 
 
@@ -403,17 +526,35 @@ export default function ResultsClient({
 
           {/* Right column — Recommendations */}
           <div className="lg:col-span-2 space-y-5">
-            <h2 className="text-xl font-extrabold text-slate-900">
-              Optimization Steps
-              <span className="ml-2 text-sm font-semibold text-slate-400">({result.recommendations.length} items)</span>
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-extrabold text-slate-900">
+                Optimization Steps
+                <span className="ml-2 text-sm font-semibold text-slate-400">({result.recommendations.length} items)</span>
+              </h2>
+              <button 
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+              >
+                <Download className="w-3 h-3" /> Export PDF
+              </button>
+            </div>
+            
             {result.recommendations.map((rec, i) => (
               <RecommendationCard key={i} rec={rec} index={i} />
             ))}
 
-            {/* Share link */}
-            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.45 }}>
-              <ShareCard slug={result.publicSlug} />
+            {/* Share & Extra */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.45 }}>
+                <ShareCard slug={result.publicSlug} />
+              </motion.div>
+              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
+                <ReferralCard />
+              </motion.div>
+            </div>
+
+            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.55 }}>
+              <WidgetSnippet />
             </motion.div>
           </div>
         </div>

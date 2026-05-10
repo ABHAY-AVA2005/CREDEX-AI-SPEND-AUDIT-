@@ -52,6 +52,7 @@ model Lead {
   name            String?
   company         String?
   role            String?
+  teamSize        Int?
   audits          Audit[]
   createdAt       DateTime @default(now())
 }
