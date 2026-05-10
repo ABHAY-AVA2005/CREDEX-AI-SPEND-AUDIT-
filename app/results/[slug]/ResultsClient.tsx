@@ -22,6 +22,7 @@ import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
 import { AuditRecommendation } from "@/schemas/audit";
 import { ProcessedAuditResult } from "@/app/actions/audit";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // Configuration for the action badges. 
 // Keeps the UI consistent without repeating tailwind classes everywhere.
@@ -188,12 +189,12 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <Mail className="w-5 h-5 text-blue-600" />
-        <h3 className="font-bold text-slate-900 text-sm">Get the full report delivered</h3>
+        <h3 className="font-bold text-foreground text-sm">Get the full report delivered</h3>
       </div>
-      <p className="text-slate-500 text-xs mb-4">We&apos;ll send the executive summary and PDF to your work email.</p>
+      <p className="text-muted-foreground text-xs mb-4">We&apos;ll send the executive summary and PDF to your work email.</p>
       
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Honeypot */}
@@ -205,7 +206,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
           value={email}
           onChange={e => { setEmail(e.target.value); setError(""); }}
           placeholder="Work Email"
-          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background"
         />
         
         <div className="grid grid-cols-2 gap-2">
@@ -215,7 +216,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
             value={role}
             onChange={e => setRole(e.target.value)}
             placeholder="Role (e.g. CTO)"
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background"
           />
           <input
             type="number"
@@ -223,7 +224,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
             value={teamSize}
             onChange={e => setTeamSize(e.target.value)}
             placeholder="Team Size"
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background"
           />
         </div>
         
@@ -250,7 +251,7 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
   const industryAvg = 45; // Based on Fluxora 2026 dataset
   
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Users className="w-5 h-5 text-indigo-600" />
         <h3 className="font-bold text-slate-900 text-sm">Industry Benchmark</h3>
@@ -299,7 +300,7 @@ function ShareCard({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+    <div className="bg-secondary/50 border border-border rounded-xl p-6">
       <div className="flex items-center gap-2 mb-3">
         <Share2 className="w-5 h-5 text-slate-600" />
         <h3 className="font-bold text-slate-900 text-sm">Share this audit</h3>
@@ -312,7 +313,7 @@ function ShareCard({ slug }: { slug: string }) {
         </div>
         <button
           onClick={copy}
-          className="px-3 py-2 border border-slate-200 bg-white rounded-lg hover:bg-slate-100 transition-colors text-slate-600 shrink-0"
+          className="px-3 py-2 border border-border bg-card rounded-lg hover:bg-secondary transition-colors text-muted-foreground shrink-0"
         >
           {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
         </button>
@@ -381,34 +382,37 @@ export default function ResultsClient({
   const isSpendingWell = result.monthlySavings < 100;
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans">
+    <div className="min-h-screen bg-background/50 text-foreground font-sans">
       
       {/* Banner for Shared Public Reports */}
       {isShared && (
-        <div className="bg-slate-900 text-white text-center text-[10px] font-bold py-1.5 uppercase tracking-widest px-4 border-b border-white/10">
+        <div className="bg-foreground text-background text-center text-[10px] font-bold py-1.5 uppercase tracking-widest px-4 border-b border-white/10">
           Shared AI Spend Audit Report &nbsp; | &nbsp;
           <Link href="/audit" className="text-blue-400 hover:text-blue-300 transition-colors underline decoration-blue-400/30">Run Your Own Stack Audit →</Link>
         </div>
       )}
 
       {/* Global Navigation Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-full px-4 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Home</span>
           </Link>
           
-          <h1 className="font-extrabold text-slate-900 text-lg tracking-tight">
+          <h1 className="font-extrabold text-foreground text-lg tracking-tight">
             {!isShared && result.companyName ? `${result.companyName} — ` : ""}Audit Results
           </h1>
           
-          <Link
-            href="/audit"
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-          >
-            New Audit →
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link
+              href="/audit"
+              className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              New Audit →
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -423,7 +427,7 @@ export default function ResultsClient({
             { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", icon: <TrendingDown className="w-4 h-4" />, color: isSpendingWell ? "text-slate-400" : "text-blue-600", border: "border-blue-200" },
           ].map((card, i) => (
             <motion.div key={i} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: i * 0.06 }}
-              className={`bg-white p-5 rounded-xl border ${card.border} shadow-sm`}>
+              className={`bg-card p-5 rounded-xl border ${card.border} shadow-sm`}>
               <div className={`flex items-center gap-2 ${card.color} text-xs font-semibold mb-2 uppercase tracking-tight`}>
                 {card.icon} {card.label}
               </div>
@@ -467,7 +471,7 @@ export default function ResultsClient({
 
             {/* AI Executive Summary — Designed like a formal memo */}
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl border border-slate-200 shadow-lg p-8 relative overflow-hidden">
+              className="bg-card rounded-xl border border-border shadow-lg p-8 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
               <div className="flex justify-between items-start mb-8">
                 <div className="space-y-1">
@@ -497,7 +501,7 @@ export default function ResultsClient({
 
             {/* Visualization: Spend Comparison Chart */}
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.28 }}
-              className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+              className="bg-card rounded-xl border border-border shadow-sm p-6">
               <h2 className="text-base font-extrabold text-slate-900 mb-5">Spend Delta Comparison</h2>
               <ResponsiveContainer width="100%" height={130}>
                 <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 16, left: 8, bottom: 0 }}>

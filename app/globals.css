@@ -82,7 +82,7 @@
   --chart-3: oklch(0.7 0.1 240);
   --chart-4: oklch(0.8 0.08 230);
   --chart-5: oklch(0.9 0.05 220);
-  --radius: 0.5rem; /* Sharper edges for a sleek corporate feel */
+  --radius: 0.5rem;
   --sidebar: oklch(0.98 0.01 250);
   --sidebar-foreground: oklch(0.13 0.02 250);
   --sidebar-primary: oklch(0.13 0.02 250);
@@ -91,12 +91,32 @@
   --sidebar-accent-foreground: oklch(0.13 0.02 250);
   --sidebar-border: oklch(0.92 0.01 250);
   --sidebar-ring: oklch(0.45 0.16 260);
+  --grid-line: oklch(0.13 0.02 250 / 0.04);
+  --grid-dot: oklch(0.13 0.02 250 / 0.1);
 }
 
 .dark {
-  /* We maintain a light-first identity, but keep the variables consistent */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.02 250);
+  --background: oklch(0.1 0.01 250); /* Deep Slate Black */
+  --foreground: oklch(0.98 0.01 250);
+  --card: oklch(0.13 0.015 250);
+  --card-foreground: oklch(0.98 0.01 250);
+  --popover: oklch(0.13 0.015 250);
+  --popover-foreground: oklch(0.98 0.01 250);
+  --primary: oklch(0.98 0.01 250);
+  --primary-foreground: oklch(0.13 0.015 250);
+  --secondary: oklch(0.18 0.02 250);
+  --secondary-foreground: oklch(0.98 0.01 250);
+  --muted: oklch(0.18 0.02 250);
+  --muted-foreground: oklch(0.6 0.02 250);
+  --accent: oklch(0.55 0.18 260); /* Brighter tech blue for dark */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.57 0.2 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.25 0.02 250);
+  --input: oklch(0.25 0.02 250);
+  --ring: oklch(0.55 0.18 260);
+  --grid-line: oklch(1 0 0 / 0.03);
+  --grid-dot: oklch(1 0 0 / 0.06);
 }
 
 @layer base {
@@ -104,10 +124,14 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    /* Subtle dot grid for a blueprint/audit feel */
-    background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
-    background-size: 40px 40px;
+    @apply bg-background text-foreground transition-colors duration-300;
+    /* Sophisticated layered grid background */
+    background-image: 
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      radial-gradient(var(--grid-dot) 1px, transparent 0);
+    background-size: 100px 100px, 100px 100px, 20px 20px;
+    background-position: center center;
   }
   html {
     @apply font-sans;

@@ -38,8 +38,8 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          forcedTheme="light" // Hard-coded light theme for that premium fintech feel
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
           {children}

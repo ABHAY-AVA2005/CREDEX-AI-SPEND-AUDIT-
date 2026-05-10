@@ -10,41 +10,38 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
       
-      {/* Subtle Fintech Grid Background (Standard for AI/Finance apps in 2026) */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'linear-gradient(to right, #0f172a 1px, transparent 1px), linear-gradient(to bottom, #0f172a 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
-      </div>
-      
-      {/* Light blue glow at the top */}
-      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent z-0 pointer-events-none"></div>
+      {/* Light blue glow at the top - dimmed for dark mode */}
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent z-0 pointer-events-none"></div>
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-slate-900 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded bg-foreground flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4 text-background" />
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">Fluxora</span>
+            <span className="font-bold text-xl tracking-tight text-foreground">Fluxora</span>
           </div>
           
           <nav className="flex items-center gap-6">
+            <ThemeToggle />
             <a 
               href="https://credex.rocks/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors hidden sm:block"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
             >
               Marketplace
             </a>
             <Link 
               href="/audit" 
-              className="px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded hover:bg-slate-800 transition-all shadow-sm active:scale-95"
+              className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded hover:opacity-90 transition-all shadow-sm active:scale-95"
             >
               Start Free Audit
             </Link>

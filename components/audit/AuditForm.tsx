@@ -106,7 +106,7 @@ export default function AuditForm() {
   if (!isClient) return null;
 
   return (
-    <div className="bg-white border border-slate-200 shadow-lg rounded-xl p-6 md:p-10">
+    <div className="bg-card border border-border shadow-lg rounded-xl p-6 md:p-10">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
         
         {/* Honeypot for bot protection — hidden from humans */}
@@ -123,19 +123,19 @@ export default function AuditForm() {
         {/* ── Section 1: Company Profile ── */}
         <section className="space-y-6">
           <div>
-            <h2 className="text-2xl font-serif font-black tracking-tight text-slate-900">1. Company Profile</h2>
-            <p className="text-slate-500 text-sm">Basic details about your organization.</p>
+            <h2 className="text-2xl font-serif font-black tracking-tight text-foreground">1. Company Profile</h2>
+            <p className="text-muted-foreground text-sm">Basic details about your organization.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Company Name</label>
+              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Company Name</label>
               <input
                 type="text"
                 required
                 {...form.register("companyName")}
                 placeholder="e.g. Acme Corp"
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
               />
               {form.formState.errors.companyName && (
                 <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companyName.message}</p>
@@ -143,12 +143,12 @@ export default function AuditForm() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Team Size</label>
+              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Team Size</label>
               <input
                 type="number"
                 required
                 {...form.register("companySize", { valueAsNumber: true })}
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
               />
               {form.formState.errors.companySize && (
                 <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companySize.message}</p>
@@ -156,12 +156,12 @@ export default function AuditForm() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Industry (Optional)</label>
+              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Industry (Optional)</label>
               <input
                 type="text"
                 {...form.register("industry")}
                 placeholder="e.g. SaaS, Fintech"
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
               />
             </div>
           </div>
@@ -171,8 +171,8 @@ export default function AuditForm() {
         <section className="space-y-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-serif font-black tracking-tight text-slate-900">2. AI & SaaS Stack</h2>
-              <p className="text-slate-500 text-sm">Add the tools your team uses daily.</p>
+              <h2 className="text-2xl font-serif font-black tracking-tight text-foreground">2. AI & SaaS Stack</h2>
+              <p className="text-muted-foreground text-sm">Add the tools your team uses daily.</p>
             </div>
           </div>
 
@@ -182,11 +182,11 @@ export default function AuditForm() {
                 key={field.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-6 border-2 border-slate-100 rounded-2xl relative bg-white shadow-sm hover:border-slate-200 transition-all"
+                className="p-6 border-2 border-border rounded-2xl relative bg-card shadow-sm hover:border-accent/30 transition-all"
               >
                 {/* Individual Tool Header */}
                 <div className="flex items-center justify-between mb-6">
-                  <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase tracking-widest">Tool #{index + 1}</span>
+                  <span className="text-[10px] font-black bg-foreground text-background px-2 py-0.5 rounded uppercase tracking-widest">Tool #{index + 1}</span>
                   {fields.length > 1 && (
                     <button
                       type="button"
@@ -200,11 +200,11 @@ export default function AuditForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Select Tool</label>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Select Tool</label>
                     <select
                       required
                       {...form.register(`tools.${index}.toolName`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all appearance-none"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all appearance-none"
                     >
                       <option value="">Select a tool...</option>
                       {uniqueTools.map(t => (
@@ -217,11 +217,11 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Current Plan</label>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Current Plan</label>
                     <select
                       required
                       {...form.register(`tools.${index}.currentPlan`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all appearance-none"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all appearance-none"
                     >
                       <option value="">Select a plan...</option>
                       {KNOWN_TOOLS
@@ -236,12 +236,12 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Seats / Users</label>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Seats / Users</label>
                     <input
                       type="number"
                       required
                       {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.seats && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.seats?.message}</p>
@@ -249,12 +249,12 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Monthly Bill ($)</label>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
                     <input
                       type="number"
                       required
                       {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.monthlySpend && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.monthlySpend?.message}</p>
@@ -262,7 +262,7 @@ export default function AuditForm() {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Use Cases</label>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Use Cases</label>
                     <input
                       required
                       onChange={(e) => {
@@ -272,7 +272,7 @@ export default function AuditForm() {
                       }}
                       defaultValue={form.getValues(`tools.${index}.useCases`).join(", ")}
                       placeholder="e.g. Coding, Chat, Design"
-                      className="w-full p-3.5 rounded-xl border-2 border-slate-100 bg-slate-50 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.useCases && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.useCases?.message}</p>
@@ -286,17 +286,17 @@ export default function AuditForm() {
           <button
             type="button"
             onClick={() => append({ toolName: "", currentPlan: "", seats: 1, monthlySpend: 0, useCases: [] })}
-            className="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-400 hover:bg-slate-50 transition-all text-sm font-bold uppercase tracking-widest"
+            className="w-full py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 hover:bg-secondary transition-all text-sm font-bold uppercase tracking-widest"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Tool to Stack
           </button>
         </section>
 
         {/* ── Footer / Submit ── */}
-        <section className="pt-8 border-t border-slate-100 flex flex-col items-center gap-6">
+        <section className="pt-8 border-t border-border flex flex-col items-center gap-6">
           <div className="text-center">
-             <p className="text-slate-500 text-sm mb-1">Results are deterministic and based on real 2026 pricing.</p>
-             <p className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Instant Analysis • No Signup Required</p>
+             <p className="text-muted-foreground text-sm mb-1">Results are deterministic and based on real 2026 pricing.</p>
+             <p className="text-muted-foreground/60 text-[10px] uppercase font-bold tracking-widest">Instant Analysis • No Signup Required</p>
           </div>
 
           <button
