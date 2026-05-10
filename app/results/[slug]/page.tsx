@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPrismaClient } from "@/lib/prisma";
 import ResultsClient from "./ResultsClient";
+import { ProcessedAuditResult } from "@/app/actions/audit";
 
 interface Props {
   params: { slug: string };
@@ -63,7 +64,7 @@ export default async function ResultsPage({ params }: Props) {
   const { slug } = await params;
 
   if (slug === "sample-demo") {
-    const sampleResult: any = {
+    const sampleResult: ProcessedAuditResult = {
       companyName: "Acme Corp (Demo)",
       totalCurrentSpend: 18245,
       totalOptimizedSpend: 10237,
