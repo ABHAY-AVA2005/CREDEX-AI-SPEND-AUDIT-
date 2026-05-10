@@ -28,5 +28,6 @@ export default function AuditPage() {
         <AuditForm />
       </div>
     </div>
+    </div>
   );
 }
