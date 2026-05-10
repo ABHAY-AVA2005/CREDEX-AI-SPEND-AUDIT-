@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Shield
+  Shield, Download
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
