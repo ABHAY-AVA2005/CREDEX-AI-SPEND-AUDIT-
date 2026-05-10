@@ -135,7 +135,7 @@ export default function AuditForm() {
                 required
                 {...form.register("companyName")}
                 placeholder="e.g. Acme Corp"
-                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
               {form.formState.errors.companyName && (
                 <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companyName.message}</p>
@@ -148,7 +148,7 @@ export default function AuditForm() {
                 type="number"
                 required
                 {...form.register("companySize", { valueAsNumber: true })}
-                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
               {form.formState.errors.companySize && (
                 <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companySize.message}</p>
@@ -161,7 +161,7 @@ export default function AuditForm() {
                 type="text"
                 {...form.register("industry")}
                 placeholder="e.g. SaaS, Fintech"
-                className="w-full p-4 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function AuditForm() {
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      className="text-red-400 hover:text-red-600 transition-colors"
+                      className="text-destructive hover:opacity-80 transition-opacity"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -204,7 +204,7 @@ export default function AuditForm() {
                     <select
                       required
                       {...form.register(`tools.${index}.toolName`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all appearance-none"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
                       <option value="">Select a tool...</option>
                       {uniqueTools.map(t => (
@@ -221,7 +221,7 @@ export default function AuditForm() {
                     <select
                       required
                       {...form.register(`tools.${index}.currentPlan`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all appearance-none"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
                       <option value="">Select a plan...</option>
                       {KNOWN_TOOLS
@@ -241,7 +241,7 @@ export default function AuditForm() {
                       type="number"
                       required
                       {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.seats && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.seats?.message}</p>
@@ -254,7 +254,7 @@ export default function AuditForm() {
                       type="number"
                       required
                       {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.monthlySpend && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.monthlySpend?.message}</p>
@@ -272,7 +272,7 @@ export default function AuditForm() {
                       }}
                       defaultValue={form.getValues(`tools.${index}.useCases`).join(", ")}
                       placeholder="e.g. Coding, Chat, Design"
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-secondary/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-background transition-all"
+                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
                     />
                     {form.formState.errors.tools?.[index]?.useCases && (
                       <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.useCases?.message}</p>
@@ -302,7 +302,7 @@ export default function AuditForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative flex items-center justify-center min-w-[320px] px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 active:scale-95 transition-all shadow-2xl shadow-blue-500/25 disabled:opacity-50 overflow-hidden"
+            className="group relative flex items-center justify-center min-w-[320px] px-10 py-5 bg-foreground text-background rounded-2xl font-black text-lg hover:opacity-90 active:scale-95 transition-all shadow-2xl shadow-accent/20 disabled:opacity-50 overflow-hidden"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-3">

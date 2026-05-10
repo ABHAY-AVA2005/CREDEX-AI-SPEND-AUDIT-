@@ -14,10 +14,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-accent/30 selection:text-foreground">
       
-      {/* Light blue glow at the top - dimmed for dark mode */}
-      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent z-0 pointer-events-none"></div>
+      {/* Subtle glow at the top - dimmed for dark mode */}
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-accent/10 to-transparent z-0 pointer-events-none"></div>
 
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -54,8 +54,8 @@ export default function LandingPage() {
         <section className="relative pt-32 pb-40 overflow-hidden">
           
           {/* Abstract background blobs for a bit of premium depth */}
-          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl opacity-50 -z-10"></div>
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl opacity-50 -z-10"></div>
+          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
+          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             {/* The Badge */}
@@ -63,9 +63,9 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest mb-10 shadow-xl shadow-blue-500/10 border border-slate-800"
+              className="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary text-foreground text-[10px] font-bold uppercase tracking-widest mb-10 shadow-xl shadow-accent/5 border border-border"
             >
-              <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400 mr-3 animate-pulse"></span>
+              <span className="flex h-1.5 w-1.5 rounded-full bg-accent mr-3 animate-pulse"></span>
               CFO-Grade AI Spend Intelligence
             </motion.div>
             
@@ -77,7 +77,7 @@ export default function LandingPage() {
               className="text-6xl md:text-8xl font-serif font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
             >
               Audit your AI stack.<br />
-              <span className="text-blue-600 italic">Stop the leak.</span>
+              <span className="text-accent italic">Stop the leak.</span>
             </motion.h1>
             
             {/* Subtext explaining the deterministic value prop */}
@@ -99,16 +99,16 @@ export default function LandingPage() {
             >
               <Link 
                 href="/audit" 
-                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl bg-slate-900 text-white hover:bg-blue-600 transition-all shadow-2xl hover:shadow-blue-500/25 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl bg-foreground text-background hover:opacity-90 transition-all shadow-2xl shadow-accent/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
               >
                 {/* Shimmer effect for that extra polish */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-white/5 to-blue-600/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-white/10 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 Run Free Audit <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               
               <Link 
                 href="/sample" 
-                className="flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl border-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all w-full sm:w-auto active:scale-[0.98]"
+                className="flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
               >
                 View Sample Report
               </Link>
@@ -121,13 +121,13 @@ export default function LandingPage() {
               transition={{ delay: 0.5 }}
               className="mt-6 flex flex-col items-center"
             >
-              <p className="text-slate-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Already have credits? Visit the official{" "}
                 <a 
                   href="https://credex.rocks/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-500 font-bold hover:underline"
+                  className="text-accent font-bold hover:underline"
                 >
                   Credex Marketplace →
                 </a>
@@ -139,7 +139,7 @@ export default function LandingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="mt-20 pt-10 border-t border-slate-100 flex flex-wrap justify-center gap-x-12 gap-y-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
+              className="mt-20 pt-10 border-t border-border flex flex-wrap justify-center gap-x-12 gap-y-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
             >
               {["Cursor", "Claude", "OpenAI", "Gemini", "GitHub"].map((logo) => (
                 <span key={logo} className="font-serif text-2xl font-black italic tracking-tighter text-foreground">
@@ -151,7 +151,7 @@ export default function LandingPage() {
         </section>
 
         {/* Social Proof Section */}
-        <section className="py-24 bg-slate-50 border-y border-slate-100">
+        <section className="py-24 bg-secondary/20 border-y border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-serif font-black text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
@@ -175,19 +175,19 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm relative"
+                  className="bg-card p-8 rounded-2xl border border-border shadow-sm relative"
                 >
-                  <div className="text-blue-600 mb-4 text-4xl font-serif leading-none">“</div>
-                  <p className="text-slate-600 text-lg leading-relaxed mb-6 italic">
+                  <div className="text-accent mb-4 text-4xl font-serif leading-none">“</div>
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
                     {testimonial.quote}
                   </p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground font-bold">
                       {testimonial.author[0]}
                     </div>
                     <div>
                       <p className="font-bold text-foreground text-sm">{testimonial.author}</p>
-                      <p className="text-slate-400 text-xs">{testimonial.role}</p>
+                      <p className="text-muted-foreground text-xs">{testimonial.role}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -197,7 +197,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-serif font-black text-foreground tracking-tight text-center mb-16">Frequently Asked Questions</h2>
             <div className="space-y-8">
@@ -223,11 +223,11 @@ export default function LandingPage() {
                   a: "Absolutely. Your audit is private by default. Only you can see the results unless you choose to generate a Shareable Link. We never sell your company data to third parties."
                 }
               ].map((faq, i) => (
-                <div key={i} className="border-b border-slate-100 pb-8">
+                <div key={i} className="border-b border-border pb-8">
                   <h3 className="font-bold text-foreground text-lg mb-3 flex items-center gap-3">
-                    <span className="text-blue-600 font-serif">Q.</span> {faq.q}
+                    <span className="text-accent font-serif">Q.</span> {faq.q}
                   </h3>
-                  <p className="text-slate-500 leading-relaxed pl-8">
+                  <p className="text-muted-foreground leading-relaxed pl-8">
                     {faq.a}
                   </p>
                 </div>
@@ -237,27 +237,27 @@ export default function LandingPage() {
         </section>
 
         {/* Final CTA Section */}
-        <section className="py-24 relative bg-slate-900 text-white overflow-hidden">
+        <section className="py-24 relative bg-card text-foreground overflow-hidden border-y border-border">
           {/* Subtle noise pattern overlay */}
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
           
           <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <ShieldCheck className="w-12 h-12 text-blue-400 mx-auto mb-6" />
+            <ShieldCheck className="w-12 h-12 text-accent mx-auto mb-6" />
             <h2 className="text-4xl font-bold mb-6 tracking-tight">Audit your stack before renewals hit.</h2>
-            <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
               Connect your workspace to generate a full AI spend audit in under 60 seconds. <br className="hidden md:block"/> Get a CFO-ready report instantly.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
                 href="/audit" 
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/20 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-lg bg-foreground text-background hover:opacity-90 transition-all shadow-xl shadow-accent/10 active:scale-95"
               >
                 Start Free Audit
               </Link>
             </div>
-            <p className="text-slate-500 text-sm mt-6 font-medium">
+            <p className="text-muted-foreground text-sm mt-6 font-medium">
               No account or credit card required. — Or visit the official{" "}
-              <a href="https://credex.rocks/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+              <a href="https://credex.rocks/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
                 Marketplace
               </a>
             </p>
@@ -266,15 +266,15 @@ export default function LandingPage() {
       </main>
 
       {/* Simplified Footer */}
-      <footer className="py-12 bg-white border-t border-slate-200">
+      <footer className="py-12 bg-background border-t border-border">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-slate-900 flex items-center justify-center">
-              <ShieldCheck className="w-3 h-3 text-white" />
+            <div className="w-5 h-5 rounded bg-foreground flex items-center justify-center">
+              <ShieldCheck className="w-3 h-3 text-background" />
             </div>
             <span className="font-bold text-sm tracking-tight text-foreground">Fluxora</span>
           </div>
-          <p className="text-slate-500 text-xs font-medium">© {new Date().getFullYear()} Fluxora Platform. Deterministic AI Spend Intelligence.</p>
+          <p className="text-muted-foreground text-xs font-medium">© {new Date().getFullYear()} Fluxora Platform. Deterministic AI Spend Intelligence.</p>
         </div>
       </footer>
     </div>
