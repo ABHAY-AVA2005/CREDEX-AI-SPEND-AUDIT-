@@ -96,27 +96,27 @@
 }
 
 .dark {
-  --background: oklch(0.14 0.02 250); /* Deep Midnight (not pure black) */
-  --foreground: oklch(0.92 0.01 250); /* Off-white for reduced eye strain */
-  --card: oklch(0.18 0.02 250); /* Elevation Level 1 */
-  --card-foreground: oklch(0.92 0.01 250);
-  --popover: oklch(0.18 0.02 250);
-  --popover-foreground: oklch(0.92 0.01 250);
-  --primary: oklch(0.92 0.01 250);
-  --primary-foreground: oklch(0.14 0.02 250);
-  --secondary: oklch(0.22 0.02 250); /* Elevation Level 2 */
-  --secondary-foreground: oklch(0.92 0.01 250);
-  --muted: oklch(0.22 0.02 250);
-  --muted-foreground: oklch(0.65 0.02 250); /* Medium-emphasis grey */
-  --accent: oklch(0.75 0.12 250); /* Desaturated Sky Blue */
-  --accent-foreground: oklch(0.14 0.02 250);
-  --destructive: oklch(0.65 0.12 25); /* Desaturated Coral/Red */
+  --background: oklch(0.14 0.01 240); /* Neutral Dark Slate */
+  --foreground: oklch(0.92 0.01 240);
+  --card: oklch(0.17 0.01 240); /* Level 1 Slate Elevation */
+  --card-foreground: oklch(0.92 0.01 240);
+  --popover: oklch(0.17 0.01 240);
+  --popover-foreground: oklch(0.92 0.01 240);
+  --primary: oklch(0.92 0.01 240);
+  --primary-foreground: oklch(0.14 0.01 240);
+  --secondary: oklch(0.2 0.01 240); /* Level 2 Slate Elevation */
+  --secondary-foreground: oklch(0.92 0.01 240);
+  --muted: oklch(0.2 0.01 240);
+  --muted-foreground: oklch(0.6 0.01 240);
+  --accent: oklch(0.7 0.1 240); /* Technical Sky Blue */
+  --accent-foreground: oklch(0.14 0.01 240);
+  --destructive: oklch(0.65 0.12 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(1 0 0 / 0.1); /* 10% white border for definition */
-  --input: oklch(1 0 0 / 0.1);
-  --ring: oklch(0.75 0.12 250);
-  --grid-line: oklch(1 0 0 / 0.12); /* Increased from 5% to 12% */
-  --grid-dot: oklch(1 0 0 / 0.2);  /* Increased from 10% to 20% */
+  --border: oklch(1 0 0 / 0.08); /* Faint Technical Border */
+  --input: oklch(1 0 0 / 0.08);
+  --ring: oklch(0.7 0.1 240);
+  --grid-line: oklch(1 0 0 / 0.1);
+  --grid-dot: oklch(1 0 0 / 0.15);
 }
 
 @layer base {
@@ -138,19 +138,19 @@
     z-index: -1;
     background-color: var(--background);
     background-image: 
-      /* Central Glow */
-      radial-gradient(circle at 50% 40%, oklch(0.75 0.12 250 / 0.15), transparent 50%),
-      /* Main Grid Lines */
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-      /* Sub-Grid Dots */
-      radial-gradient(var(--grid-dot) 1px, transparent 0);
-    background-size: 100% 100%, 80px 80px, 80px 80px, 20px 20px;
+      /* Central Technical Glow */
+      radial-gradient(circle at 50% 40%, oklch(0.7 0.1 240 / 0.1), transparent 50%),
+      /* Razor-Thin Major Grid Lines */
+      linear-gradient(var(--grid-line) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, var(--grid-line) 0.5px, transparent 0.5px),
+      /* Technical Sub-Grid Dots */
+      radial-gradient(var(--grid-dot) 0.5px, transparent 0);
+    background-size: 100% 100%, 100px 100px, 100px 100px, 20px 20px;
     background-position: center center;
-    mask-image: radial-gradient(ellipse at center, black 70%, transparent 100%);
+    mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
   }
 
-  /* 3D Perspective Grid Layer */
+  /* 3D Perspective Engineering Layer */
   body::after {
     content: "";
     position: fixed;
@@ -160,12 +160,12 @@
     bottom: -50%;
     z-index: -1;
     background-image: 
-      linear-gradient(var(--grid-line) 1.5px, transparent 1.5px),
-      linear-gradient(90deg, var(--grid-line) 1.5px, transparent 1.5px);
-    background-size: 120px 120px;
-    transform: perspective(1000px) rotateX(60deg) translateY(0);
-    animation: grid-move 40s linear infinite;
-    opacity: 0.35;
+      linear-gradient(var(--grid-line) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, var(--grid-line) 0.5px, transparent 0.5px);
+    background-size: 100px 100px;
+    transform: perspective(1200px) rotateX(65deg) translateY(0);
+    animation: grid-move 45s linear infinite;
+    opacity: 0.2;
     pointer-events: none;
   }
 
