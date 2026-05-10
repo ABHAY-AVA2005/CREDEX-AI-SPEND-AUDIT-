@@ -99,7 +99,11 @@ const StatusIcon = ({ status }: { status: string }) => {
 
 export default function SampleAuditPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans">
+    <div className="min-h-screen bg-white text-slate-900 font-sans relative">
+      {/* Subtle Fintech Grid Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none fixed" 
+           style={{ backgroundImage: 'linear-gradient(to right, #0f172a 1px, transparent 1px), linear-gradient(to bottom, #0f172a 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+      </div>
       {/* ⚠️ Sticky Demo Banner */}
       <div className="sticky top-0 z-[60] w-full bg-amber-400 text-amber-900 text-center text-sm font-bold py-2 px-4 flex items-center justify-center gap-2 shadow-md">
         <AlertTriangle className="w-4 h-4 shrink-0" />

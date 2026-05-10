@@ -64,13 +64,39 @@ Deploy to **Vercel** with one click:
 4. **Honeypot Protection**: We chose hidden honeypot fields for abuse protection. This filters bots with zero friction for human users.
 5. **Tailwind + Framer Motion**: We built the UI with Vanilla Tailwind for performance and Framer Motion for a premium "Fintech" feel.
 
+## 🚀 Key Features
+
+### 1. Deterministic Audit Engine
+Unlike other tools that use probabilistic estimates, Credex uses a **Logic-First Engine**. We wrote clear, defensible rules that analyze your stack based on 2026 pricing data. This means every recommendation is 100% accurate and explainable to a CFO.
+
+### 2. High-Trust UX
+- **No Login Required**: Value first, leads later.
+- **Post-Value Lead Capture**: Users only share their email after seeing the actual savings.
+- **Public Share Links**: Anonymous report sharing with unique slugs (no sensitive data leaked).
+
+### 3. Bonus Features (The "Extra Mile")
+- **Industry Benchmark**: Compare your spend-per-seat against high-growth startup averages.
+- **PDF Export**: Instant professional reports for team distribution.
+- **Referral Loop**: Built-in perks for sharing with other founders.
+- **Embeddable Widget**: Code snippet for bloggers and partners to integrate the audit tool.
+
+## 📝 Project History (The 7-Day Sprint)
+- **May 7-8**: Market research and 2026 pricing database construction.
+- **May 9**: Initial prototype deployment (Green light on Vercel).
+- **May 10**: Engine refinement and deterministic rule implementation.
+- **May 11**: Bonus features (PDF, Benchmark, Widget) added.
+- **May 12**: Design polish (Premium Fintech UI) and 404/Share logic stabilization.
+- **May 13**: Final documentation and submission prep.
+
 ## 📊 Documentation
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack justification.
-- **[DEVLOG.md](./docs/DEVLOG.md)**: 7-day development history (May 9-15).
+- **[DEVLOG.md](./docs/DEVLOG.md)**: 7-day development history (May 7-13).
 - **[REFLECTION.md](./docs/REFLECTION.md)**: Post-build analysis and self-rating.
 - **[TESTS.md](./docs/TESTS.md)**: Automated test suite documentation.
 - **[PRICING_DATA.md](./docs/PRICING_DATA.md)**: 2026 verified pricing sources.
+- **[LAUNCH_THREAD.md](./docs/LAUNCH_THREAD.md)**: Draft X/Twitter thread.
 
 ## 🔗 Links
-- **Deployed URL:** [credex-ai-spend-audit.vercel.app](https://credex-ai-spend-audit.vercel.app)
+- **GitHub:** [https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-)
+- **Deployed URL:** [https://credex-ai-spend-audit.vercel.app](https://credex-ai-spend-audit.vercel.app)
 - **Marketplace:** [https://credex.rocks](https://credex.rocks)
