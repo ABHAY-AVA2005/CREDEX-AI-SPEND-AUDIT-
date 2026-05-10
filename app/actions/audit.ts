@@ -24,6 +24,7 @@ export interface ProcessedAuditResult extends AuditResult {
   publicSlug: string;
   companyName: string;
   isPersisted?: boolean;
+  dbError?: string;
 }
 
 /**
@@ -55,59 +56,59 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   const publicSlug = nanoid(10);
 
   // 4. Persist to database (Background Task - non-blocking for user results)
+  let isPersisted = false;
+  let dbErrorMsg: string | null = null;
+
   try {
     if (!process.env.DATABASE_URL) {
       console.warn("[AuditAction] Skipping DB persistence: DATABASE_URL not found.");
+      dbErrorMsg = "DATABASE_URL environment variable is missing.";
     } else {
       const { getPrismaClient } = await import("@/lib/prisma");
       const prisma = getPrismaClient();
-    
-    await prisma.audit.create({
-      data: {
-        companySize: parsed.data.companySize,
-        industry: parsed.data.industry,
-        totalSpend: result.totalCurrentSpend,
-        optimizedSpend: result.totalOptimizedSpend,
-        savings: result.monthlySavings,
-        aiSummary,
-        isPublic: true,
-        publicSlug,
-        tools: {
-          create: result.recommendations.map((rec) => ({
-            toolName: rec.originalTool,
-            currentPlan: rec.originalPlan ?? "",
-            seats: rec.originalSeats ?? 1,
-            monthlySpend: rec.originalMonthlyCost ?? 0,
-            // Mapping back to the original index to preserve useCases
-            useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
-            suggestedTool: rec.suggestedTool,
-            suggestedPlan: rec.suggestedPlan,
-            suggestedSpend: rec.suggestedTotalCost,
-            reasoning: rec.reasoning,
-          })),
+      
+      await prisma.audit.create({
+        data: {
+          companySize: parsed.data.companySize,
+          industry: parsed.data.industry,
+          totalSpend: result.totalCurrentSpend,
+          optimizedSpend: result.totalOptimizedSpend,
+          savings: result.monthlySavings,
+          aiSummary,
+          isPublic: true,
+          publicSlug,
+          tools: {
+            create: result.recommendations.map((rec) => ({
+              toolName: rec.originalTool,
+              currentPlan: rec.originalPlan ?? "",
+              seats: rec.originalSeats ?? 1,
+              monthlySpend: rec.originalMonthlyCost ?? 0,
+              useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
+              suggestedTool: rec.suggestedTool,
+              suggestedPlan: rec.suggestedPlan,
+              suggestedSpend: rec.suggestedTotalCost,
+              reasoning: rec.reasoning,
+            })),
+          },
         },
-      },
       });
+      isPersisted = true;
       console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
     }
-    const isPersisted = true;
-    return {
-      ...result,
-      aiSummary,
-      publicSlug,
-      companyName: parsed.data.companyName,
-      isPersisted,
-    };
   } catch (dbError) {
-    console.error("[AuditAction] Critical Database Error (Persist Failed):", dbError);
-    return {
-      ...result,
-      aiSummary,
-      publicSlug,
-      companyName: parsed.data.companyName,
-      isPersisted: false,
-    };
+    console.error("[AuditAction] Critical Database Error:", dbError);
+    dbErrorMsg = dbError instanceof Error ? dbError.message : "Unknown database error";
+    isPersisted = false;
   }
+
+  return {
+    ...result,
+    aiSummary,
+    publicSlug,
+    companyName: parsed.data.companyName,
+    isPersisted,
+    dbError: dbErrorMsg || undefined,
+  };
 }
 
 /**

@@ -239,9 +239,16 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       {result.isPersisted === false && (
-        <div className="bg-amber-500/10 border-b border-amber-500/20 py-2 px-4 flex items-center justify-center gap-2 text-amber-500 text-[10px] font-bold uppercase tracking-wider">
-          <AlertCircle className="w-3 h-3" />
-          Offline Mode: This audit is stored locally. Shareable link may not work until database sync.
+        <div className="bg-amber-500/10 border-b border-amber-500/20 py-2 px-4 flex flex-col items-center justify-center gap-1 text-amber-500 text-[10px] font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-3 h-3" />
+            Offline Mode: This audit is stored locally. Shareable link will not work for others.
+          </div>
+          {result.dbError && (
+            <div className="opacity-70 font-mono lowercase tracking-normal bg-black/20 px-2 rounded">
+              Error: {result.dbError}
+            </div>
+          )}
         </div>
       )}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
