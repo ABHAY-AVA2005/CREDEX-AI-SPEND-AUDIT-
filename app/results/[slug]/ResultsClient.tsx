@@ -7,7 +7,7 @@ import {
   ArrowLeft, TrendingDown, DollarSign, Wallet, ArrowRight,
   CheckCircle2, XCircle, AlertTriangle, Layers,
   Share2, Mail, Calendar, Copy, Check,
-  Download, Code, Award, Users, Shield
+  Download, Users, Shield
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -242,53 +242,6 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
             : `Great! Your per-seat spend is below the $${industryAvg} industry average.`}
         </p>
       </div>
-    </div>
-  );
-}
-
-// ── Referral Card ──
-function ReferralCard() {
-  return (
-    <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-6 shadow-md border border-emerald-400">
-      <div className="flex items-center gap-2 mb-3">
-        <Award className="w-5 h-5 text-emerald-100" />
-        <h3 className="font-bold text-sm">Refer a Founder</h3>
-      </div>
-      <p className="text-emerald-50 text-[11px] leading-relaxed mb-4">
-        Share this tool with another founder. If they run an audit, you both get $100 off your next Credex purchase.
-      </p>
-      <button className="w-full py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg text-xs font-bold transition-all active:scale-95 border border-white/20">
-        Copy Referral Link
-      </button>
-    </div>
-  );
-}
-
-// ── Widget Snippet ──
-function WidgetSnippet() {
-  const [copied, setCopied] = useState(false);
-  const code = `<script src="https://credex-audit.vercel.app/widget.js" async></script>`;
-  
-  const copy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <div className="bg-slate-900 text-slate-400 rounded-xl p-5 border border-slate-800">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Code className="w-4 h-4 text-blue-400" />
-          <h3 className="font-bold text-white text-[11px] uppercase tracking-wider">Embed on your blog</h3>
-        </div>
-        <button onClick={copy} className="text-[10px] hover:text-white transition-colors">
-          {copied ? "Copied!" : "Copy Code"}
-        </button>
-      </div>
-      <pre className="text-[10px] font-mono bg-black/30 p-2 rounded border border-white/5 overflow-x-auto">
-        {code}
-      </pre>
     </div>
   );
 }
@@ -565,18 +518,11 @@ export default function ResultsClient({
             ))}
 
             {/* Share & Extra */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-1 pt-4">
               <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.45 }}>
                 <ShareCard slug={result.publicSlug} />
               </motion.div>
-              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
-                <ReferralCard />
-              </motion.div>
             </div>
-
-            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.55 }}>
-              <WidgetSnippet />
-            </motion.div>
           </div>
         </div>
       </div>
