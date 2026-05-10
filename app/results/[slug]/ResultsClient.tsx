@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Shield, Download
+  Shield, Download, Copy, Check
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -152,11 +152,28 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
 }
 
 function ShareCard({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/results/${slug}` : "";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="bg-card border border-border rounded-2xl p-6">
-      <h3 className="font-bold text-foreground text-sm mb-2">Share this audit</h3>
-      <div className="px-3 py-2 bg-secondary border border-border rounded-lg text-xs font-mono truncate">
-        {`${typeof window !== 'undefined' ? window.location.origin : ''}/results/${slug}`}
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+      <h3 className="font-bold text-foreground text-sm mb-3">Share this audit</h3>
+      <div className="flex gap-2">
+        <div className="flex-grow px-3 py-2 bg-secondary border border-border rounded-xl text-[10px] font-mono truncate text-muted-foreground flex items-center">
+          {shareUrl}
+        </div>
+        <button 
+          onClick={handleCopy}
+          className="flex-shrink-0 p-2 bg-accent text-accent-foreground rounded-xl hover:opacity-90 active:scale-95 transition-all"
+        >
+          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        </button>
       </div>
     </div>
   );

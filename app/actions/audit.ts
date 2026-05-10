@@ -147,6 +147,9 @@ export async function captureLeadEmail(
 
   // 2. Send the Email Report
   if (resend) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL 
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
     try {
       await resend.emails.send({
         from: "Fluxora Audit <onboarding@resend.dev>",
@@ -194,7 +197,7 @@ export async function captureLeadEmail(
       <h1>🎯 Your AI Spend Audit is Ready</h1>
       <p>Hi ${companyName}, we've analyzed your AI tool stack</p>
     </div>
-
+ 
     <div class="content">
       <div class="savings-card">
         <div style="font-size: 48px; margin-bottom: 10px;">💰</div>
@@ -204,7 +207,7 @@ export async function captureLeadEmail(
           That's $${annualSavings.toLocaleString()} annually on your AI tools
         </div>
       </div>
-
+ 
       <div class="summary-section">
         <div class="summary-title">📊 Executive Summary</div>
         <div class="summary-text">
@@ -213,13 +216,13 @@ export async function captureLeadEmail(
           ).join('')}
         </div>
       </div>
-
+ 
       <div style="text-align: center; margin: 40px 0;">
-        <a href="${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/results/${publicSlug}" class="cta-button">
+        <a href="${baseUrl}/results/${publicSlug}" class="cta-button">
           📈 View Your Full Audit Report
         </a>
         <p style="color: #6b7280; font-size: 14px; margin: 15px 0 0 0;">
-          Shareable link: ${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/results/${publicSlug}
+          Shareable link: ${baseUrl}/results/${publicSlug}
         </p>
       </div>
 
