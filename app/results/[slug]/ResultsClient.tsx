@@ -475,13 +475,34 @@ export default function ResultsClient({
             {/* Consultation CTA — only for high savings */}
             <ConsultationCTA annualSavings={result.annualSavings} />
 
-            {/* Executive Summary */}
+            {/* Executive Summary — Letter Format */}
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-              <h2 className="text-base font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> Executive Summary
-              </h2>
-              <p className="text-sm text-slate-600 leading-relaxed italic">{result.aiSummary}</p>
+              className="bg-white rounded-xl border border-slate-200 shadow-lg p-8 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
+              <div className="flex justify-between items-start mb-8">
+                <div className="space-y-1">
+                  <h2 className="text-xl font-serif font-black text-slate-900 italic tracking-tight">Executive Summary</h2>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Credex Audit ID: {result.publicSlug.toUpperCase()}</p>
+                </div>
+                <Shield className="w-8 h-8 text-slate-100" />
+              </div>
+              <div className="prose prose-slate max-w-none">
+                <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                  Dear {result.companyName || "Founder"},
+                </p>
+                <div className="text-sm text-slate-600 leading-relaxed mt-4 space-y-4">
+                  {result.aiSummary.split('\n').map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+                <div className="mt-8 pt-6 border-t border-slate-50 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold">CA</div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">Credex Audit Engine</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Deterministic Intelligence Unit</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Chart */}

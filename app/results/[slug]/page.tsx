@@ -15,12 +15,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   try {
     const prisma = getPrismaClient();
-    const audit = await prisma.audit.findUnique({ where: { publicSlug: slug } });
+    const audit = await prisma.audit.findFirst({ where: { publicSlug: slug } });
     if (audit) {
       savings = audit.savings * 12; // annual
       company = "Your AI Stack";
     }
-  } catch {
+  } catch (err) {
+    console.error("Metadata error:", err);
     // DB unavailable — use defaults
   }
 
@@ -59,7 +60,7 @@ export default async function ResultsPage({ params }: Props) {
   // Try to load from DB
   try {
     const prisma = getPrismaClient();
-    const audit = await prisma.audit.findUnique({
+    const audit = await prisma.audit.findFirst({
       where: { publicSlug: slug, isPublic: true },
       include: { tools: true },
     });
@@ -92,7 +93,8 @@ export default async function ResultsPage({ params }: Props) {
     };
 
     return <ResultsClient result={result} isShared={true} />;
-  } catch {
+  } catch (err) {
+    console.error("Results page error:", err);
     return notFound();
   }
 }

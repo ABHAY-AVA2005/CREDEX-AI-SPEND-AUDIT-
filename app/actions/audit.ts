@@ -34,38 +34,33 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   const publicSlug = nanoid(10);
 
   // 4. Persist to database (Prisma)
-  try {
-    const { getPrismaClient } = await import("@/lib/prisma");
-    const prisma = getPrismaClient();
-    await prisma.audit.create({
-      data: {
-        companySize: parsed.data.companySize,
-        industry: parsed.data.industry,
-        totalSpend: result.totalCurrentSpend,
-        optimizedSpend: result.totalOptimizedSpend,
-        savings: result.monthlySavings,
-        aiSummary,
-        isPublic: true,
-        publicSlug,
-        tools: {
-          create: result.recommendations.map((rec) => ({
-            toolName: rec.originalTool,
-            currentPlan: rec.originalPlan ?? "",
-            seats: rec.originalSeats ?? 1,
-            monthlySpend: rec.originalMonthlyCost ?? 0,
-            useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
-            suggestedTool: rec.suggestedTool,
-            suggestedPlan: rec.suggestedPlan,
-            suggestedSpend: rec.suggestedTotalCost,
-            reasoning: rec.reasoning,
-          })),
-        },
+  const { getPrismaClient } = await import("@/lib/prisma");
+  const prisma = getPrismaClient();
+  await prisma.audit.create({
+    data: {
+      companySize: parsed.data.companySize,
+      industry: parsed.data.industry,
+      totalSpend: result.totalCurrentSpend,
+      optimizedSpend: result.totalOptimizedSpend,
+      savings: result.monthlySavings,
+      aiSummary,
+      isPublic: true,
+      publicSlug,
+      tools: {
+        create: result.recommendations.map((rec) => ({
+          toolName: rec.originalTool,
+          currentPlan: rec.originalPlan ?? "",
+          seats: rec.originalSeats ?? 1,
+          monthlySpend: rec.originalMonthlyCost ?? 0,
+          useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
+          suggestedTool: rec.suggestedTool,
+          suggestedPlan: rec.suggestedPlan,
+          suggestedSpend: rec.suggestedTotalCost,
+          reasoning: rec.reasoning,
+        })),
       },
-    });
-  } catch (dbError) {
-    // DB not available locally — continue without saving
-    console.warn("DB save skipped:", dbError);
-  }
+    },
+  });
 
   return {
     ...result,
