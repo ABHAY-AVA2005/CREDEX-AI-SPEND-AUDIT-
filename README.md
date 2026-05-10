@@ -88,6 +88,15 @@ Unlike other tools that use probabilistic estimates, Credex uses a **Logic-First
 - **May 12**: Design polish (Premium Fintech UI) and 404/Share logic stabilization.
 - **May 13**: Final documentation and submission prep.
 
+## 🧠 Technical Decisions & Trade-offs
+
+During the 7-day sprint, several critical decisions shaped the platform:
+
+1. **Deterministic Logic vs. LLM Math**: I decided early on to hardcode the savings logic in TypeScript rather than asking an LLM to "calculate" it. **Reason:** CFOs require precision. An LLM might hallucinate a pricing tier or miscalculate a 12-month projection. By using a registry of real pricing, we guarantee financial accuracy.
+2. **Post-Value Lead Capture**: Most tools gate everything behind an email. Credex shows the **Full Audit** first. **Reason:** Trust is the hardest currency to earn. By showing value first, the quality of the leads we capture (founders who already see the potential savings) is significantly higher.
+3. **App Router & Server Actions**: Leveraged Next.js 15 Server Actions for all database mutations. **Reason:** It eliminates the need for separate API routes and reduces the total code surface area, making the app easier to maintain and faster to deploy.
+4. **Prisma over Raw SQL**: While raw SQL is faster, Prisma provided the type-safety needed to move quickly without introducing bugs in the tool-to-audit relationships.
+
 ## 📊 Documentation
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack justification.
 - **[DEVLOG.md](./docs/DEVLOG.md)**: 7-day development history (May 7-13).
