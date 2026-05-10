@@ -17,9 +17,9 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const actionConfig: Record<string, { label: string; bg: string; color: string; border: string; icon: React.ReactNode }> = {
   REPLACE:     { label: "Replace",     bg: "bg-destructive/10", color: "text-destructive", border: "border-destructive/20", icon: <XCircle className="w-4 h-4" /> },
-  CONSOLIDATE: { label: "Consolidate", bg: "bg-orange-500/10",  color: "text-orange-400",    border: "border-orange-500/20", icon: <Layers className="w-4 h-4" /> },
-  DOWNGRADE:   { label: "Downgrade",   bg: "bg-amber-500/10",  color: "text-amber-400",     border: "border-amber-500/20",  icon: <AlertTriangle className="w-4 h-4" /> },
-  KEEP:        { label: "Keep",        bg: "bg-emerald-500/10", color: "text-emerald-400",   border: "border-emerald-500/20", icon: <CheckCircle2 className="w-4 h-4" /> },
+  CONSOLIDATE: { label: "Consolidate", bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <Layers className="w-4 h-4" /> },
+  DOWNGRADE:   { label: "Downgrade",   bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <AlertTriangle className="w-4 h-4" /> },
+  KEEP:        { label: "Keep",        bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <CheckCircle2 className="w-4 h-4" /> },
 };
 
 function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: number }) {
@@ -124,7 +124,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   if (submitted) return <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 text-center text-emerald-500 font-bold">Report sent!</div>;
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
       <h3 className="font-bold text-foreground text-sm mb-4">Get the full report</h3>
       <form onSubmit={handleSubmit} className="space-y-3">
         <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Work Email" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
@@ -132,7 +132,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
           <input type="text" required value={role} onChange={e => setRole(e.target.value)} placeholder="Role (e.g. CTO)" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
           <input type="number" required value={teamSize} onChange={e => setTeamSize(e.target.value)} placeholder="Team Size" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
         </div>
-        <button type="submit" disabled={loading} className="w-full py-2.5 bg-foreground text-background font-semibold rounded-lg hover:opacity-90">
+        <button type="submit" disabled={loading} className="w-full py-2.5 bg-accent text-accent-foreground font-semibold rounded-2xl hover:opacity-90">
           {loading ? "Sending..." : "Send Free Report"}
         </button>
       </form>
@@ -144,7 +144,7 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
   const totalSeats = result.recommendations.reduce((acc, r) => acc + (r.originalSeats || 1), 0);
   const spendPerSeat = totalSeats > 0 ? Math.round(result.totalCurrentSpend / totalSeats) : 0;
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
       <h3 className="font-bold text-foreground text-sm mb-4">Industry Benchmark</h3>
       <div className="text-2xl font-bold">${spendPerSeat}<span className="text-xs text-muted-foreground">/seat/mo</span></div>
     </div>
@@ -153,7 +153,7 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
 
 function ShareCard({ slug }: { slug: string }) {
   return (
-    <div className="bg-card border border-border rounded-xl p-6">
+    <div className="bg-card border border-border rounded-2xl p-6">
       <h3 className="font-bold text-foreground text-sm mb-2">Share this audit</h3>
       <div className="px-3 py-2 bg-secondary border border-border rounded-lg text-xs font-mono truncate">
         {`${typeof window !== 'undefined' ? window.location.origin : ''}/results/${slug}`}
@@ -165,10 +165,10 @@ function ShareCard({ slug }: { slug: string }) {
 function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
   if (annualSavings < 6000) return null;
   return (
-    <div className="bg-gradient-to-br from-indigo-900 to-blue-900 text-white rounded-xl p-6 border border-white/10 shadow-lg">
+    <div className="bg-gradient-to-br from-[#0B0E14] to-[#1E293B] text-white rounded-2xl p-6 border border-white/10 shadow-lg">
       <h3 className="font-extrabold text-lg mb-2">Unlock Capital Recovery</h3>
-      <p className="text-blue-100 text-sm mb-4">Wastage detected. Book a call to liquidate unused credits.</p>
-      <a href="https://credex.rocks" className="block w-full py-2 bg-white text-blue-900 font-bold rounded-lg text-center text-sm">Book Consultation</a>
+      <p className="text-muted-foreground text-sm mb-4">Wastage detected. Book a call to liquidate unused credits.</p>
+      <a href="https://credex.rocks" className="block w-full py-2 bg-accent text-accent-foreground font-bold rounded-xl text-center text-sm hover:opacity-90 transition-opacity">Book Consultation</a>
     </div>
   );
 }
@@ -176,7 +176,7 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
 export default function ResultsClient({ result, isShared = false }: { result: ProcessedAuditResult; isShared?: boolean; }) {
   const chartData = [
     { name: "Current", amount: result.totalCurrentSpend, fill: "#CF6679" },
-    { name: "Optimized", amount: result.totalOptimizedSpend, fill: "#81C784" },
+    { name: "Optimized", amount: result.totalOptimizedSpend, fill: "#00A36C" },
   ];
 
   const savingsPct = result.totalCurrentSpend > 0 ? Math.round((result.monthlySavings / result.totalCurrentSpend) * 100) : 0;
@@ -203,7 +203,7 @@ export default function ResultsClient({ result, isShared = false }: { result: Pr
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Current Spend", value: `$${result.totalCurrentSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <DollarSign className="w-4 h-4" /> },
-            { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-[#81C784]", icon: <TrendingDown className="w-4 h-4" /> },
+            { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
             { label: "Optimized Spend", value: `$${result.totalOptimizedSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <Wallet className="w-4 h-4" /> },
             { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
           ].map((card, i) => (
@@ -223,7 +223,7 @@ export default function ResultsClient({ result, isShared = false }: { result: Pr
           {/* Left Panel */}
           <div className="lg:col-span-1 space-y-6">
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
-              className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-secondary/30 border-border' : 'bg-emerald-500/10 border-emerald-500/20'} text-center`}>
+              className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-secondary/30 border-border' : 'bg-accent/10 border-accent/20'} text-center`}>
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
@@ -232,9 +232,9 @@ export default function ResultsClient({ result, isShared = false }: { result: Pr
                 </>
               ) : (
                 <>
-                  <TrendingDown className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
+                  <TrendingDown className="w-10 h-10 text-accent mx-auto mb-3" />
                   <h2 className="text-xl font-black">Wasted spend found.</h2>
-                  <p className="text-muted-foreground text-sm mt-2">Identify <span className="font-bold text-emerald-500">${result.monthlySavings}/mo</span> in potential recovery.</p>
+                  <p className="text-muted-foreground text-sm mt-2">Identify <span className="font-bold text-accent">${result.monthlySavings}/mo</span> in potential recovery.</p>
                 </>
               )}
             </motion.div>

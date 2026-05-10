@@ -41,7 +41,7 @@ export default function LandingPage() {
             </a>
             <Link 
               href="/audit" 
-              className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded hover:opacity-90 transition-all shadow-sm active:scale-95"
+              className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-2xl hover:opacity-90 transition-all shadow-sm active:scale-95"
             >
               Start Free Audit
             </Link>
@@ -85,7 +85,7 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-8 max-w-2xl text-lg md:text-xl text-slate-500 mx-auto mb-12 leading-relaxed"
+              className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground mx-auto mb-12 leading-relaxed"
             >
               Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. Fluxora uses deterministic math to recover up to 40% of your AI budget.
             </motion.p>
@@ -99,7 +99,7 @@ export default function LandingPage() {
             >
               <Link 
                 href="/audit" 
-                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl bg-foreground text-background hover:opacity-90 transition-all shadow-2xl shadow-accent/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl bg-accent text-accent-foreground hover:opacity-90 transition-all shadow-2xl shadow-accent/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
               >
                 {/* Shimmer effect for that extra polish */}
                 <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-white/10 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -108,7 +108,7 @@ export default function LandingPage() {
               
               <Link 
                 href="/sample" 
-                className="flex items-center justify-center px-10 py-5 text-lg font-bold rounded-xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
+                className="flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
               >
                 View Sample Report
               </Link>

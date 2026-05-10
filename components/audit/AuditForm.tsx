@@ -302,7 +302,7 @@ export default function AuditForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative flex items-center justify-center min-w-[320px] px-10 py-5 bg-foreground text-background rounded-2xl font-black text-lg hover:opacity-90 active:scale-95 transition-all shadow-2xl shadow-accent/20 disabled:opacity-50 overflow-hidden"
+            className="group relative flex items-center justify-center min-w-[320px] px-10 py-5 bg-accent text-accent-foreground rounded-2xl font-black text-lg hover:opacity-90 active:scale-95 transition-all shadow-2xl shadow-accent/20 disabled:opacity-50 overflow-hidden"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-3">
