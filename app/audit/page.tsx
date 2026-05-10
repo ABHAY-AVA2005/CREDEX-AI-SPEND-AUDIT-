@@ -6,7 +6,7 @@ export default function AuditPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-slate-900 selection:bg-blue-100">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center">
+        <div className="max-w-full px-4 sm:px-8 h-16 flex items-center">
           <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Home</span>
