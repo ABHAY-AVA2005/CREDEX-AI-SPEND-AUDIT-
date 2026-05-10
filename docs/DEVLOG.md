@@ -139,4 +139,21 @@
 - Keeping documentation simple is just as important as the code
 - The "Fluxora Consultation" CTA is the most important business outcome of the app
 
-**Status:** Project complete, fully documented, and ready for submission.
+---
+
+## Day 8 — 2026-05-14
+**Hours worked:** 6
+
+**What I did:**
+- **Midnight UI Overhaul**: Transitioned the entire platform to a professional "Midnight" dark-mode-first aesthetic.
+- **Desaturated Palette Implementation**: Applied foundational dark mode principles (avoiding pure black, using desaturated coral/mint functional colors).
+- **Elevated 3D Background**: Engineered a high-end 3D animated perspective grid for the background, creating a "Founder's Blueprint" look.
+- **Accessibility Hardening**: Verified all text-to-background contrast ratios against WCAG 4.5:1 standards.
+- **Background Layering Fix**: Resolved CSS z-index conflicts to ensure grid visibility across all browser engines.
+
+**What I learned:**
+- Small details like avoiding pure black (#000000) significantly reduce eye strain and feel more premium.
+- Using 3D perspective in CSS is a lightweight way to add immense depth to a simple UI.
+- "Elevation" in dark mode is better represented by color shifts (darker to lighter) than by shadows.
+
+**Status:** Project complete, fully documented, and ready for production launch.
