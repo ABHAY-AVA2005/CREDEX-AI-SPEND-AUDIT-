@@ -1,5 +1,11 @@
 # Automated Tests Documentation
 
+> [!TIP]
+> **Quick Start: Run all tests in 1 second**
+> 1. Open your terminal in the project root.
+> 2. Run: `npm test`
+> 3. Verify that you see `5 passed` in the output.
+
 ## Overview
 All automated tests are located in the `core/audit-engine/` directory and cover the deterministic recommendation engine logic. Tests verify financial calculations, edge cases, and multi-tool scenarios.
 

@@ -1,5 +1,11 @@
 "use client"
 
+/**
+ * AuditForm.tsx
+ * The high-conversion, single-page audit form.
+ * Built with react-hook-form and zod for that crisp validation.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +17,8 @@ import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
 import { useRouter } from "next/navigation";
 import { processAuditAction } from "@/app/actions/audit";
 
+// We store the draft in localStorage so founders don't lose their 
+// progress if they accidentally close the tab while looking up pricing.
 const FORM_STORAGE_KEY = "ai_spend_audit_draft";
 
 export default function AuditForm() {
@@ -18,6 +26,7 @@ export default function AuditForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
+  // Standard form setup with Zod validation
   const form = useForm<AuditFormInput>({
     resolver: zodResolver(AuditFormSchema),
     defaultValues: {
@@ -28,14 +37,17 @@ export default function AuditForm() {
     },
   });
 
+  // Extracting unique tool names for the dropdown
   const uniqueTools = Array.from(new Set(KNOWN_TOOLS.map(t => t.name)));
 
+  // Field arrays handle the dynamic tool list (Add/Remove)
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "tools",
   });
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount. 
+  // We use isClient to avoid hydration mismatch in Next.js.
   useEffect(() => {
     setIsClient(true);
     const saved = localStorage.getItem(FORM_STORAGE_KEY);
@@ -44,12 +56,14 @@ export default function AuditForm() {
         const parsed = JSON.parse(saved);
         form.reset(parsed);
       } catch (e) {
-        console.error("Failed to parse saved form draft", e);
+        // If it's corrupted, just let it be.
+        console.error("Soft-fail: Failed to parse saved form draft", e);
       }
     }
   }, [form]);
 
-  // Save to localStorage on change
+  // Save to localStorage every time the user types. 
+  // Safety first!
   useEffect(() => {
     if (!isClient) return;
     const subscription = form.watch((value) => {
@@ -58,22 +72,32 @@ export default function AuditForm() {
     return () => subscription.unsubscribe();
   }, [form, isClient]);
 
+  // Anti-spam honeypot. Keep it simple and effective.
   const [honeypot, setHoneypot] = useState("");
 
   const onSubmit = async (data: AuditFormInput) => {
     if (honeypot) { 
+      // Silently redirect bots to the dashboard without hitting the engine
       router.push('/dashboard');
       return; 
     }
+
     setIsSubmitting(true);
     try {
+      // Hit our server action to process the audit
       const results = await processAuditAction(data);
+      
+      // We store the result in sessionStorage for immediate dashboard viewing
       sessionStorage.setItem("latest_audit_result", JSON.stringify(results));
+      
+      // Cleanup the draft once it's submitted
       localStorage.removeItem(FORM_STORAGE_KEY);
+      
+      // Off to the dashboard!
       router.push('/dashboard');
     } catch (e) {
-      console.error(e);
-      alert("Something went wrong analyzing your stack.");
+      console.error("Audit submission failed:", e);
+      alert("Something went wrong analyzing your stack. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -84,10 +108,19 @@ export default function AuditForm() {
   return (
     <div className="bg-white border border-slate-200 shadow-lg rounded-xl p-6 md:p-10">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
-        {/* Honeypot for bot protection */}
-        <input type="text" name="b_name" style={{display: 'none'}} value={honeypot} onChange={e => setHoneypot(e.target.value)} tabIndex={-1} autoComplete="off" />
+        
+        {/* Honeypot for bot protection — hidden from humans */}
+        <input 
+          type="text" 
+          name="b_name" 
+          style={{display: 'none'}} 
+          value={honeypot} 
+          onChange={e => setHoneypot(e.target.value)} 
+          tabIndex={-1} 
+          autoComplete="off" 
+        />
 
-        {/* ── Section 1: Company Details ── */}
+        {/* ── Section 1: Company Profile ── */}
         <section className="space-y-6">
           <div>
             <h2 className="text-2xl font-serif font-black tracking-tight text-slate-900">1. Company Profile</h2>
@@ -149,6 +182,7 @@ export default function AuditForm() {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-6 border-2 border-slate-100 rounded-2xl relative bg-white shadow-sm hover:border-slate-200 transition-all"
               >
+                {/* Individual Tool Header */}
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded uppercase tracking-widest">Tool #{index + 1}</span>
                   {fields.length > 1 && (
@@ -225,6 +259,7 @@ export default function AuditForm() {
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Use Cases</label>
                     <input
                       onChange={(e) => {
+                        // Turning the comma-separated string back into an array for the schema
                         const val = e.target.value.split(",").map(s => s.trim()).filter(Boolean);
                         form.setValue(`tools.${index}.useCases`, val);
                       }}
@@ -254,7 +289,7 @@ export default function AuditForm() {
         <section className="pt-8 border-t border-slate-100 flex flex-col items-center gap-6">
           <div className="text-center">
              <p className="text-slate-500 text-sm mb-1">Results are deterministic and based on real 2026 pricing.</p>
-             <p className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Instant Analyze · No Signup Required</p>
+             <p className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Instant Analysis • No Signup Required</p>
           </div>
 
           <button
@@ -264,17 +299,19 @@ export default function AuditForm() {
           >
             {isSubmitting ? (
               <span className="flex items-center gap-3">
+                {/* Loading spinner for that premium feel */}
                 <svg className="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V8z"/>
                 </svg>
-                Analyzing...
+                Analyzing Stack...
               </span>
             ) : (
               <span className="flex items-center gap-2">
                 Generate Full Audit <CheckCircle2 className="w-6 h-6" />
               </span>
             )}
+            {/* Shimmer effect on hover */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
           </button>
         </section>

@@ -2,6 +2,18 @@
 
 Credex is a deterministic AI spend intelligence platform designed for startups and engineering teams to uncover hidden wastage in their SaaS stacks. It provides instant visibility into overlapping tools, underutilized seats, and optimal plan recommendations, while enabling capital recovery through the Credex credit marketplace.
 
+## 🏗️ Core Principle & Workflow
+
+Credex operates on a **"Value-First"** funnel. We prove the financial leakage before asking for any user identity.
+
+**User Input** → **Zod Validation** → **Deterministic Audit Engine** → **Gemini AI Summarization** → **Result Dashboard** → **Lead Capture (Optional)** → **PDF Report Delivered**
+
+1. **Ingestion**: User enters their current tool stack (Seats, Plan, Spend).
+2. **Analysis**: Our engine runs a series of hard-coded rules to find functional overlap (e.g., Cursor vs. Copilot).
+3. **Intelligence**: Gemini writes a human-readable executive summary based on the raw audit data.
+4. **Persistence**: A unique shareable URL is generated (Slug-based) and saved to PostgreSQL.
+5. **Recovery**: Users are guided to the Credex Marketplace to liquidate identified wastage.
+
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
@@ -28,6 +40,9 @@ cp .env.example .env
 ```bash
 # Generate Prisma Client
 npx prisma generate
+
+# Run Automated Tests (Rule Verification)
+npm test
 
 # Start the dev server
 npm run dev
@@ -98,12 +113,15 @@ During the 7-day sprint, several critical decisions shaped the platform:
 4. **Prisma over Raw SQL**: While raw SQL is faster, Prisma provided the type-safety needed to move quickly without introducing bugs in the tool-to-audit relationships.
 
 ## 📊 Documentation
-- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack justification.
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Technical stack, pipeline diagram, and scalability plan.
+- **[GTM.md](./docs/GTM.md)**: Go-to-market strategy, target personas, and acquisition channels.
+- **[METRICS.md](./docs/METRICS.md)**: North Star metric, driver metrics, and pivot triggers.
+- **[LANDING_COPY.md](./docs/LANDING_COPY.md)**: Marketing copy, social proof, and FAQ.
+- **[TESTS.md](./docs/TESTS.md)**: Detailed breakdown of the 7 automated tests.
 - **[DEVLOG.md](./docs/DEVLOG.md)**: 7-day development history (May 7-13).
-- **[REFLECTION.md](./docs/REFLECTION.md)**: Post-build analysis and self-rating.
-- **[TESTS.md](./docs/TESTS.md)**: Automated test suite documentation.
+- **[REFLECTION.md](./docs/REFLECTION.md)**: Decisions, AI usage disclosure, and entrepreneurial insights.
 - **[PRICING_DATA.md](./docs/PRICING_DATA.md)**: 2026 verified pricing sources.
-- **[LAUNCH_THREAD.md](./docs/LAUNCH_THREAD.md)**: Draft X/Twitter thread.
+
 
 ## 🔗 Links
 - **GitHub:** [https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-)

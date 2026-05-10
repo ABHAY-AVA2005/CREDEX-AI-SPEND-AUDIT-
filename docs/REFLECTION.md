@@ -14,13 +14,13 @@ I originally thought about forcing users to give their email **before** seeing r
 - **Team Dashboard**: A view for managers to see all team members' AI subscriptions in one place.
 
 ## 4. How I used AI
-I used **Cursor** (with Claude 3.5 Sonnet) as my primary pair-programmer. 
-- **Where it excelled**: Generating the initial Tailwind skeletons for the KPI cards and handling the boilerplate for Prisma schema migrations.
-- **Where I took the wheel**: I manually designed the deterministic audit logic and the specific "Finance Reasoning" behind the tool replacements. AI often suggested generic "efficiency" tips; I overrode these with hard-math rules (e.g., "Consolidate GitHub vs Cursor" which requires specific IDE knowledge).
-- **Critical Oversight**: AI tried to use `Math.random()` for the public slugs; I manually switched to `nanoid` to ensure URL safety and professionality.
+I used **Antigravity** (for complex agentic tasks) and **Windsurf** (for context-aware coding) within **VS Code** as my primary tools.
+- **Where they excelled**: Antigravity was exceptional at managing the 7-day sprint lifecycle—handling multi-file refactors like the form unification and documentation sync. Windsurf helped with rapid UI iteration on the Tailwind components.
+- **Where I took the wheel**: I manually designed the deterministic audit logic and the specific "Finance Reasoning" behind the tool replacements. The agents often suggested generic "efficiency" tips; I overrode these with hard-math rules (e.g., "Consolidate GitHub vs Cursor" which requires specific IDE knowledge).
+- **Critical Oversight**: An early agent suggestion tried to use `Math.random()` for the public slugs; I manually switched to `nanoid` to ensure URL safety and professionality.
 
 ## 5. Entrepreneurial Insights
-If I were to pitch this to a VC today, I would focus on the **"Secondary Credit Market"** data. By giving away the audit for free, Credex identifies exactly who is overpaying for OpenAI or AWS. We then offer them a 1-click liquidation path to sell those unused credits on our marketplace. This turns a "cost-reduction tool" into a "revenue-generation engine."
+If I were to pitch this to a VC today (Venture Capitalist — a professional investor who funds high-growth startups), I would focus on the **"Secondary Credit Market"** data. By giving away the audit for free, Credex identifies exactly who is overpaying for OpenAI or AWS. We then offer them a 1-click liquidation path to sell those unused credits on our marketplace. This turns a "cost-reduction tool" into a "revenue-generation engine."
 
 ## 6. Self-Rating
 - **Discipline (8/10)**: I logged my work every day and stayed focused.

@@ -4,16 +4,25 @@ import { getPrismaClient } from "@/lib/prisma";
 import ResultsClient from "./ResultsClient";
 import { ProcessedAuditResult } from "@/app/actions/audit";
 
+/**
+ * results/[slug]/page.tsx
+ * The dynamic entry point for sharing audits.
+ * 
+ * We handle SEO metadata generation here so that shared links
+ * on X/LinkedIn look professional with the specific savings amount.
+ */
+
 interface Props {
   params: { slug: string };
 }
 
-// Dynamic Open Graph metadata per audit
+// ── Dynamic SEO Metadata ──
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   let savings = 12000;
   let company = "Startup";
 
+  // Handle the demo slug explicitly
   if (slug === "sample-demo") {
     savings = 96096;
     company = "Acme Corp (Demo)";
@@ -22,17 +31,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const prisma = getPrismaClient();
       const audit = await prisma.audit.findFirst({ where: { publicSlug: slug } });
       if (audit) {
-        savings = audit.savings * 12; // annual
+        savings = audit.savings * 12; // annualized for the headline
         company = "Your AI Stack";
       }
     } catch (err) {
-      console.error("Metadata error:", err);
-      // DB unavailable — use defaults
+      console.error("Metadata recovery failed:", err);
     }
   }
 
   const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | Credex`;
-  const description = `See exactly where ${company} is overspending on AI tools and how to save $${savings.toLocaleString()} annually. Powered by Credex.`;
+  const description = `See exactly where ${company} is overspending on AI tools and how to recover $${savings.toLocaleString()} annually.`;
 
   return {
     title,
@@ -60,9 +68,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// ── Main Page Component ──
 export default async function ResultsPage({ params }: Props) {
   const { slug } = await params;
 
+  // 1. Check for the hardcoded Demo state
   if (slug === "sample-demo") {
     const sampleResult: ProcessedAuditResult = {
       companyName: "Acme Corp (Demo)",
@@ -96,12 +106,14 @@ export default async function ResultsPage({ params }: Props) {
           suggestedTotalCost: 5200,
           savings: 3200,
           newCost: 5200,
-          reasoning: "Redeploy $3,200 in expiring AWS reserved credits before 38-day deadline."
+          reasoning: "Redeploy $3,200 in expiring AWS reserved credits before the 38-day deadline."
         }
       ]
     };
     return <ResultsClient result={sampleResult} isShared={true} />;
   }
+
+  // 2. Fetch from Database for real user audits
   try {
     const prisma = getPrismaClient();
     const audit = await prisma.audit.findFirst({
@@ -111,7 +123,7 @@ export default async function ResultsPage({ params }: Props) {
 
     if (!audit) return notFound();
 
-    // Reconstruct result shape for the client component
+    // Reconstruct the JSON result for the client-side dashboard
     const result = {
       publicSlug: slug,
       companyName: "Your Company",
@@ -138,7 +150,7 @@ export default async function ResultsPage({ params }: Props) {
 
     return <ResultsClient result={result} isShared={true} />;
   } catch (err) {
-    console.error("Results page error:", err);
+    console.error("Results data fetch failed:", err);
     return notFound();
   }
 }

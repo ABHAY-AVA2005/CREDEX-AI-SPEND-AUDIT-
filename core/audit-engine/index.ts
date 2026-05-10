@@ -1,3 +1,12 @@
+/**
+ * audit-engine/index.ts
+ * The "Brain" of the operation.
+ * 
+ * I've structured this as a series of deterministic rules. 
+ * Why? Because when you're telling a founder they're wasting $10k/year, 
+ * "the AI said so" isn't a good enough answer. They need to see the logic.
+ */
+
 import { AuditFormInput, AuditResult, AuditRecommendation } from "@/schemas/audit";
 import { KNOWN_TOOLS } from "./knowledge";
 
@@ -6,12 +15,14 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
   let totalOptimizedSpend = 0;
   const recommendations: AuditRecommendation[] = [];
 
+  // Track capabilities we've already covered so we can find redundancies.
   const coveredCapabilities = new Set<string>();
 
   input.tools.forEach((tool) => {
     const currentCost = tool.monthlySpend;
     totalCurrentSpend += currentCost;
 
+    // Default state: Keep the tool as is.
     let action: AuditRecommendation["action"] = "KEEP";
     let newCost = currentCost;
     let suggestedTool: string | undefined = undefined;
@@ -23,7 +34,11 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     const toolNameLower = tool.toolName.toLowerCase();
     const useCasesLower = tool.useCases.map(u => u.toLowerCase());
 
-    // Rule 1: Replace expensive pure copywriting tools with Claude
+    /**
+     * RULE 1: Replace expensive pure copywriting tools with Claude.
+     * Jasper and Copy.ai were great in 2023, but Claude 3.5 is now the king
+     * of creative writing at a much lower price point.
+     */
     if ((toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) && currentCost > 20) {
       const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
       action = "REPLACE";
@@ -35,7 +50,11 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       reasoning = `Claude 3.5 Sonnet offers equivalent or better copywriting capabilities for a fraction of the cost of ${tool.toolName}.`;
       coveredCapabilities.add("COPYWRITING");
     }
-    // Rule 2: Consolidate Copilot + ChatGPT for Coding into Cursor
+
+    /**
+     * RULE 2: Consolidate Copilot + ChatGPT for Coding into Cursor.
+     * Cursor is the new standard. If they have it, they don't need Copilot.
+     */
     else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
        if (!coveredCapabilities.has("CODE")) {
          const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
@@ -45,37 +64,50 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
          suggestedCostPerSeat = rec?.costPerSeat ?? 20;
          newCost = suggestedCostPerSeat * tool.seats;
          suggestedTotalCost = newCost;
-         reasoning = `Cursor includes Claude 3.5 Sonnet and GPT-4o natively in the IDE, replacing the need for separate Github Copilot and ChatGPT Plus subscriptions for your engineering team.`;
+         reasoning = `Cursor includes Claude 3.5 Sonnet and GPT-4o natively in the IDE, replacing the need for separate Github Copilot and ChatGPT Plus subscriptions.`;
          coveredCapabilities.add("CODE");
        } else {
+         // If we already handled the coding capability, this tool is redundant.
          action = "CONSOLIDATE";
          newCost = 0;
          suggestedTotalCost = 0;
          reasoning = `This capability (Coding) is already covered by the recommended alternative (Cursor).`;
        }
     }
-    // Rule 3: High seat counts on consumer plans
+
+    /**
+     * RULE 3: High seat counts on consumer plans.
+     * If you have 10+ seats, you're getting ripped off on consumer pricing. 
+     * Switch to a Team plan or a direct API gateway.
+     */
     else if (tool.seats >= 10 && !tool.currentPlan.toLowerCase().includes("team") && !tool.currentPlan.toLowerCase().includes("enterprise")) {
       action = "REPLACE";
       suggestedTool = tool.toolName;
       suggestedPlan = "Team / API";
+      // Industry heuristic: API gateways save ~60%
       newCost = (currentCost * 0.4);
       suggestedCostPerSeat = Math.round(newCost / tool.seats);
       suggestedTotalCost = newCost;
-      reasoning = `With ${tool.seats} seats, moving to a shared team API gateway (like TypingMind or LibreChat) could save ~60% compared to individual per-seat consumer subscriptions.`;
+      reasoning = `With ${tool.seats} seats, moving to a shared team API gateway (like TypingMind) could save ~60% compared to individual consumer subscriptions.`;
     }
-    // Rule 4: Price Anomaly (Cost per seat > $50)
+
+    /**
+     * RULE 4: Price Anomaly Detection.
+     * If you're paying >$50/seat, you're likely on a legacy contract or 
+     * a massive markup plan.
+     */
     else if (tool.seats > 0 && (currentCost / tool.seats) > 50) {
-      const avgMarketRate = 30; // Average premium SaaS per-seat cost
+      const avgMarketRate = 30; // Industry standard for premium SaaS
       action = "DOWNGRADE";
       suggestedTool = tool.toolName;
       suggestedPlan = "Standard / Direct";
       suggestedCostPerSeat = avgMarketRate;
       newCost = avgMarketRate * tool.seats;
       suggestedTotalCost = newCost;
-      reasoning = `Your current cost of $${Math.round(currentCost / tool.seats)}/seat is significantly above the market average for ${tool.toolName}. Switching to a direct subscription or standard plan could save you substantial costs.`;
+      reasoning = `Your current cost of $${Math.round(currentCost / tool.seats)}/seat is significantly above the market average. Switching to a standard direct plan could save substantial costs.`;
     }
 
+    // Wrap up the math for this tool
     const savings = currentCost - newCost;
     totalOptimizedSpend += newCost;
 

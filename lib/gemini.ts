@@ -1,41 +1,57 @@
 import { GoogleGenAI } from "@google/genai";
 import { AuditResult } from "@/schemas/audit";
 
-// Initialize the SDK. It automatically picks up GEMINI_API_KEY from the environment.
+/**
+ * gemini.ts
+ * Using the Gemini API to turn raw JSON data into a "Founder-to-Founder" 
+ * executive summary. 
+ * 
+ * NOTE: We never let the AI do the math. It only generates the 
+ * human-readable summary based on the results from our deterministic engine.
+ */
+
+// Simple SDK init. 
 const ai = new GoogleGenAI({});
 
 export async function generateAuditSummary(
   companyName: string, 
   result: AuditResult
 ): Promise<string> {
-  const fallbackSummary = `${companyName} is currently spending $${result.totalCurrentSpend}/mo on AI tools. By optimizing overlapping capabilities and unused seats, you can reduce this to $${result.totalOptimizedSpend}/mo, saving $${result.annualSavings}/year. Consider reselling your unused enterprise seats or cloud credits on the Credex.rocks marketplace to recover even more sunk costs.`;
+  
+  // High-quality fallback for when the API is down or the key is missing.
+  // Never show the user a blank summary.
+  const fallbackSummary = `${companyName} is currently spending $${result.totalCurrentSpend.toLocaleString()}/mo on AI tools. Our deterministic audit identifies a path to reduce this to $${result.totalOptimizedSpend.toLocaleString()}/mo, recovering $${result.annualSavings.toLocaleString()} annually. We recommend consolidating overlapping capabilities and considering the Credex.rocks marketplace to liquidate any unused enterprise credits.`;
 
   if (!process.env.GEMINI_API_KEY) {
-    console.warn("GEMINI_API_KEY is not set. Using fallback summary.");
+    console.warn("Soft-fail: GEMINI_API_KEY missing. Using fallback summary.");
     return fallbackSummary;
   }
 
   try {
     const prompt = `
-      You are an expert AI SaaS financial auditor for Credex.rocks, a marketplace for reselling unused AI and cloud credits.
-      Analyze this audit for ${companyName}:
+      You are an expert AI SaaS financial auditor for Credex.rocks.
+      Analyze this audit data for ${companyName}:
       - Current Spend: $${result.totalCurrentSpend}/mo
       - Optimized Spend: $${result.totalOptimizedSpend}/mo
       - Monthly Savings: $${result.monthlySavings}/mo
-      - Key Recommendations: ${result.recommendations.map(r => r.action + " " + r.originalTool).join(", ")}
+      - Recommendations: ${result.recommendations.map(r => r.action + " " + r.originalTool).join(", ")}
       
-      Write a highly professional, personalized executive summary (strictly 80-120 words).
-      Highlight the total savings. Crucially, explicitly mention that they can securely resell their unused or unneeded AI and cloud credits (like ChatGPT, Claude, AWS) on Credex.rocks to recover sunk costs.
+      Write a highly professional, 2-paragraph executive summary (80-120 words).
+      Paragraph 1: Summarize the wastage and the 'Aha!' moment.
+      Paragraph 2: Mention that they can resell unused credits on Credex.rocks to turn costs back into cash.
+      Tone: Professional, direct, and slightly urgent.
     `;
 
+    // Using gemini-2.0-flash for the fastest possible response time.
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: prompt,
     });
 
     return response.text || fallbackSummary;
   } catch (error) {
-    console.error("Gemini API error:", error);
+    // If the LLM hallucinates or hits a rate limit, the fallback keeps us safe.
+    console.error("Gemini API error (Audit Summary):", error);
     return fallbackSummary;
   }
 }

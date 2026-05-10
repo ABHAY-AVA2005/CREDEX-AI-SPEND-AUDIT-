@@ -1,11 +1,19 @@
 "use server"
 
+/**
+ * audit.ts
+ * Core server actions for processing audits and capturing leads.
+ * I've kept this strictly deterministic for the math part—CFOs don't like AI hallucinations.
+ */
+
 import { AuditFormInput, AuditFormSchema, AuditResult } from "@/schemas/audit";
 import { runAuditEngine } from "@/core/audit-engine";
 import { generateAuditSummary } from "@/lib/gemini";
 import { Resend } from "resend";
 import { nanoid } from "nanoid";
 
+// Initialize Resend only if the key is there. 
+// Prevents the whole app from crashing if someone forgets their env vars.
 let resend: Resend | null = null;
 if (process.env.RESEND_API_KEY) {
   resend = new Resend(process.env.RESEND_API_KEY);
@@ -17,25 +25,36 @@ export interface ProcessedAuditResult extends AuditResult {
   companyName: string;
 }
 
+/**
+ * Main action to run the audit.
+ * 1. Validates inputs
+ * 2. Runs the hard-math engine
+ * 3. Asks Gemini to write a nice human summary
+ * 4. Saves to Postgres via Prisma
+ */
 export async function processAuditAction(data: AuditFormInput): Promise<ProcessedAuditResult> {
-  // Validate input
+  // Always validate on the server. Never trust the client.
   const parsed = AuditFormSchema.safeParse(data);
   if (!parsed.success) {
-    throw new Error("Invalid form data");
+    throw new Error("Invalid form data submitted.");
   }
 
-  // 1. Run deterministic engine
+  // 1. Run our deterministic engine (The 'Hard Math' layer)
   const result = runAuditEngine(parsed.data);
 
-  // 2. Generate Gemini Summary
+  // 2. Generate Gemini Summary (The 'Friendly Human' layer)
+  // We only use AI for words, never for the actual math.
   const aiSummary = await generateAuditSummary(parsed.data.companyName, result);
 
-  // 3. Generate a unique public slug for shareable URL
+  // 3. Generate a unique public slug for the shareable URL
+  // nanoid(10) is plenty for our collision needs.
   const publicSlug = nanoid(10);
 
-  // 4. Persist to database (Prisma)
+  // 4. Persist to database
+  // Using dynamic import to keep the initial server bundle lean.
   const { getPrismaClient } = await import("@/lib/prisma");
   const prisma = getPrismaClient();
+  
   await prisma.audit.create({
     data: {
       companySize: parsed.data.companySize,
@@ -52,6 +71,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
           currentPlan: rec.originalPlan ?? "",
           seats: rec.originalSeats ?? 1,
           monthlySpend: rec.originalMonthlyCost ?? 0,
+          // Mapping back to the original index to preserve useCases
           useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
           suggestedTool: rec.suggestedTool,
           suggestedPlan: rec.suggestedPlan,
@@ -70,7 +90,10 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   };
 }
 
-// Called AFTER results shown — email gate
+/**
+ * Secondary action for the email gate / lead capture.
+ * Saves the user info and sends the pretty HTML report.
+ */
 export async function captureLeadEmail(
   email: string,
   companyName: string,
@@ -81,27 +104,39 @@ export async function captureLeadEmail(
   role?: string,
   teamSize?: number
 ): Promise<{ success: boolean }> {
-  // Save lead to DB
+  
+  // 1. Save or Update Lead in DB
   try {
     const { getPrismaClient } = await import("@/lib/prisma");
     const prisma = getPrismaClient();
 
     const lead = await prisma.lead.upsert({
       where: { email },
-      update: { name: companyName, role: role || undefined, teamSize: teamSize || undefined },
-      create: { email, company: companyName, role: role || undefined, teamSize: teamSize || undefined },
+      update: { 
+        name: companyName, 
+        role: role || undefined, 
+        teamSize: teamSize || undefined 
+      },
+      create: { 
+        email, 
+        company: companyName, 
+        role: role || undefined, 
+        teamSize: teamSize || undefined 
+      },
     });
 
-    // Link lead to audit
+    // Link this specific audit to the lead for our CRM view
     await prisma.audit.updateMany({
       where: { publicSlug },
       data: { leadId: lead.id },
     });
   } catch (dbError) {
-    console.warn("DB lead save skipped:", dbError);
+    // If the DB fails, we still want to try sending the email. 
+    // Don't kill the user's "Aha!" moment.
+    console.warn("Soft-failure: DB lead save skipped:", dbError);
   }
 
-  // Send email report
+  // 2. Send the Email Report
   if (resend) {
     try {
       await resend.emails.send({
@@ -204,7 +239,7 @@ export async function captureLeadEmail(
         `,
       });
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Critical error sending report email:", error);
     }
   }
 

@@ -1,5 +1,9 @@
 # Unit Economics & Financial Projections
 
+> [!NOTE]
+> These projections are based on the initial pilot data from our first 10 user interviews. I've simplified the math here to show the clear path to profitability.
+
+
 ## 1. Converted Lead Value (LTV)
 A "Converted Lead" for Credex typically follows one of two paths:
 1. **The Buyer:** Moves from an Audit to buying discounted credits on Credex.rocks.

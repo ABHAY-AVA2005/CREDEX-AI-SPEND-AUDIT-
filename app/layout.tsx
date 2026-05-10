@@ -3,6 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
+/**
+ * RootLayout.tsx
+ * The global shell for the Credex platform.
+ * 
+ * We enforce a Light theme here to maintain that clean, 
+ * paper-like "Audit Memo" aesthetic across the entire app.
+ */
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +39,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
+          forcedTheme="light" // Hard-coded light theme for that premium fintech feel
           disableTransitionOnChange
         >
           {children}

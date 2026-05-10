@@ -1,27 +1,19 @@
-# Product Metrics & KPIs
+# Metrics & Instrumentation
 
-## 1. North Star Metric
-**Net Savings Detected ($)**
-*Why:* As a B2B lead-gen tool for a cost-saving marketplace, our ultimate value is the "payout" we find for the user. If this number is high, the user feels a "financial urgency" to engage with Credex.rocks. It directly correlates with the quality of leads passed to the marketplace.
+## 🌟 The North Star Metric: "Identified Annual Recovery (IAR)"
+**Definition**: The total dollar amount of annual savings identified across all completed audits.
+**Why**: As a B2B lead-gen tool, our value isn't "Daily Active Users" (no one audits their spend every day). Our value is the **Financial Impact** we reveal. If IAR is high, our "Consultation" leads become extremely valuable to the Credex sales team.
 
----
+## 📈 3 Driver (Input) Metrics
+1. **Audit Completion Rate (ACR)**: The % of users who start the form and reach the results page. This measures the "Friction" of our ingestion flow.
+2. **Average Tools per Audit (TPA)**: If users only enter 1 tool, we can't find "Overlap." We need >3 tools to provide a high-value audit.
+3. **Share-to-View Ratio (SVR)**: The % of audits that generate a public URL. This measures the "Confidence" and "Aha!" moment of the user.
 
-## 2. Input Metrics (Driving the North Star)
-1. **Tools Per Audit:** The more tools a user inputs, the higher the likelihood of detecting overlap. We drive this by making the "Add Tool" UX frictionless.
-2. **"Switch" Conversion Rate:** The percentage of audits that result in a "REPLACE" or "CONSOLIDATE" recommendation. If this is low, our audit engine isn't aggressive enough.
-3. **Share Rate:** Percentage of users who copy the public shareable URL. This is our primary viral driver for the top-of-funnel volume.
+## 🛠️ Instrumentation Plan (What we track first)
+1. **Segment/PostHog Event: `audit_started`**: Tracked when the first tool is added.
+2. **Segment/PostHog Event: `lead_captured`**: Tracked when the email/role form is submitted on the results page.
+3. **Funnel Tracking**: Landing Page -> Step 1 (Company Info) -> Step 2 (Tools) -> Results -> Lead Capture.
 
----
-
-## 3. What to Instrument First
-- **Step-Dropoff:** Tracking exactly where users quit the 3-step audit form. Is the "Tools" step too complex?
-- **CTA Click-through (Credex.rocks):** Measuring how many "High Savings" users actually click through to the secondary marketplace after seeing their results.
-- **Email Capture Conversion:** Measuring the conversion from "See Results" to "Enter Email for Report." This validates if the "Value-First" strategy works.
-
----
-
-## 4. Pivot Decision Trigger
-**Metric: "High Savings" (<$500/mo) leads falling below 5% of total audits.**
-
-*The Decision:* If the vast majority of users are already "optimized," it means our target audience is too small or the market has already matured beyond "shadow spend." 
-*The Pivot:* We would shift from a "Cost Savings" audit to a **"Capability Benchmarking"** audit. Instead of saying "You're spending too much," we'd say "Your competitors are using Anthropic API direct to save 40% on RAG—here is how you migrate." We move from a "Defense" tool (saving money) to an "Offense" tool (increasing efficiency).
+## 🚦 The Pivot Decision
+**The Trigger**: If after 500 audits, the **Average Savings Identified per Audit** is less than $200/mo.
+**The Decision**: This would mean AI tools are either too cheap to matter or users are already perfectly optimized. We would pivot the tool from a "Cost Savings" audit to a **"Security & Compliance"** audit (focusing on *where* the data is going, rather than how much it costs).
