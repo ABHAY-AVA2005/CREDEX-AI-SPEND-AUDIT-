@@ -64,18 +64,18 @@
   --card-foreground: oklch(0.13 0.02 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.02 250);
-  --primary: oklch(0.13 0.02 250); /* Sleek almost-black for primary buttons */
+  --primary: oklch(0.13 0.02 250);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0.01 250); /* Soft background contrast */
+  --secondary: oklch(0.97 0.01 250);
   --secondary-foreground: oklch(0.3 0.03 250);
   --muted: oklch(0.97 0.01 250);
   --muted-foreground: oklch(0.5 0.02 250);
-  --accent: oklch(0.45 0.16 260); /* Vibrant tech blue */
+  --accent: oklch(0.45 0.16 260);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.57 0.2 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.01 250); /* Soft elegant border */
-  --input: oklch(0.92 0.01 250);
+  --border: oklch(0.88 0.02 250); /* Sharper border for visibility */
+  --input: oklch(0.88 0.02 250);
   --ring: oklch(0.45 0.16 260);
   --chart-1: oklch(0.45 0.16 260);
   --chart-2: oklch(0.6 0.12 250);
@@ -91,49 +91,53 @@
   --sidebar-accent-foreground: oklch(0.13 0.02 250);
   --sidebar-border: oklch(0.92 0.01 250);
   --sidebar-ring: oklch(0.45 0.16 260);
-  --grid-line: oklch(0.13 0.02 250 / 0.04);
-  --grid-dot: oklch(0.13 0.02 250 / 0.1);
+  --grid-line: oklch(0.13 0.02 250 / 0.08); /* Doubled visibility */
+  --grid-dot: oklch(0.13 0.02 250 / 0.15); /* Sharper dots */
 }
 
 .dark {
-  --background: oklch(0.1 0.01 250); /* Deep Slate Black */
+  --background: oklch(0.08 0.01 250); /* Midnight Blue-Black */
   --foreground: oklch(0.98 0.01 250);
-  --card: oklch(0.13 0.015 250);
+  --card: oklch(0.11 0.02 250); /* Slightly lighter for cards */
   --card-foreground: oklch(0.98 0.01 250);
-  --popover: oklch(0.13 0.015 250);
+  --popover: oklch(0.11 0.02 250);
   --popover-foreground: oklch(0.98 0.01 250);
   --primary: oklch(0.98 0.01 250);
-  --primary-foreground: oklch(0.13 0.015 250);
-  --secondary: oklch(0.18 0.02 250);
+  --primary-foreground: oklch(0.08 0.01 250);
+  --secondary: oklch(0.15 0.02 250);
   --secondary-foreground: oklch(0.98 0.01 250);
-  --muted: oklch(0.18 0.02 250);
-  --muted-foreground: oklch(0.6 0.02 250);
-  --accent: oklch(0.55 0.18 260); /* Brighter tech blue for dark */
+  --muted: oklch(0.15 0.02 250);
+  --muted-foreground: oklch(0.7 0.02 250);
+  --accent: oklch(0.65 0.22 260); /* Glowing neon blue */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.57 0.2 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.25 0.02 250);
-  --input: oklch(0.25 0.02 250);
-  --ring: oklch(0.55 0.18 260);
-  --grid-line: oklch(1 0 0 / 0.03);
-  --grid-dot: oklch(1 0 0 / 0.06);
+  --border: oklch(0.22 0.03 250); /* Visible borders in dark mode */
+  --input: oklch(0.22 0.03 250);
+  --ring: oklch(0.65 0.22 260);
+  --grid-line: oklch(1 0 0 / 0.06);
+  --grid-dot: oklch(1 0 0 / 0.12);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-colors duration-200;
   }
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-    /* Sophisticated layered grid background */
+    @apply bg-background text-foreground min-h-screen relative overflow-x-hidden;
+    
+    /* High-Definition Multi-Layer Grid with Blueprint Glow */
     background-image: 
+      radial-gradient(circle at 50% 0%, oklch(0.45 0.16 260 / 0.05), transparent 50%),
+      radial-gradient(circle at center, transparent 0%, var(--background) 100%),
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
       radial-gradient(var(--grid-dot) 1px, transparent 0);
-    background-size: 100px 100px, 100px 100px, 20px 20px;
-    background-position: center center;
+    background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px, 20px 20px;
+    background-attachment: fixed;
+    background-position: center top, center center, center center, center center, center center;
   }
   html {
-    @apply font-sans;
+    @apply font-sans scroll-smooth;
   }
 }

@@ -74,7 +74,7 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-6xl md:text-8xl font-serif font-black tracking-tighter mb-8 text-slate-900 leading-[0.95]"
+              className="text-6xl md:text-8xl font-serif font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
             >
               Audit your AI stack.<br />
               <span className="text-blue-600 italic">Stop the leak.</span>
@@ -142,7 +142,7 @@ export default function LandingPage() {
               className="mt-20 pt-10 border-t border-slate-100 flex flex-wrap justify-center gap-x-12 gap-y-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
             >
               {["Cursor", "Claude", "OpenAI", "Gemini", "GitHub"].map((logo) => (
-                <span key={logo} className="font-serif text-2xl font-black italic tracking-tighter text-slate-900">
+                <span key={logo} className="font-serif text-2xl font-black italic tracking-tighter text-foreground">
                   {logo}
                 </span>
               ))}
@@ -154,7 +154,7 @@ export default function LandingPage() {
         <section className="py-24 bg-slate-50 border-y border-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-serif font-black text-slate-900 tracking-tight">Trusted by Founders & Finance Teams</h2>
+              <h2 className="text-3xl font-serif font-black text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
               {[
@@ -186,7 +186,7 @@ export default function LandingPage() {
                       {testimonial.author[0]}
                     </div>
                     <div>
-                      <p className="font-bold text-slate-900 text-sm">{testimonial.author}</p>
+                      <p className="font-bold text-foreground text-sm">{testimonial.author}</p>
                       <p className="text-slate-400 text-xs">{testimonial.role}</p>
                     </div>
                   </div>
@@ -199,7 +199,7 @@ export default function LandingPage() {
         {/* FAQ Section */}
         <section className="py-24 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl font-serif font-black text-slate-900 tracking-tight text-center mb-16">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-serif font-black text-foreground tracking-tight text-center mb-16">Frequently Asked Questions</h2>
             <div className="space-y-8">
               {[
                 {
@@ -224,7 +224,7 @@ export default function LandingPage() {
                 }
               ].map((faq, i) => (
                 <div key={i} className="border-b border-slate-100 pb-8">
-                  <h3 className="font-bold text-slate-900 text-lg mb-3 flex items-center gap-3">
+                  <h3 className="font-bold text-foreground text-lg mb-3 flex items-center gap-3">
                     <span className="text-blue-600 font-serif">Q.</span> {faq.q}
                   </h3>
                   <p className="text-slate-500 leading-relaxed pl-8">
@@ -272,7 +272,7 @@ export default function LandingPage() {
             <div className="w-5 h-5 rounded bg-slate-900 flex items-center justify-center">
               <ShieldCheck className="w-3 h-3 text-white" />
             </div>
-            <span className="font-bold text-sm tracking-tight text-slate-900">Fluxora</span>
+            <span className="font-bold text-sm tracking-tight text-foreground">Fluxora</span>
           </div>
           <p className="text-slate-500 text-xs font-medium">© {new Date().getFullYear()} Fluxora Platform. Deterministic AI Spend Intelligence.</p>
         </div>

@@ -53,7 +53,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
           <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border ${cfg.color}`}>
             {cfg.icon} {cfg.label}
           </span>
-          <h3 className="font-bold text-slate-900 text-base">{rec.originalTool}</h3>
+          <h3 className="font-bold text-foreground text-base">{rec.originalTool}</h3>
         </div>
         
         {rec.savings > 0 && (
@@ -75,7 +75,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
           {/* Current State Column */}
           <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Current Setup</p>
-            <p className="font-bold text-slate-900">{rec.originalTool}</p>
+            <p className="font-bold text-foreground">{rec.originalTool}</p>
             {rec.originalPlan && <p className="text-sm text-slate-500 mt-0.5">Plan: <span className="font-semibold text-slate-700">{rec.originalPlan}</span></p>}
             {rec.originalSeats !== undefined && <p className="text-sm text-slate-500 mt-0.5">Seats: <span className="font-semibold text-slate-700">{rec.originalSeats}</span></p>}
             {rec.originalMonthlyCost !== undefined && (
@@ -100,7 +100,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
                 </>
               ) : (
                 <>
-                  <p className="font-bold text-slate-900">{rec.suggestedTool}</p>
+                  <p className="font-bold text-foreground">{rec.suggestedTool}</p>
                   {rec.suggestedPlan && <p className="text-sm text-slate-500 mt-0.5">Plan: <span className="font-semibold text-slate-700">{rec.suggestedPlan}</span></p>}
                   {rec.suggestedCostPerSeat !== undefined && rec.originalSeats !== undefined && (
                     <p className="text-sm text-slate-500 mt-0.5">${rec.suggestedCostPerSeat}/seat × {rec.originalSeats} seats</p>
@@ -254,13 +254,13 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
     <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Users className="w-5 h-5 text-indigo-600" />
-        <h3 className="font-bold text-slate-900 text-sm">Industry Benchmark</h3>
+        <h3 className="font-bold text-foreground text-sm">Industry Benchmark</h3>
       </div>
       
       <div className="space-y-4">
         <div className="flex justify-between items-end">
           <span className="text-xs text-slate-500 font-medium">Your Spend / Seat</span>
-          <span className="text-xl font-bold text-slate-900">${spendPerSeat}<span className="text-xs font-normal opacity-50">/mo</span></span>
+          <span className="text-xl font-bold text-foreground">${spendPerSeat}<span className="text-xs font-normal opacity-50">/mo</span></span>
         </div>
         
         <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
@@ -303,7 +303,7 @@ function ShareCard({ slug }: { slug: string }) {
     <div className="bg-secondary/50 border border-border rounded-xl p-6">
       <div className="flex items-center gap-2 mb-3">
         <Share2 className="w-5 h-5 text-slate-600" />
-        <h3 className="font-bold text-slate-900 text-sm">Share this audit</h3>
+        <h3 className="font-bold text-foreground text-sm">Share this audit</h3>
       </div>
       <p className="text-slate-500 text-xs mb-4">Public reports have identifying details (company name, email) automatically hidden.</p>
       
@@ -450,7 +450,7 @@ export default function ResultsClient({
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-12 h-12 text-slate-400 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You&apos;re spending well.</h2>
+                  <h2 className="text-2xl font-black text-foreground leading-tight">You&apos;re spending well.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm">
                     Our audit confirms your stack is already lean. We don&apos;t manufacture fake savings.
                   </p>
@@ -458,7 +458,7 @@ export default function ResultsClient({
               ) : (
                 <>
                   <TrendingDown className="w-12 h-12 text-emerald-500 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">Wasted spend found.</h2>
+                  <h2 className="text-2xl font-black text-foreground leading-tight">Wasted spend found.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm leading-relaxed">
                     We identified <span className="font-bold text-emerald-600">${result.monthlySavings}/mo</span> in potential recovery by consolidating overlapping tools.
                   </p>
@@ -475,7 +475,7 @@ export default function ResultsClient({
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
               <div className="flex justify-between items-start mb-8">
                 <div className="space-y-1">
-                  <h2 className="text-xl font-serif font-black text-slate-900 italic tracking-tight underline decoration-slate-200 decoration-4 underline-offset-4">Executive Summary</h2>
+                  <h2 className="text-xl font-serif font-black text-foreground italic tracking-tight underline decoration-secondary decoration-4 underline-offset-4">Executive Summary</h2>
                   <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Fluxora ID: {result.publicSlug.toUpperCase()}</p>
                 </div>
                 <Shield className="w-8 h-8 text-slate-100" />
@@ -492,7 +492,7 @@ export default function ResultsClient({
                 <div className="mt-8 pt-6 border-t border-slate-50 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold">FA</div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900">Fluxora Audit Engine</p>
+                    <p className="text-xs font-bold text-foreground">Fluxora Audit Engine</p>
                     <p className="text-[10px] text-slate-400 font-medium">Deterministic Intelligence</p>
                   </div>
                 </div>
@@ -502,7 +502,7 @@ export default function ResultsClient({
             {/* Visualization: Spend Comparison Chart */}
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.28 }}
               className="bg-card rounded-xl border border-border shadow-sm p-6">
-              <h2 className="text-base font-extrabold text-slate-900 mb-5">Spend Delta Comparison</h2>
+              <h2 className="text-base font-extrabold text-foreground mb-5">Spend Delta Comparison</h2>
               <ResponsiveContainer width="100%" height={130}>
                 <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 16, left: 8, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} opacity={0.2} />
@@ -538,7 +538,7 @@ export default function ResultsClient({
           {/* Right Column: Detailed Recommendations */}
           <div className="lg:col-span-2 space-y-5">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-extrabold text-slate-900">
+              <h2 className="text-xl font-extrabold text-foreground">
                 Actionable Optimization Steps
                 <span className="ml-2 text-sm font-semibold text-slate-400">({result.recommendations.length} items)</span>
               </h2>
