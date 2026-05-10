@@ -20,8 +20,8 @@ I decided early on to hardcode the savings logic in TypeScript rather than askin
 
 ### Foundational Dark Mode & 3D UI
 I chose to implement a "Midnight" dark-mode-first design instead of a standard white or pure black UI.
-- **Reasoning**: Pure black (#000000) causes eye strain and OLED "smearing." By using a deep midnight grey and desaturated functional colors (Mint for success, Coral for error), the UI feels more professional and CFO-grade.
-- **3D Blueprint Grid**: The animated 3D perspective grid in the background reinforces the brand's identity as a "Structural" audit tool—it's not just a surface-level scan; it's a deep architectural analysis of the company's AI stack.
+- **Reasoning**: Pure black (#000000) causes eye strain and OLED "smearing." By using a **Dark Slate** palette (`oklch(0.14 0.01 240)`) and desaturated functional colors (Mint for success, Coral for error), the UI radiates a "Systems Design" and "Engineering" vibe that CFOs trust.
+- **3D Engineering Grid**: The animated 3D perspective grid with razor-thin **0.5px lines** reinforces the brand's identity as a "Structural" audit tool—it's not just a surface-level scan; it's a deep architectural analysis of the company's financial stack.
 
 ## 6. What I'd build in Week 2
 - **Direct Integration**: I'd let users link their bank account (via Plaid) to automatically find AI spend.

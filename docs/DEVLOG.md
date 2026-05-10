@@ -147,13 +147,11 @@
 **What I did:**
 - **Midnight UI Overhaul**: Transitioned the entire platform to a professional "Midnight" dark-mode-first aesthetic.
 - **Desaturated Palette Implementation**: Applied foundational dark mode principles (avoiding pure black, using desaturated coral/mint functional colors).
-- **Elevated 3D Background**: Engineered a high-end 3D animated perspective grid for the background, creating a "Founder's Blueprint" look.
-- **Accessibility Hardening**: Verified all text-to-background contrast ratios against WCAG 4.5:1 standards.
-- **Background Layering Fix**: Resolved CSS z-index conflicts to ensure grid visibility across all browser engines.
+- **Engineering-Grade Blueprint UI**: Refined the grid with razor-thin 0.5px lines and a neutral Dark Slate palette for a high-precision architectural feel.
+- **Systematic Spacing**: Implemented 100px/20px systematic grid increments to match financial systems-design vibes.
 
 **What I learned:**
-- Small details like avoiding pure black (#000000) significantly reduce eye strain and feel more premium.
-- Using 3D perspective in CSS is a lightweight way to add immense depth to a simple UI.
-- "Elevation" in dark mode is better represented by color shifts (darker to lighter) than by shadows.
+- "Financial Precision" in UI is often about what you *remove*—making lines thinner and more subtle actually makes them feel more authoritative.
+- Dark Slate is a more neutral and "serious" choice for fintech than pure Midnight Blue.
 
-**Status:** Project complete, fully documented, and ready for production launch.
+**Status:** Project complete, fully hardened, and ready for production launch.
