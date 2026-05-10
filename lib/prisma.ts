@@ -8,11 +8,7 @@ export function getPrismaClient(): PrismaClient {
   if (!globalForPrisma.prisma) {
     // @ts-expect-error - Prisma 7 constructor types are strictly bound to schema
     globalForPrisma.prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: process.env.DATABASE_URL,
-        },
-      },
+      datasourceUrl: process.env.DATABASE_URL,
     } as any);
   }
   return globalForPrisma.prisma;
