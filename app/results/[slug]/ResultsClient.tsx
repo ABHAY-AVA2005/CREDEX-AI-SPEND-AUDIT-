@@ -126,7 +126,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
         {/* Reasoning Block */}
         <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
           <p className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-1">Why</p>
-          <p className="text-sm text-slate-700 leading-relaxed italic">&quot;{rec.reasoning}&quot;</p>
+          <p className="text-sm text-slate-700 leading-relaxed italic">"{rec.reasoning}"</p>
         </div>
 
         {rec.savings > 0 && (
@@ -193,7 +193,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
         <Mail className="w-5 h-5 text-blue-600" />
         <h3 className="font-bold text-slate-900 text-sm">Get the full report delivered</h3>
       </div>
-      <p className="text-slate-500 text-xs mb-4">We&apos;ll send the executive summary and PDF to your work email.</p>
+      <p className="text-slate-500 text-xs mb-4">We'll send the executive summary and PDF to your work email.</p>
       
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Honeypot */}
@@ -342,7 +342,7 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
       </div>
       
       <p className="text-blue-100 text-sm leading-relaxed mb-5">
-        Your stack has over <strong className="text-white">${Math.floor(annualSavings/12).toLocaleString()}/mo</strong> in wastage. Let&apos;s book a call to liquidate your unused enterprise credits on the Credex secondary market.
+        Your stack has over <strong className="text-white">${Math.floor(annualSavings/12).toLocaleString()}/mo</strong> in wastage. Let's book a call to liquidate your unused enterprise credits on the Credex secondary market.
       </p>
       
       <a
@@ -444,9 +444,9 @@ export default function ResultsClient({
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-12 h-12 text-slate-400 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You&apos;re spending well.</h2>
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're spending well.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm">
-                    Our audit confirms your stack is already lean. We don&apos;t manufacture fake savings.
+                    Our audit confirms your stack is already lean. We don't manufacture fake savings.
                   </p>
                 </>
               ) : (

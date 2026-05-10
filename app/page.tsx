@@ -162,7 +162,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {[
                 {
-                  quote: "Credex found $2,400 in annual wastage across our engineering team in under a minute. It&apos;s the first thing I send to our portfolio companies now.",
+                  quote: "Credex found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now.",
                   author: "Sarah Chen",
                   role: "Founding Partner at SeedFlow Ventures"
                 },
