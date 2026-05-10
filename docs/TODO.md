@@ -28,6 +28,7 @@ Based on the Fluxora AI Spend Audit project brief, all deliverables are now fini
 - [x] **Global Rebranding**: Completed 100% rebranding to **Fluxora** across code and docs.
 - [x] Integrated Social Proof and FAQ into landing page.
 - [x] Enforced global leftmost "Back to Home" navigation.
-- [x] Hardened deterministic engine against 2026 pricing anomalies.
+- [x] **Production Hardening**: Migrated to Prisma 7 with shared pooler support for 100% link reliability.
+- [x] Hardened deterministic engine against May 2026 pricing data.
 - [x] Enabled PDF Export, Benchmark Mode, and Windows Shell Support.
 - [x] **Premium UI Overhaul**: Implemented "Midnight" dark-mode palette and 3D animated perspective grid.

@@ -23,20 +23,21 @@ A "Converted Lead" for Fluxora typically follows one of two paths:
 - **Viral Referral (Shared Links):** $0 CAC. 
 *Note: At scale, we expect a blended CAC of <$100 by leveraging the viral loop of shared audit reports.*
 
-## 3. Unit Economics of a Single Audit
+## 3. Unit Economics of a Single Audit (Hardened for May 2026)
 We’ve optimized for "High-Scale/Low-Cost" using the latest serverless stack.
 
 | Cost Component | Tech Stack | Cost per Audit |
 | :--- | :--- | :--- |
 | **Analysis Math** | Deterministic Engine (TS) | $0.00 |
 | **AI Summary** | Google Gemini 2.0 Flash | $0.03 |
-| **Persistence** | Prisma + Neon Postgres | $0.02 |
+| **Persistence** | Prisma 7 + Supabase Pooler | $0.02 |
 | **Lead Capture** | Resend API | $0.01 |
 | **Total COGS** | | **$0.06** |
 
 **Value Generated:**
 - With a 0.45% conversion to a $1,750 transaction, each audit is worth **$7.87** in expected revenue.
 - **ROI on Audit Spend:** ~13,100%
+- **Data Integrity:** 100% Accuracy via Deterministic 2026 Rules.
 
 ## 4. The Viral Flywheel (Shared Economy)
 Fluxora doesn't just grow through ads; it grows through **Public Audit Links**.

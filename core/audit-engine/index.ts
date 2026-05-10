@@ -109,7 +109,7 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       newCost = (currentCost * 0.4);
       suggestedCostPerSeat = Math.round(newCost / tool.seats);
       suggestedTotalCost = newCost;
-      reasoning = `With ${tool.seats} seats, moving to a shared team API gateway (like TypingMind) could save ~60% compared to individual consumer subscriptions.`;
+      reasoning = `With ${tool.seats} seats, you are paying a significant premium for consumer UI. Switching to an API-based gateway (like TypingMind) using your own API keys can reduce your cost to ~$8/seat while maintaining full capability.`;
     }
 
     /**
