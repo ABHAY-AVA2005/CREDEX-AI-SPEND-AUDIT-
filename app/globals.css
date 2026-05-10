@@ -125,17 +125,53 @@
   }
   body {
     @apply bg-background text-foreground min-h-screen relative overflow-x-hidden;
-    
-    /* High-Definition Multi-Layer Grid with Blueprint Glow */
+  }
+  
+  /* The Elevated 3D Blueprint Background */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: var(--background);
     background-image: 
-      radial-gradient(circle at 50% 0%, oklch(0.45 0.16 260 / 0.05), transparent 50%),
-      radial-gradient(circle at center, transparent 0%, var(--background) 100%),
+      /* Central Glow */
+      radial-gradient(circle at 50% 40%, oklch(0.75 0.12 250 / 0.15), transparent 50%),
+      /* Main Grid Lines */
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      /* Sub-Grid Dots */
       radial-gradient(var(--grid-dot) 1px, transparent 0);
-    background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px, 20px 20px;
-    background-attachment: fixed;
-    background-position: center top, center center, center center, center center, center center;
+    background-size: 100% 100%, 80px 80px, 80px 80px, 20px 20px;
+    background-position: center center;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
+  }
+
+  /* 3D Perspective Grid Layer */
+  body::after {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    z-index: -1;
+    background-image: 
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 100px 100px;
+    transform: perspective(1000px) rotateX(60deg) translateY(0);
+    animation: grid-move 60s linear infinite;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  @keyframes grid-move {
+    0% { transform: perspective(1000px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(1000px) rotateX(60deg) translateY(100px); }
   }
   html {
     @apply font-sans scroll-smooth;
