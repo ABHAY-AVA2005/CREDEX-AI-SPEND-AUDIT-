@@ -121,7 +121,10 @@ export default async function ResultsPage({ params }: Props) {
       include: { tools: true },
     });
 
-    if (!audit) return notFound();
+    if (!audit) {
+      // If not in DB, we return the client component but tell it to check local storage
+      return <ResultsClient result={null} isShared={true} />;
+    }
 
     // Reconstruct the JSON result for the client-side dashboard
     const result = {
@@ -151,6 +154,6 @@ export default async function ResultsPage({ params }: Props) {
     return <ResultsClient result={result} isShared={true} />;
   } catch (err) {
     console.error("Results data fetch failed:", err);
-    return notFound();
+    return <ResultsClient result={null} isShared={true} />;
   }
 }

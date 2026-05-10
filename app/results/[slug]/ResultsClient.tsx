@@ -190,7 +190,43 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
   );
 }
 
-export default function ResultsClient({ result }: { result: ProcessedAuditResult; isShared?: boolean; }) {
+export default function ResultsClient({ result: serverResult }: { result: ProcessedAuditResult | null; isShared?: boolean; }) {
+  const [result, setResult] = useState<ProcessedAuditResult | null>(serverResult);
+  const [isRecovering, setIsRecovering] = useState(!serverResult);
+
+  useEffect(() => {
+    if (!serverResult) {
+      // Try to recover from session storage if the server couldn't find it in DB
+      const saved = sessionStorage.getItem("latest_audit_result");
+      if (saved) {
+        try {
+          setResult(JSON.parse(saved));
+        } catch (e) {
+          console.error("Local recovery failed:", e);
+        }
+      }
+      setIsRecovering(false);
+    }
+  }, [serverResult]);
+
+  if (isRecovering) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground font-bold tracking-widest uppercase text-xs">Recovering Audit...</div>
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
+        <h2 className="text-4xl font-serif font-black mb-4">404: Audit Not Found</h2>
+        <p className="text-muted-foreground max-w-md mb-8">This audit may have expired or was never persisted to our database. Start a new analysis to see your savings.</p>
+        <Link href="/audit" className="px-8 py-4 bg-accent text-accent-foreground rounded-2xl font-bold hover:opacity-90 transition-all">New Audit →</Link>
+      </div>
+    );
+  }
+
   const chartData = [
     { name: "Current", amount: result.totalCurrentSpend, fill: "#CF6679" },
     { name: "Optimized", amount: result.totalOptimizedSpend, fill: "#00A36C" },

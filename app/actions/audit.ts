@@ -55,8 +55,11 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
 
   // 4. Persist to database (Background Task - non-blocking for user results)
   try {
-    const { getPrismaClient } = await import("@/lib/prisma");
-    const prisma = getPrismaClient();
+    if (!process.env.DATABASE_URL) {
+      console.warn("[AuditAction] Skipping DB persistence: DATABASE_URL not found.");
+    } else {
+      const { getPrismaClient } = await import("@/lib/prisma");
+      const prisma = getPrismaClient();
     
     await prisma.audit.create({
       data: {
@@ -82,9 +85,9 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
             reasoning: rec.reasoning,
           })),
         },
-      },
-    });
-    console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+      });
+      console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+    }
   } catch (dbError) {
     // If the DB fails (e.g., connection issue on Vercel), we log it but DON'T kill the user's results.
     // The user will still see the 'Aha!' moment on the dashboard from the returned object.
