@@ -87,9 +87,10 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
           })),
         },
       },
-    });
+      });
+      console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+    }
     const isPersisted = true;
-    console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
     return {
       ...result,
       aiSummary,
