@@ -33,10 +33,13 @@ export interface ProcessedAuditResult extends AuditResult {
  * 4. Saves to Postgres via Prisma
  */
 export async function processAuditAction(data: AuditFormInput): Promise<ProcessedAuditResult> {
+  console.log("[AuditAction] Incoming Data:", JSON.stringify(data));
+  
   // Always validate on the server. Never trust the client.
   const parsed = AuditFormSchema.safeParse(data);
   if (!parsed.success) {
-    throw new Error("Invalid form data submitted.");
+    console.error("[AuditAction] Validation Failed:", parsed.error.format());
+    throw new Error("Validation failed: Please ensure all tool names and spend amounts are valid.");
   }
 
   // 1. Run our deterministic engine (The 'Hard Math' layer)
@@ -50,37 +53,43 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   // nanoid(10) is plenty for our collision needs.
   const publicSlug = nanoid(10);
 
-  // 4. Persist to database
-  // Using dynamic import to keep the initial server bundle lean.
-  const { getPrismaClient } = await import("@/lib/prisma");
-  const prisma = getPrismaClient();
-  
-  await prisma.audit.create({
-    data: {
-      companySize: parsed.data.companySize,
-      industry: parsed.data.industry,
-      totalSpend: result.totalCurrentSpend,
-      optimizedSpend: result.totalOptimizedSpend,
-      savings: result.monthlySavings,
-      aiSummary,
-      isPublic: true,
-      publicSlug,
-      tools: {
-        create: result.recommendations.map((rec) => ({
-          toolName: rec.originalTool,
-          currentPlan: rec.originalPlan ?? "",
-          seats: rec.originalSeats ?? 1,
-          monthlySpend: rec.originalMonthlyCost ?? 0,
-          // Mapping back to the original index to preserve useCases
-          useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
-          suggestedTool: rec.suggestedTool,
-          suggestedPlan: rec.suggestedPlan,
-          suggestedSpend: rec.suggestedTotalCost,
-          reasoning: rec.reasoning,
-        })),
+  // 4. Persist to database (Background Task - non-blocking for user results)
+  try {
+    const { getPrismaClient } = await import("@/lib/prisma");
+    const prisma = getPrismaClient();
+    
+    await prisma.audit.create({
+      data: {
+        companySize: parsed.data.companySize,
+        industry: parsed.data.industry,
+        totalSpend: result.totalCurrentSpend,
+        optimizedSpend: result.totalOptimizedSpend,
+        savings: result.monthlySavings,
+        aiSummary,
+        isPublic: true,
+        publicSlug,
+        tools: {
+          create: result.recommendations.map((rec) => ({
+            toolName: rec.originalTool,
+            currentPlan: rec.originalPlan ?? "",
+            seats: rec.originalSeats ?? 1,
+            monthlySpend: rec.originalMonthlyCost ?? 0,
+            // Mapping back to the original index to preserve useCases
+            useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
+            suggestedTool: rec.suggestedTool,
+            suggestedPlan: rec.suggestedPlan,
+            suggestedSpend: rec.suggestedTotalCost,
+            reasoning: rec.reasoning,
+          })),
+        },
       },
-    },
-  });
+    });
+    console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+  } catch (dbError) {
+    // If the DB fails (e.g., connection issue on Vercel), we log it but DON'T kill the user's results.
+    // The user will still see the 'Aha!' moment on the dashboard from the returned object.
+    console.error("[AuditAction] Critical Database Error (Persist Failed):", dbError);
+  }
 
   return {
     ...result,
