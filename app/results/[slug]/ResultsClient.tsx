@@ -554,9 +554,9 @@ export default function ResultsClient({
               </h2>
               <button 
                 onClick={() => window.print()}
-                className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95 shadow-sm group"
               >
-                <Download className="w-3 h-3" /> Export PDF
+                <Download className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" /> Export PDF
               </button>
             </div>
             
