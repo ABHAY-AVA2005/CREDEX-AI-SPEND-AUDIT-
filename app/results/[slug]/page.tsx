@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { getPrismaClient } from "@/lib/prisma";
 import ResultsClient from "./ResultsClient";
 import { ProcessedAuditResult } from "@/app/actions/audit";
