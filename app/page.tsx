@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, ShieldCheck, Zap, CheckCircle2, Search, Database, Fingerprint, Store } from "lucide-react";
+import { ArrowRight, BarChart3, ShieldCheck, Zap, CheckCircle2, Search, Database, Fingerprint } from "lucide-react";
 
 export default function LandingPage() {
   return (

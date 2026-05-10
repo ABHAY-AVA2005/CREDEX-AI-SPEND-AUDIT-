@@ -147,8 +147,8 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
         teamSize ? parseInt(teamSize) : undefined
       );
       setSubmitted(true);
-    } catch (e: any) {
-      setError(e.message || "Failed to send.");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to send.");
     } finally {
       setLoading(false);
     }
@@ -456,15 +456,15 @@ export default function ResultsClient({
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-12 h-12 text-slate-400 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're spending well.</h2>
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You&apos;re spending well.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm">
-                    Our audit shows your AI stack is already highly optimized. We don't manufacture fake savings. Enter your email below to be notified if new optimization rules apply to your stack in the future.
+                    Our audit shows your AI stack is already highly optimized. We don&apos;t manufacture fake savings. Enter your email below to be notified if new optimization rules apply to your stack in the future.
                   </p>
                 </>
               ) : (
                 <>
                   <TrendingDown className="w-12 h-12 text-emerald-500 mb-3" />
-                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You're losing money.</h2>
+                  <h2 className="text-2xl font-black text-slate-900 leading-tight">You&apos;re losing money.</h2>
                   <p className="text-slate-500 text-sm mt-2 max-w-sm">
                     We found <span className="font-bold text-emerald-600">${result.monthlySavings}/mo</span> in potential savings by optimizing your plans and consolidating tools.
                   </p>
