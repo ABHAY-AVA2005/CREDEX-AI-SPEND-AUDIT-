@@ -337,38 +337,61 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Panel */}
+          {/* Main Column (Left 2/3) */}
+          <div className="lg:col-span-2 space-y-6">
+            <HighSavingsCTA result={result} />
+
+            <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
+              <h2 className="text-xl font-black mb-6 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-accent" /> 
+                Executive Summary
+              </h2>
+              <div className="text-base text-muted-foreground space-y-5 leading-relaxed">
+                {result.aiSummary.split('\n').map((para, i) => <p key={i}>{para}</p>)}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-black px-2 flex items-center gap-2">
+                  <TrendingDown className="w-5 h-5 text-accent" />
+                  Audit Recommendations
+                </h2>
+                <button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 bg-secondary border border-border rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-border transition-colors">
+                  <Download className="w-3 h-3" /> PDF
+                </button>
+              </div>
+              {result.recommendations.map((rec, i) => (
+                <RecommendationCard key={i} rec={rec} index={i} />
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar (Right 1/3) */}
           <div className="lg:col-span-1 space-y-6">
-            <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
+            <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
               className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-secondary/30 border-border' : 'bg-accent/10 border-accent/20'} text-center`}>
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                  <h2 className="text-xl font-black">You&apos;re spending well.</h2>
-                  <p className="text-muted-foreground text-sm mt-2">Your stack is already optimized for your team size.</p>
+                  <h2 className="text-xl font-black">Stack Optimized.</h2>
+                  <p className="text-muted-foreground text-sm mt-2">No redundant spend detected.</p>
                 </>
               ) : (
                 <>
                   <TrendingDown className="w-10 h-10 text-accent mx-auto mb-3" />
-                  <h2 className="text-xl font-black">Wasted spend found.</h2>
+                  <h2 className="text-xl font-black">Wasted Spend.</h2>
                   <p className="text-muted-foreground text-sm mt-2">Identify <span className="font-bold text-accent">${result.monthlySavings}/mo</span> in potential recovery.</p>
                 </>
               )}
             </motion.div>
 
             <ConsultationCTA annualSavings={result.annualSavings} />
+            
+            <BenchmarkCard result={result} />
 
             <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-              <h2 className="text-base font-black mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-accent" /> Executive Summary</h2>
-              <div className="text-sm text-muted-foreground space-y-4 leading-relaxed">
-                {result.aiSummary.split('\n').map((para, i) => <p key={i}>{para}</p>)}
-              </div>
-            </div>
-
-            <ReferralCard />
-
-            <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-              <h2 className="text-sm font-bold mb-4">Spend Comparison</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Spend Comparison</h2>
               <ResponsiveContainer width="100%" height={120}>
                 <BarChart data={chartData} layout="vertical">
                   <XAxis type="number" hide />
@@ -380,23 +403,9 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
               </ResponsiveContainer>
             </div>
 
-            <BenchmarkCard result={result} />
-            <EmailCaptureCard result={result} />
+            <ReferralCard />
             <ShareCard slug={result.publicSlug} />
-          </div>
-
-          {/* Right Panel: Recommendations */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black">Actionable Steps <span className="text-sm font-medium text-muted-foreground">({result.recommendations.length})</span></h2>
-              <button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 bg-secondary border border-border rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-border transition-colors">
-                <Download className="w-3 h-3" /> PDF
-              </button>
-            </div>
-
-            {result.recommendations.map((rec, i) => (
-              <RecommendationCard key={i} rec={rec} index={i} />
-            ))}
+            <EmailCaptureCard result={result} />
           </div>
         </div>
       </div>
