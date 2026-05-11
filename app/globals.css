@@ -80,45 +80,58 @@
   --input: #E5E7EB;
   --ring: #7C3AED;
   --radius: 16px;
-  --grid-line: #F5F3FF; /* Very Light Lavender */
-  --grid-dot: #EDE9FE;
+  --grid-line: rgba(139, 92, 246, 0.12); /* Brighter Lavender Grid */
+  --grid-dot: rgba(139, 92, 246, 0.2);
 }
 
 .dark {
-  --background: #020205; /* Deep Space Black */
-  --foreground: #F1F5F9;
-  --card: #0A0A16; /* Deep Indigo Card */
-  --card-foreground: #F1F5F9;
-  --popover: #0A0A16;
-  --popover-foreground: #F1F5F9;
-  --primary: #8B5CF6; /* Vibrant Violet */
+  --background: #010103; /* Near Black */
+  --foreground: #F8FAFC;
+  --card: #050510; /* Sleeker Dark Indigo */
+  --card-foreground: #F8FAFC;
+  --popover: #050510;
+  --popover-foreground: #F8FAFC;
+  --primary: #9F67FF; /* Brighter Violet */
   --primary-foreground: #FFFFFF;
-  --secondary: #111122; /* Dark Indigo */
+  --secondary: #0D0D1F; 
   --secondary-foreground: #C4B5FD;
-  --muted: #111122;
+  --muted: #0D0D1F;
   --muted-foreground: #94A3B8;
-  --accent: #A78BFA; /* Soft Lavender */
-  --accent-foreground: #020205;
+  --accent: #C084FC; /* Brighter Soft Lavender */
+  --accent-foreground: #010103;
   --destructive: #F87171;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(139, 92, 246, 0.15);
-  --input: rgba(139, 92, 246, 0.15);
-  --ring: #8B5CF6;
-  --grid-line: rgba(139, 92, 246, 0.08); /* Soft Violet Grid */
-  --grid-dot: rgba(139, 92, 246, 0.12);
+  --border: rgba(168, 85, 247, 0.25);
+  --input: rgba(168, 85, 247, 0.15);
+  --ring: #9F67FF;
+  --grid-line: rgba(168, 85, 247, 0.15); /* Brighter Violet Grid */
+  --grid-dot: rgba(168, 85, 247, 0.25);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 transition-colors duration-200;
+    @apply border-border outline-ring/50 transition-all duration-300 ease-in-out;
   }
+  
+  /* Grainy Noise Overlay for Premium Feel */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    mix-blend-mode: overlay;
+  }
+
   html {
-    @apply scroll-smooth overflow-x-hidden;
+    @apply scroll-smooth overflow-x-hidden selection:bg-primary/30 selection:text-primary;
     width: 100%;
     height: 100%;
   }
   body {
-    @apply text-foreground min-h-screen relative overflow-x-hidden bg-transparent font-sans;
+    @apply text-foreground min-h-screen relative overflow-x-hidden bg-transparent font-sans antialiased;
     width: 100%;
   }
   
@@ -133,9 +146,9 @@
     z-index: -1;
     background-color: var(--background);
     background-image: 
-      /* Deep Indigo Radial Bloom */
-      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
-      radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+      /* More Dramatic Radial Blooms */
+      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
       /* Technical Grid Lines */
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
@@ -144,8 +157,8 @@
     pointer-events: none;
   }
 
-  /* 3D Perspective Layer - Hidden on small screens to avoid positioning quirks */
-  body::after {
+  /* Secondary Perspective Layer - Visible on desktop for extra depth */
+  .grid-perspective {
     content: "";
     position: fixed;
     top: -50%;
@@ -158,13 +171,25 @@
     background-image: 
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 50px 50px;
-    transform: perspective(1000px) rotateX(60deg) translateY(0);
-    animation: grid-move 40s linear infinite;
-    opacity: 0.15;
+    background-size: 60px 60px;
+    transform: perspective(1200px) rotateX(65deg) translateY(0);
+    animation: grid-move 60s linear infinite;
+    opacity: 0.2;
     pointer-events: none;
     display: none;
   }
+
+  @media (min-width: 1024px) {
+    .grid-perspective {
+      display: block;
+    }
+  }
+
+  @keyframes grid-move {
+    0% { transform: perspective(1200px) rotateX(65deg) translateY(0); }
+    100% { transform: perspective(1200px) rotateX(65deg) translateY(120px); }
+  }
+}
 
   @media (min-width: 768px) {
     body::after {

@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Shield, Download, Copy, Check, AlertCircle
+  Shield, Download, Copy, Check, AlertCircle, Zap, Mail, Trash2
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -21,83 +21,86 @@ const actionConfig: Record<string, { label: string; bg: string; color: string; b
   KEEP:        { label: "Keep",        bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <CheckCircle2 className="w-4 h-4" /> },
 };
 
+// Helper for tool icons (mocking for aesthetic)
+function ToolIcon({ name }: { name: string }) {
+  return <div className="text-primary font-black text-xl italic">{name.charAt(0)}</div>;
+}
+
 function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: number }) {
-  const cfg = actionConfig[rec.action] ?? actionConfig.KEEP;
-  
+  const isReplace = rec.action === "REPLACE" || rec.action === "DOWNGRADE" || rec.action === "CONSOLIDATE";
+
   return (
     <motion.div
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.4 + index * 0.08 }}
-      className="bg-card rounded-xl border border-border shadow-sm overflow-hidden"
+      transition={{ delay: 0.1 + index * 0.1 }}
+      className="group bg-card/40 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden hover:border-primary/40 transition-all duration-500 shadow-2xl relative"
     >
-      <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-white/5">
-        <div className="flex items-center gap-4">
-          <div className={`p-2 rounded-lg ${cfg.bg} ${cfg.color}`}>
-            {cfg.icon}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      
+      <div className="p-6 sm:p-8 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 bg-secondary/80 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-primary/20 transition-all duration-500 shadow-inner group-hover:scale-105 transform">
+              <ToolIcon name={rec.originalTool} />
+            </div>
+            <div>
+              <h3 className="font-black text-xl tracking-tight text-foreground group-hover:text-primary transition-colors">{rec.originalTool}</h3>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">{rec.originalPlan} · {rec.originalSeats} Seats</p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-foreground text-lg">{rec.originalTool}</h3>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{cfg.label}</span>
+          <div className="flex items-center gap-6">
+            <div className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg ${
+              isReplace ? "bg-primary/20 text-primary border border-primary/30" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+            }`}>
+              {rec.action}
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-black text-foreground">${rec.originalMonthlyCost.toLocaleString()}</div>
+              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-50">Current Spend</div>
+            </div>
           </div>
         </div>
-        
-        {rec.savings > 0 && (
-          <div className="text-right">
-            <p className="text-muted-foreground text-[10px] uppercase font-bold tracking-widest">Monthly Saving</p>
-            <p className="text-lg font-extrabold text-primary">+${rec.savings.toLocaleString()}/mo</p>
+
+        {isReplace && (
+          <div className="relative">
+            {/* Animated connecting line */}
+            <div className="absolute -top-6 left-8 w-[2px] h-6 bg-gradient-to-b from-primary/10 to-primary/40 group-hover:h-8 transition-all duration-500" />
+            
+            <div className="bg-primary/[0.05] border border-primary/20 rounded-2xl p-6 relative overflow-hidden group/opt shadow-inner">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover/opt:opacity-100 transition-opacity pointer-events-none" />
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 shadow-xl shadow-primary/10 group-hover/opt:rotate-12 transition-transform">
+                    <Zap className="w-6 h-6 text-primary fill-primary/20" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Recommended Fluxora Fix</div>
+                    <div className="font-black text-lg text-foreground">{rec.suggestedTool || "Consolidated Stack"}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-8">
+                  <div className="text-right">
+                    <div className="text-xl font-black text-primary">-${rec.savings.toLocaleString()}</div>
+                    <div className="text-[10px] font-bold text-primary/60 uppercase tracking-widest">Monthly Recovery</div>
+                  </div>
+                  <div className="h-10 w-[1px] bg-primary/20 hidden sm:block" />
+                  <div className="text-right">
+                    <div className="text-xl font-black text-foreground">${(rec.suggestedTotalCost || 0).toLocaleString()}</div>
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Optimized Cost</div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 pt-5 border-t border-primary/10 text-sm text-muted-foreground leading-relaxed italic opacity-80 group-hover/opt:opacity-100 transition-opacity">
+                &ldquo;{rec.reasoning}&rdquo;
+              </div>
+            </div>
           </div>
         )}
       </div>
-
-      <div className="p-4 sm:p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div className="bg-secondary/50 rounded-lg p-4 border border-border">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Current Setup</p>
-            <p className="font-bold text-foreground">{rec.originalTool}</p>
-            {rec.originalPlan && <p className="text-sm text-muted-foreground mt-0.5">Plan: <span className="font-semibold text-foreground/80">{rec.originalPlan}</span></p>}
-            {rec.originalSeats !== undefined && <p className="text-sm text-muted-foreground mt-0.5">Seats: <span className="font-semibold text-foreground/80">{rec.originalSeats}</span></p>}
-            {rec.originalMonthlyCost !== undefined && (
-              <p className="text-sm text-muted-foreground mt-0.5">Current Bill: <span className="font-semibold text-foreground/80">${rec.originalMonthlyCost.toLocaleString()}/mo</span></p>
-            )}
-          </div>
-          
-          <div className="bg-secondary/50 rounded-lg p-4 border border-border">
-            <p className="text-[10px] font-stylish font-bold text-accent uppercase tracking-widest mb-3">Fluxora Fix</p>
-            {rec.action === "KEEP" ? (
-              <>
-                <p className="font-bold text-foreground">{rec.originalTool}</p>
-                <p className="text-sm text-muted-foreground mt-0.5 italic">Already optimized.</p>
-              </>
-            ) : (
-              <>
-                <p className="font-bold text-foreground">{rec.suggestedTool}</p>
-                {rec.suggestedPlan && <p className="text-sm text-muted-foreground mt-0.5">Plan: <span className="font-semibold text-foreground/80">{rec.suggestedPlan}</span></p>}
-                {rec.suggestedCostPerSeat !== undefined && rec.originalSeats !== undefined && (
-                  <p className="text-sm text-muted-foreground mt-0.5">${rec.suggestedCostPerSeat}/seat × {rec.originalSeats} seats</p>
-                )}
-                {rec.suggestedTotalCost !== undefined && (
-                  <p className="text-base font-extrabold text-primary mt-3">
-                    ${rec.suggestedTotalCost.toLocaleString()}<span className="text-xs font-medium">/mo</span>
-                  </p>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="bg-secondary/50 border border-border rounded-lg px-4 py-3">
-          <p className="text-xs font-bold text-accent uppercase tracking-widest mb-1">Why</p>
-          <p className="text-sm text-muted-foreground leading-relaxed italic">&quot;{rec.reasoning}&quot;</p>
-        </div>
-
-        {rec.savings > 0 && (
-          <div className="mt-4 flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-4 py-2">
-            <span className="text-sm font-semibold text-primary">Annual recovery from this item</span>
-            <span className="text-base font-extrabold text-primary">${(rec.savings * 12).toLocaleString()}/yr</span>
-          </div>
-        )}
-      </div>
+    </motion.div>
+  );
+}
     </motion.div>
   );
 }
@@ -216,15 +219,18 @@ function ShareCard({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-      <h3 className="font-bold text-foreground text-sm mb-3">Share this audit</h3>
-      <div className="flex gap-2">
-        <div className="flex-grow px-3 py-2 bg-secondary border border-border rounded-xl text-[10px] font-mono truncate text-muted-foreground flex items-center">
+    <div className="bg-card/40 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative overflow-hidden group">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <h3 className="font-black text-foreground text-[10px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+        <Copy className="w-3 h-3 text-primary" /> Share Audit
+      </h3>
+      <div className="flex gap-2 relative z-10">
+        <div className="flex-grow px-3 py-2.5 bg-secondary/50 border border-white/5 rounded-xl text-[10px] font-mono truncate text-muted-foreground flex items-center group-hover:border-primary/20 transition-colors">
           {shareUrl}
         </div>
         <button 
           onClick={handleCopy}
-          className="flex-shrink-0 p-2 bg-accent text-accent-foreground rounded-xl hover:opacity-90 active:scale-95 transition-all"
+          className="flex-shrink-0 p-2.5 bg-primary text-primary-foreground rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20"
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
         </button>
@@ -235,12 +241,15 @@ function ShareCard({ slug }: { slug: string }) {
 
 function ReferralCard() {
   return (
-    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-      <h3 className="font-bold text-foreground text-sm mb-3">Referral Perks</h3>
-      <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-        Share Fluxora with another founder. If they run an audit, both parties get a <span className="text-accent font-bold">5% Liquidation Bonus</span> on their first Credex credit sale.
+    <div className="bg-card/40 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative overflow-hidden group">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <h3 className="font-black text-foreground text-[10px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+        <Zap className="w-3 h-3 text-primary" /> Partner Perks
+      </h3>
+      <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+        Share Fluxora with a founder. If they audit, both get a <span className="text-primary font-black">5% Liquidation Bonus</span> on their first credit sale.
       </p>
-      <div className="px-3 py-2 bg-secondary border border-dashed border-border rounded-xl text-center font-mono text-xs text-foreground uppercase tracking-widest">
+      <div className="px-4 py-3 bg-secondary/50 border border-dashed border-primary/30 rounded-xl text-center font-mono text-xs text-primary uppercase tracking-[0.2em] group-hover:bg-primary/5 transition-colors">
         FLUX-REF-2026
       </div>
     </div>
@@ -319,36 +328,37 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
   const isSpendingWell = result.monthlySavings < 100;
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
+    <div className="min-h-screen bg-background text-foreground font-sans relative selection:bg-primary/30">
+      {/* 3D Perspective Grid for 'Sexy' Depth */}
+      <div className="grid-perspective" />
+
       {result.isPersisted === false && (
-        <div className="bg-amber-500/10 border-b border-amber-500/20 py-2 px-4 flex flex-col items-center justify-center gap-1 text-amber-500 text-[10px] font-bold uppercase tracking-wider">
+        <div className="bg-primary/10 border-b border-primary/20 py-2 px-4 flex flex-col items-center justify-center gap-1 text-primary text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-3 h-3" />
-            Offline Mode: This audit is stored locally. Shareable link will not work for others.
+            <Zap className="w-3 h-3 animate-pulse" />
+            Limited Access: This audit is stored locally. Submit email to persist result.
           </div>
-          {result.dbError && (
-            <div className="opacity-70 font-mono lowercase tracking-normal bg-black/20 px-2 rounded">
-              Error: {result.dbError}
-            </div>
-          )}
         </div>
       )}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <header className="sticky top-0 z-50 bg-background/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-1 sm:gap-4">
-          <Link href="/" className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors group">
+          <Link href="/" className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-xs font-bold uppercase tracking-widest hidden min-[380px]:block">Home</span>
+            <span className="text-[10px] font-black uppercase tracking-widest hidden min-[380px]:block">Engine Room</span>
           </Link>
-          <h1 className="font-stylish text-sm sm:text-xl font-black tracking-tight text-foreground truncate max-w-[120px] sm:max-w-none">
-            Audit Results
-          </h1>
+          <div className="flex flex-col items-center">
+            <h1 className="font-stylish text-lg sm:text-2xl font-black tracking-tight text-foreground leading-none">
+              Audit Report
+            </h1>
+            <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-muted-foreground mt-1 opacity-50">Deterministic Analysis</span>
+          </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggle />
             <Link 
               href="/audit" 
-              className="px-3 py-1.5 bg-accent text-accent-foreground text-[10px] sm:text-sm font-black uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm whitespace-nowrap"
+              className="px-4 py-2 bg-primary text-primary-foreground text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/20 whitespace-nowrap"
             >
-              New Audit <span className="hidden sm:inline">→</span>
+              Restart <span className="hidden sm:inline">Audit</span>
             </Link>
           </div>
         </div>
@@ -356,21 +366,25 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
 
       <div className="w-full max-w-6xl mx-auto px-4 py-6 sm:py-10 space-y-6 sm:space-y-8">
         {/* KPI Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mx-auto">
           {[
-            { label: "Current Spend", value: `$${result.totalCurrentSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <DollarSign className="w-4 h-4" /> },
-            { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
-            { label: "Optimized Spend", value: `$${result.totalOptimizedSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <Wallet className="w-4 h-4" /> },
-            { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
+            { label: "Current Spend", value: `$${result.totalCurrentSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <DollarSign className="w-4 h-4" />, glow: "shadow-white/5" },
+            { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-primary", icon: <TrendingDown className="w-4 h-4" />, glow: "shadow-primary/20" },
+            { label: "Optimized Spend", value: `$${result.totalOptimizedSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <Wallet className="w-4 h-4" />, glow: "shadow-white/5" },
+            { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", color: "text-primary", icon: <TrendingDown className="w-4 h-4" />, glow: "shadow-primary/20" },
           ].map((card, i) => (
             <motion.div key={i} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}
-              className="bg-card p-4 sm:p-5 rounded-xl border border-border shadow-sm w-full mx-auto">
-              <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-widest mb-2">
-                {card.icon} {card.label}
-              </div>
-              <div className="text-xl sm:text-2xl font-black">
-                <span className={card.color}>{card.value}</span>
-                <span className="text-xs font-medium opacity-50 ml-1">{card.sub}</span>
+              className={`group bg-card/40 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 shadow-2xl ${card.glow} w-full mx-auto relative overflow-hidden`}>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-[0.2em] mb-4">
+                  <div className="p-1.5 bg-secondary rounded-lg">{card.icon}</div>
+                  {card.label}
+                </div>
+                <div className="text-2xl sm:text-3xl font-black tracking-tighter">
+                  <span className={card.color}>{card.value}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-2">{card.sub}</span>
+                </div>
               </div>
             </motion.div>
           ))}
