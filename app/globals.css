@@ -80,8 +80,8 @@
   --input: #E5E7EB;
   --ring: #7C3AED;
   --radius: 16px;
-  --grid-line: #F3F4F6;
-  --grid-dot: #E5E7EB;
+  --grid-line: #F5F3FF; /* Very Light Lavender */
+  --grid-dot: #EDE9FE;
 }
 
 .dark {
@@ -104,8 +104,8 @@
   --border: rgba(139, 92, 246, 0.15);
   --input: rgba(139, 92, 246, 0.15);
   --ring: #8B5CF6;
-  --grid-line: rgba(139, 92, 246, 0.03);
-  --grid-dot: rgba(139, 92, 246, 0.05);
+  --grid-line: rgba(139, 92, 246, 0.08); /* Soft Violet Grid */
+  --grid-dot: rgba(139, 92, 246, 0.12);
 }
 
 @layer base {
