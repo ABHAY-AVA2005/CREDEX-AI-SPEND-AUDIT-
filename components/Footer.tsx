@@ -7,9 +7,9 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 items-start">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <FluxoraLogo className="w-6 h-6" />
-              <span className="font-black text-lg tracking-tighter uppercase italic">Fluxora</span>
+            <div className="flex items-center gap-4">
+              <FluxoraLogo className="w-12 h-12" />
+              <span className="font-stylish text-3xl font-extrabold tracking-tight text-foreground">Fluxora</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
               The deterministic AI spend auditor for high-growth startups. Built to uncover waste and reclaim capital.

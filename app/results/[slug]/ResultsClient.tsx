@@ -31,18 +31,21 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
       transition={{ delay: 0.4 + index * 0.08 }}
       className="bg-card rounded-xl border border-border shadow-sm overflow-hidden"
     >
-      <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-secondary/30">
-        <div className="flex items-center gap-3">
-          <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border ${cfg.bg} ${cfg.color} ${cfg.border}`}>
-            {cfg.icon} {cfg.label}
-          </span>
-          <h3 className="font-bold text-foreground text-base">{rec.originalTool}</h3>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-white/5">
+        <div className="flex items-center gap-4">
+          <div className={`p-2 rounded-lg ${cfg.bg} ${cfg.color}`}>
+            {cfg.icon}
+          </div>
+          <div>
+            <h3 className="font-bold text-foreground text-lg">{rec.originalTool}</h3>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{cfg.label}</span>
+          </div>
         </div>
         
         {rec.savings > 0 && (
           <div className="text-right">
             <p className="text-muted-foreground text-[10px] uppercase font-bold tracking-widest">Monthly Saving</p>
-            <p className="text-lg font-extrabold text-emerald-500">+${rec.savings.toLocaleString()}/mo</p>
+            <p className="text-lg font-extrabold text-primary">+${rec.savings.toLocaleString()}/mo</p>
           </div>
         )}
       </div>
@@ -60,7 +63,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
           </div>
           
           <div className="bg-secondary/50 rounded-lg p-4 border border-border">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Fluxora Fix</p>
+            <p className="text-[10px] font-stylish font-bold text-accent uppercase tracking-widest mb-3">Fluxora Fix</p>
             {rec.action === "KEEP" ? (
               <>
                 <p className="font-bold text-foreground">{rec.originalTool}</p>
@@ -74,7 +77,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
                   <p className="text-sm text-muted-foreground mt-0.5">${rec.suggestedCostPerSeat}/seat × {rec.originalSeats} seats</p>
                 )}
                 {rec.suggestedTotalCost !== undefined && (
-                  <p className="text-base font-extrabold text-emerald-500 mt-3">
+                  <p className="text-base font-extrabold text-primary mt-3">
                     ${rec.suggestedTotalCost.toLocaleString()}<span className="text-xs font-medium">/mo</span>
                   </p>
                 )}
@@ -89,9 +92,9 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
         </div>
 
         {rec.savings > 0 && (
-          <div className="mt-4 flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-4 py-2">
-            <span className="text-sm font-semibold text-emerald-500">Annual recovery from this item</span>
-            <span className="text-base font-extrabold text-emerald-500">${(rec.savings * 12).toLocaleString()}/yr</span>
+          <div className="mt-4 flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-4 py-2">
+            <span className="text-sm font-semibold text-primary">Annual recovery from this item</span>
+            <span className="text-base font-extrabold text-primary">${(rec.savings * 12).toLocaleString()}/yr</span>
           </div>
         )}
       </div>
@@ -121,7 +124,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
     }
   };
 
-  if (submitted) return <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 text-center text-emerald-500 font-bold">Report sent!</div>;
+  if (submitted) return <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center text-primary font-bold">Report sent!</div>;
 
   return (
     <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
@@ -174,7 +177,7 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
       <h3 className="font-bold text-foreground text-sm mb-4">Industry Benchmark</h3>
       <div className="text-2xl font-bold mb-1">${spendPerSeat}<span className="text-xs text-muted-foreground">/seat/mo</span></div>
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Your AI spend per developer is <span className="text-foreground font-bold">${spendPerSeat}</span> — companies your size average <span className="text-emerald-500 font-bold">${benchmarkAverage}</span>.
+        Your AI spend per developer is <span className="text-foreground font-bold">${spendPerSeat}</span> — companies your size average <span className="text-primary font-bold">${benchmarkAverage}</span>.
       </p>
     </div>
   );
@@ -184,8 +187,8 @@ function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
   if (result.annualSavings < 1000) return null;
 
   return (
-    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6 mb-8 text-center">
-      <h3 className="font-bold text-emerald-500 text-lg mb-2">High Recovery Potential Found</h3>
+    <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6 mb-8 text-center">
+      <h3 className="font-bold text-primary text-lg mb-2">High Recovery Potential Found</h3>
       <p className="text-sm text-muted-foreground mb-4">
         Our deterministic engine identified <strong>${result.annualSavings.toLocaleString()}</strong> in immediate annual recovery. 
         Book a professional Credex consultation to execute these savings and liquidate unused credits.
@@ -194,7 +197,7 @@ function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
         href="https://credex.rocks/consultation" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="inline-block py-2.5 px-6 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-colors"
+        className="inline-block py-2.5 px-6 bg-primary text-primary-foreground font-bold rounded-2xl hover:opacity-90 transition-opacity"
       >
         Book Credex Consultation →
       </a>
@@ -304,8 +307,8 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
   }
 
   const chartData = [
-    { name: "Current", amount: result.totalCurrentSpend, fill: "#CF6679" },
-    { name: "Optimized", amount: result.totalOptimizedSpend, fill: "#00A36C" },
+    { name: "Current", amount: result.totalCurrentSpend, fill: "var(--destructive)" },
+    { name: "Optimized", amount: result.totalOptimizedSpend, fill: "var(--primary)" },
   ];
 
   const isSpendingWell = result.monthlySavings < 100;

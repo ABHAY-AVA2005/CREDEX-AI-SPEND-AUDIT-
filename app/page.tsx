@@ -23,9 +23,9 @@ export default function LandingPage() {
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
-          <div className="flex items-center gap-2">
-            <FluxoraLogo className="w-6 h-6" />
-            <span className="font-bold text-xl tracking-tight text-foreground">Fluxora</span>
+          <div className="flex items-center gap-4 group cursor-pointer">
+            <FluxoraLogo className="w-12 h-12" />
+            <span className="font-stylish text-4xl font-extrabold tracking-tight text-foreground transition-all group-hover:text-primary">Fluxora</span>
           </div>
           
           <nav className="flex items-center gap-6">
@@ -73,10 +73,10 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-6xl md:text-8xl font-serif font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
+              className="text-6xl md:text-8xl font-sans font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
             >
-              Audit your AI stack.<br />
-              <span className="text-accent italic">Stop the leak.</span>
+              Paying for AI tools?<br />
+              <span className="text-primary font-stylish font-extrabold tracking-tight">Stop overpaying.</span>
             </motion.h1>
             
             {/* Subtext explaining the deterministic value prop */}
@@ -98,10 +98,10 @@ export default function LandingPage() {
             >
               <Link 
                 href="/audit" 
-                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl bg-accent text-accent-foreground hover:opacity-90 transition-all shadow-2xl shadow-accent/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:scale-105 transition-all shadow-2xl shadow-primary/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
               >
                 {/* Shimmer effect for that extra polish */}
-                <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-white/10 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 Run Free Audit <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               
@@ -141,7 +141,7 @@ export default function LandingPage() {
               className="mt-20 pt-10 border-t border-border flex flex-wrap justify-center gap-x-12 gap-y-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
             >
               {["Cursor", "Claude", "OpenAI", "Gemini", "GitHub"].map((logo) => (
-                <span key={logo} className="font-serif text-2xl font-black italic tracking-tighter text-foreground">
+                <span key={logo} className="font-stylish text-2xl font-bold tracking-tight text-foreground/40">
                   {logo}
                 </span>
               ))}
@@ -153,7 +153,7 @@ export default function LandingPage() {
         <section className="py-24 bg-secondary/20 border-y border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-serif font-black text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
+              <h2 className="text-3xl font-stylish font-bold text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
               {[
@@ -198,7 +198,7 @@ export default function LandingPage() {
         {/* FAQ Section */}
         <section className="py-24 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl font-serif font-black text-foreground tracking-tight text-center mb-16">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-stylish font-bold text-foreground tracking-tight text-center mb-16">Frequently Asked Questions</h2>
             <div className="space-y-8">
               {[
                 {
@@ -241,15 +241,15 @@ export default function LandingPage() {
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
           
           <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <FluxoraLogo className="w-12 h-12 mx-auto mb-6" />
-            <h2 className="text-4xl font-bold mb-6 tracking-tight">Audit your stack before renewals hit.</h2>
+            <FluxoraLogo className="w-20 h-20 mx-auto mb-8" />
+            <h2 className="text-4xl font-stylish font-extrabold mb-6 tracking-tight">Audit your stack before renewals hit.</h2>
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
               Connect your workspace to generate a full AI spend audit in under 60 seconds. <br className="hidden md:block"/> Get a CFO-ready report instantly.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
                 href="/audit" 
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-lg bg-foreground text-background hover:opacity-90 transition-all shadow-xl shadow-accent/10 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-lg bg-primary text-primary-foreground hover:scale-105 transition-all shadow-xl shadow-primary/20 active:scale-95"
               >
                 Start Free Audit
               </Link>

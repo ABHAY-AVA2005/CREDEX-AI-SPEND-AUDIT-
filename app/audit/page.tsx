@@ -6,7 +6,7 @@ import { FluxoraLogo } from "@/components/Logo";
 
 export default function AuditPage() {
   return (
-    <div className="min-h-screen bg-background/50 text-foreground selection:bg-blue-100">
+    <div className="min-h-screen bg-background/50 text-foreground selection:bg-primary/20">
       
       {/* Global Header — Pins the 'Back' button to the far left for consistent navigation */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -15,7 +15,7 @@ export default function AuditPage() {
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
-          <FluxoraLogo className="w-5 h-5" />
+          <FluxoraLogo className="w-8 h-8" />
           <ThemeToggle />
         </div>
       </header>
@@ -25,7 +25,7 @@ export default function AuditPage() {
           
           {/* Intake Header — Focuses on the "Aha!" moment of savings */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-black tracking-tighter lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+            <h1 className="text-4xl font-black tracking-tighter lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               AI Spend Audit
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
