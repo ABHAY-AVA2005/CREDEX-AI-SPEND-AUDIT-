@@ -23,24 +23,24 @@ export default function LandingPage() {
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
-          <div className="flex items-center gap-4 group cursor-pointer">
-            <FluxoraLogo className="w-12 h-12" />
-            <span className="font-stylish text-4xl font-extrabold tracking-tight text-foreground transition-all group-hover:text-primary">Fluxora</span>
+          <div className="flex items-center gap-2 sm:gap-4 group cursor-pointer">
+            <FluxoraLogo className="w-8 h-8 sm:w-12 sm:h-12" />
+            <span className="font-stylish text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground transition-all group-hover:text-primary">Fluxora</span>
           </div>
           
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 sm:gap-6">
             <ThemeToggle />
             <a 
               href="https://credex.rocks/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
+              className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden min-[480px]:block"
             >
               Marketplace
             </a>
             <Link 
               href="/audit" 
-              className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-2xl hover:opacity-90 transition-all shadow-sm active:scale-95"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-primary text-primary-foreground text-xs sm:text-sm font-medium rounded-xl sm:rounded-2xl hover:opacity-90 transition-all shadow-sm active:scale-95 whitespace-nowrap"
             >
               Start Free Audit
             </Link>
@@ -50,11 +50,11 @@ export default function LandingPage() {
 
       {/* Main Hero Section */}
       <main className="flex-grow z-10">
-        <section className="relative pt-32 pb-40 overflow-hidden">
+        <section className="relative pt-20 pb-32 md:pt-32 md:pb-40 overflow-hidden">
           
           {/* Abstract background blobs for a bit of premium depth */}
-          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
+          <div className="absolute top-1/4 -left-20 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
+          <div className="absolute bottom-1/4 -right-20 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             {/* The Badge */}
@@ -62,7 +62,7 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary text-foreground text-[10px] font-bold uppercase tracking-widest mb-10 shadow-xl shadow-accent/5 border border-border"
+              className="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary text-foreground text-[10px] font-bold uppercase tracking-widest mb-8 md:mb-10 shadow-xl shadow-accent/5 border border-border"
             >
               <span className="flex h-1.5 w-1.5 rounded-full bg-accent mr-3 animate-pulse"></span>
               CFO-Grade AI Spend Intelligence
@@ -73,7 +73,7 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-6xl md:text-8xl font-sans font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
+              className="text-5xl sm:text-6xl md:text-8xl font-sans font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
             >
               Paying for AI tools?<br />
               <span className="text-primary font-stylish font-extrabold tracking-tight">Stop overpaying.</span>
@@ -84,7 +84,7 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground mx-auto mb-12 leading-relaxed"
+              className="mt-6 md:mt-8 max-w-2xl text-base md:text-xl text-muted-foreground mx-auto mb-10 md:mb-12 leading-relaxed"
             >
               Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. Fluxora uses deterministic math to recover up to 40% of your AI budget.
             </motion.p>
@@ -94,11 +94,11 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center"
             >
               <Link 
                 href="/audit" 
-                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:scale-105 transition-all shadow-2xl shadow-primary/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
+                className="group relative flex items-center justify-center px-8 md:px-10 py-4 md:py-5 text-base md:text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:scale-105 transition-all shadow-2xl shadow-primary/20 w-full sm:w-auto overflow-hidden active:scale-[0.98]"
               >
                 {/* Shimmer effect for that extra polish */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -107,7 +107,7 @@ export default function LandingPage() {
               
               <Link 
                 href="/sample" 
-                className="flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
+                className="flex items-center justify-center px-8 md:px-10 py-4 md:py-5 text-base md:text-lg font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
               >
                 View Sample Report
               </Link>

@@ -5,34 +5,34 @@ export function Footer() {
   return (
     <footer className="w-full py-12 border-t border-border bg-card/30 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <FluxoraLogo className="w-12 h-12" />
-              <span className="font-stylish text-3xl font-extrabold tracking-tight text-foreground">Fluxora</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          <div className="space-y-4 text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <FluxoraLogo className="w-10 h-10 md:w-12 md:h-12" />
+              <span className="font-stylish text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">Fluxora</span>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+            <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
               The deterministic AI spend auditor for high-growth startups. Built to uncover waste and reclaim capital.
             </p>
           </div>
-
-          <div className="space-y-4 md:text-right md:flex md:flex-col md:items-end">
+ 
+          <div className="space-y-4 text-center md:text-right md:flex md:flex-col md:items-end">
             <h3 className="text-sm font-bold uppercase tracking-widest text-foreground">Support & Feedback</h3>
-            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed md:text-right">
+            <p className="text-xs text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed md:text-right">
               Found a bug? Have a suggestion for improvement? I&apos;d love to hear from you.
             </p>
             <a 
               href="mailto:abhayvarshit2005@gmail.com" 
-              className="group flex items-center gap-2 text-accent font-bold hover:text-accent/80 transition-colors"
+              className="group flex items-center justify-center md:justify-end gap-2 text-accent font-bold hover:text-accent/80 transition-colors"
             >
               <Mail className="w-4 h-4" />
               abhayvarshit2005@gmail.com
             </a>
           </div>
         </div>
-
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">
+ 
+        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold text-center md:text-left">
             © 2026 Fluxora Audit Engine. All rights reserved.
           </p>
           <div className="flex items-center gap-6">

@@ -50,8 +50,8 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
         )}
       </div>
 
-      <div className="p-6">
-        <div className="grid md:grid-cols-2 gap-4 mb-5">
+      <div className="p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
           <div className="bg-secondary/50 rounded-lg p-4 border border-border">
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Current Setup</p>
             <p className="font-bold text-foreground">{rec.originalTool}</p>
@@ -139,7 +139,7 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
           aria-label="Work Email Address"
           className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" 
         />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <input 
             type="text" 
             required 
@@ -250,19 +250,24 @@ function ReferralCard() {
 function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
   if (annualSavings < 1000) return null;
   return (
-    <div className="bg-gradient-to-br from-[#0B0E14] to-[#1E293B] text-white rounded-2xl p-6 border border-white/10 shadow-lg">
-      <h3 className="font-extrabold text-lg mb-2">High Recovery Potential Found</h3>
-      <p className="text-muted-foreground text-sm mb-4">
-        Our engine identified <strong>${annualSavings.toLocaleString()}</strong> in annual waste. Book a professional Credex consultation to execute these savings.
-      </p>
-      <a 
-        href="https://credex.rocks/consultation" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="block w-full py-2 bg-accent text-accent-foreground font-bold rounded-xl text-center text-sm hover:opacity-90 transition-opacity"
-      >
-        Book Consultation →
-      </a>
+    <div className="bg-primary text-primary-foreground rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden group">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-from)_0%,_transparent_70%)] from-white pointer-events-none" />
+      
+      <div className="relative z-10">
+        <h3 className="font-black text-xl mb-2 tracking-tight">High Recovery Potential</h3>
+        <p className="text-primary-foreground/80 text-sm mb-6 leading-relaxed">
+          Our engine identified <strong className="text-white">${annualSavings.toLocaleString()}</strong> in annual waste. Book a professional Credex consultation to execute these savings and liquidate credits.
+        </p>
+        <a 
+          href="https://credex.rocks/consultation" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center w-full py-3 bg-white text-primary font-bold rounded-xl text-center text-sm hover:bg-opacity-90 transition-all active:scale-95 shadow-lg"
+        >
+          Book Consultation →
+        </a>
+      </div>
     </div>
   );
 }
@@ -329,22 +334,22 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         </div>
       )}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+          <Link href="/" className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Home</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Home</span>
           </Link>
-          <h1 className="font-extrabold text-lg tracking-tight">Audit Results</h1>
-          <div className="flex items-center gap-4">
+          <h1 className="font-extrabold text-sm sm:text-lg tracking-tight truncate">Audit Results</h1>
+          <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggle />
-            <Link href="/audit" className="text-sm font-semibold text-accent hover:opacity-80">New Audit →</Link>
+            <Link href="/audit" className="text-xs sm:text-sm font-semibold text-accent hover:opacity-80 whitespace-nowrap">New Audit →</Link>
           </div>
         </div>
       </header>
 
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
         {/* KPI Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Current Spend", value: `$${result.totalCurrentSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <DollarSign className="w-4 h-4" /> },
             { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
@@ -352,12 +357,13 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
             { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
           ].map((card, i) => (
             <motion.div key={i} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}
-              className="bg-card p-5 rounded-xl border border-border shadow-sm">
+              className="bg-card p-4 sm:p-5 rounded-xl border border-border shadow-sm">
               <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-widest mb-2">
                 {card.icon} {card.label}
               </div>
-              <div className={`text-2xl font-black ${card.color}`}>
-                {card.value}<span className="text-xs font-medium opacity-50">{card.sub}</span>
+              <div className="text-xl sm:text-2xl font-black">
+                <span className={card.color}>{card.value}</span>
+                <span className="text-xs font-medium opacity-50 ml-1">{card.sub}</span>
               </div>
             </motion.div>
           ))}

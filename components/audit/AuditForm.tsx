@@ -311,20 +311,20 @@ export default function AuditForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative flex items-center justify-center min-w-[320px] px-10 py-5 bg-accent text-accent-foreground rounded-2xl font-black text-lg hover:opacity-90 active:scale-95 transition-all shadow-2xl shadow-accent/20 disabled:opacity-50 overflow-hidden"
+            className="group relative flex items-center justify-center w-full max-w-[400px] px-8 py-4 md:px-10 md:py-5 bg-accent text-accent-foreground rounded-2xl font-black text-lg hover:opacity-90 active:scale-95 transition-all shadow-2xl shadow-accent/20 disabled:opacity-50 overflow-hidden"
           >
             {isSubmitting ? (
-              <span className="flex items-center gap-3">
+              <span className="flex items-center gap-3 text-sm md:text-lg">
                 {/* Loading spinner for that premium feel */}
-                <svg className="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-5 w-5 md:h-6 md:w-6 text-white" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V8z"/>
                 </svg>
                 Analyzing Stack...
               </span>
             ) : (
-              <span className="flex items-center gap-2">
-                Generate Full Audit <CheckCircle2 className="w-6 h-6" />
+              <span className="flex items-center gap-2 text-sm md:text-lg">
+                Generate Full Audit <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6" />
               </span>
             )}
             {/* Shimmer effect on hover */}

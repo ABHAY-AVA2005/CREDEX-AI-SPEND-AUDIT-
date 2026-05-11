@@ -135,9 +135,10 @@
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
     background-position: center center;
+    pointer-events: none;
   }
 
-  /* 3D Perspective Layer */
+  /* 3D Perspective Layer - Hidden on small screens to avoid positioning quirks */
   body::after {
     content: "";
     position: fixed;
@@ -154,6 +155,13 @@
     animation: grid-move 40s linear infinite;
     opacity: 0.15;
     pointer-events: none;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    body::after {
+      display: block;
+    }
   }
 
   @keyframes grid-move {

@@ -13,22 +13,22 @@ export default function AuditPage() {
         <div className="max-w-full px-4 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to Home</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Back to Home</span>
           </Link>
-          <FluxoraLogo className="w-8 h-8" />
+          <FluxoraLogo className="w-8 h-8 sm:w-10 sm:h-10" />
           <ThemeToggle />
         </div>
       </header>
 
-      <div className="py-12 px-4 sm:px-6 lg:px-8">
+      <div className="py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           
           {/* Intake Header — Focuses on the "Aha!" moment of savings */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-black tracking-tighter lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+          <div className="text-center mb-8 md:mb-10">
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tighter lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               AI Spend Audit
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Identify redundancies in your stack and recover up to 40% of your SaaS budget using our deterministic analysis engine.
             </p>
           </div>
