@@ -127,10 +127,34 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
     <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
       <h3 className="font-bold text-foreground text-sm mb-4">Get the full report</h3>
       <form onSubmit={handleSubmit} className="space-y-3">
-        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Work Email" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
+        <input 
+          type="email" 
+          required 
+          value={email} 
+          onChange={e => setEmail(e.target.value)} 
+          placeholder="Work Email" 
+          aria-label="Work Email Address"
+          className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" 
+        />
         <div className="grid grid-cols-2 gap-2">
-          <input type="text" required value={role} onChange={e => setRole(e.target.value)} placeholder="Role (e.g. CTO)" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
-          <input type="number" required value={teamSize} onChange={e => setTeamSize(e.target.value)} placeholder="Team Size" className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" />
+          <input 
+            type="text" 
+            required 
+            value={role} 
+            onChange={e => setRole(e.target.value)} 
+            placeholder="Role (e.g. CTO)" 
+            aria-label="Your Job Role"
+            className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" 
+          />
+          <input 
+            type="number" 
+            required 
+            value={teamSize} 
+            onChange={e => setTeamSize(e.target.value)} 
+            placeholder="Team Size" 
+            aria-label="Total Team Size"
+            className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-background" 
+          />
         </div>
         <button type="submit" disabled={loading} className="w-full py-2.5 bg-accent text-accent-foreground font-semibold rounded-2xl hover:opacity-90">
           {loading ? "Sending..." : "Send Free Report"}

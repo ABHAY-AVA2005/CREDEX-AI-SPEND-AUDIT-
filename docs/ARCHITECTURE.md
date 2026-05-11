@@ -1,6 +1,10 @@
-# Technical Architecture & Pipeline
+## 🛠️ Technical Choices & Justification
 
-Fluxora is built with a **Deterministic-First** philosophy. In a market saturated with "hallucinating" AI agents, we prioritize financial accuracy over probabilistic estimates. Our architecture ensures that every dollar found is defensible to a CFO.
+To satisfy the core project constraints, we have made the following foundational choices:
+
+1. **Framework: Next.js 15 (React 19)**: Chosen for its **Server Actions** capability, which allows us to perform secure, server-side database operations (Prisma) and API calls (Gemini/Resend) without exposing sensitive logic or secrets to the client.
+2. **Language: TypeScript**: Non-negotiable for a financial tool. TypeScript ensures that the **Deterministic Audit Engine** operates on strictly typed data, eliminating runtime errors in savings calculations.
+3. **UI: Hand-Coded Tailwind**: We avoided all website builders. The interface is built with raw **Tailwind CSS** and **Radix UI** primitives to ensure maximum performance and a unique, premium aesthetic that cannot be achieved with templates.
 
 ## 🏗️ High-Level System Overview
 

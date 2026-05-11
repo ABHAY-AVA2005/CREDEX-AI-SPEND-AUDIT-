@@ -130,8 +130,9 @@ export default function AuditForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Company Name</label>
+              <label htmlFor="companyName" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Company Name</label>
               <input
+                id="companyName"
                 type="text"
                 required
                 {...form.register("companyName")}
@@ -144,8 +145,9 @@ export default function AuditForm() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Team Size</label>
+              <label htmlFor="companySize" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Team Size</label>
               <input
+                id="companySize"
                 type="number"
                 required
                 {...form.register("companySize", { valueAsNumber: true })}
@@ -157,8 +159,9 @@ export default function AuditForm() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Industry (Optional)</label>
+              <label htmlFor="industry" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Industry (Optional)</label>
               <input
+                id="industry"
                 type="text"
                 {...form.register("industry")}
                 placeholder="e.g. SaaS, Fintech"
@@ -201,8 +204,9 @@ export default function AuditForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Select Tool</label>
+                    <label htmlFor={`toolName-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Select Tool</label>
                     <select
+                      id={`toolName-${index}`}
                       required
                       {...form.register(`tools.${index}.toolName`)}
                       className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
@@ -218,8 +222,9 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Current Plan</label>
+                    <label htmlFor={`currentPlan-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Current Plan</label>
                     <select
+                      id={`currentPlan-${index}`}
                       required
                       {...form.register(`tools.${index}.currentPlan`)}
                       className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
@@ -237,8 +242,9 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Seats / Users</label>
+                    <label htmlFor={`seats-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Seats / Users</label>
                     <input
+                      id={`seats-${index}`}
                       type="number"
                       required
                       {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
@@ -250,8 +256,9 @@ export default function AuditForm() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
+                    <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
                     <input
+                      id={`monthlySpend-${index}`}
                       type="number"
                       required
                       {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
@@ -263,8 +270,9 @@ export default function AuditForm() {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Use Cases</label>
+                    <label htmlFor={`useCases-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Use Cases</label>
                     <input
+                      id={`useCases-${index}`}
                       required
                       onChange={(e) => {
                         // Turning the comma-separated string back into an array for the schema
