@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts
 import {
   ArrowLeft, TrendingDown, DollarSign, Wallet,
   CheckCircle2, XCircle, AlertTriangle, Layers,
-  Shield, Download, Copy, Check, AlertCircle, Zap, Mail, Trash2
+  Shield, Download, Copy, Check, Zap
 } from "lucide-react";
 import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
@@ -14,12 +14,7 @@ import { AuditRecommendation } from "@/schemas/audit";
 import { ProcessedAuditResult } from "@/app/actions/audit";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-const actionConfig: Record<string, { label: string; bg: string; color: string; border: string; icon: React.ReactNode }> = {
-  REPLACE:     { label: "Replace",     bg: "bg-destructive/10", color: "text-destructive", border: "border-destructive/20", icon: <XCircle className="w-4 h-4" /> },
-  CONSOLIDATE: { label: "Consolidate", bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <Layers className="w-4 h-4" /> },
-  DOWNGRADE:   { label: "Downgrade",   bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <AlertTriangle className="w-4 h-4" /> },
-  KEEP:        { label: "Keep",        bg: "bg-secondary",       color: "text-accent",        border: "border-border",        icon: <CheckCircle2 className="w-4 h-4" /> },
-};
+
 
 // Helper for tool icons (mocking for aesthetic)
 function ToolIcon({ name }: { name: string }) {
@@ -56,7 +51,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
               {rec.action}
             </div>
             <div className="text-right">
-              <div className="text-2xl font-black text-foreground">${rec.originalMonthlyCost.toLocaleString()}</div>
+              <div className="text-2xl font-black text-foreground">${(rec.originalMonthlyCost ?? 0).toLocaleString()}</div>
               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-50">Current Spend</div>
             </div>
           </div>
