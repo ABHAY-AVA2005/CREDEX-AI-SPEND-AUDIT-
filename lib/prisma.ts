@@ -8,7 +8,11 @@ const globalForPrisma = globalThis as unknown as {
 export function getPrismaClient(): PrismaClient {
   if (!globalForPrisma.prisma) {
     globalForPrisma.prisma = new PrismaClient({
-      datasourceUrl: process.env.DATABASE_URL,
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
     } as any);
   }
   return globalForPrisma.prisma;
