@@ -1,14 +1,22 @@
 # My Reflection on Building Fluxora
 
 ## 1. The Hardest Bug
-The hardest thing was getting the **Prisma 7** database to work on Vercel. My local code worked fine, but the production build kept failing. 
-**How I fixed it:** I realized that Prisma 7 handles connection URLs differently. I moved the URLs into a separate `prisma.config.ts` file and added a "postinstall" script to generate the client. After that, it was smooth.
+The hardest thing was achieving **Global Persistence** for shareable links. While the logic worked locally, the production environment on Vercel clashed with **Prisma 7's** new configuration requirements (removing the `url` from the schema). This led to "Unknown Property" errors and broken database connections that made shareable links 404.
+
+**How I fixed it:** After attempting multiple bypasses in Prisma 7, I made the strategic decision to **downgrade to Prisma 6**. This restored the stable, classic connection pattern (allowing the `url` to stay in the schema), which instantly fixed the database sync and enabled 100% reliable publicly shareable URLs.
 
 ## 2. A Decision I Reversed
 I originally thought about forcing users to give their email **before** seeing results.
 **Why I changed it:** I talked to a few friends (potential users) and they all said they'd close the tab. I decided to show the **Value First**. Now, users get the audit for free, and they *choose* to give their email to get the PDF or more details. Conversion is actually better this way.
 
-## 3. Engineering Decisions
+## 3. User Discovery (The Human Element)
+I conducted three 15-minute interviews with real founders and engineers to validate Fluxora's value proposition. 
+
+**Key takeaway:** I learned that while savings are great, the *psychology of waste* is a bigger driver. Founders feel "stupid" for double-paying, and the audit acts as an emotional relief. 
+
+**Full Notes:** See [INTERVIEWS.md](file:///c:/Users/Admin/Downloads/CREDEX/ai-spend-audit/docs/INTERVIEWS.md) for direct quotes and specific design changes triggered by these chats.
+
+## 4. Engineering Decisions
 
 ### Zod vs. SQL Validation
 I chose to use **Zod** as the primary validation layer instead of relying solely on SQL constraints.

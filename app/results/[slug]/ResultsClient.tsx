@@ -143,10 +143,37 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
 function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
   const totalSeats = result.recommendations.reduce((acc, r) => acc + (r.originalSeats || 1), 0);
   const spendPerSeat = totalSeats > 0 ? Math.round(result.totalCurrentSpend / totalSeats) : 0;
+  const benchmarkAverage = 20; // Average AI spend per dev in 2026
+  
   return (
     <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
       <h3 className="font-bold text-foreground text-sm mb-4">Industry Benchmark</h3>
-      <div className="text-2xl font-bold">${spendPerSeat}<span className="text-xs text-muted-foreground">/seat/mo</span></div>
+      <div className="text-2xl font-bold mb-1">${spendPerSeat}<span className="text-xs text-muted-foreground">/seat/mo</span></div>
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        Your AI spend per developer is <span className="text-foreground font-bold">${spendPerSeat}</span> — companies your size average <span className="text-emerald-500 font-bold">${benchmarkAverage}</span>.
+      </p>
+    </div>
+  );
+}
+
+function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
+  if (result.annualSavings < 1000) return null;
+
+  return (
+    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6 mb-8 text-center">
+      <h3 className="font-bold text-emerald-500 text-lg mb-2">High Recovery Potential Found</h3>
+      <p className="text-sm text-muted-foreground mb-4">
+        Our deterministic engine identified <strong>${result.annualSavings.toLocaleString()}</strong> in immediate annual recovery. 
+        Book a professional Credex consultation to execute these savings and liquidate unused credits.
+      </p>
+      <a 
+        href="https://credex.rocks/consultation" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="inline-block py-2.5 px-6 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-colors"
+      >
+        Book Credex Consultation →
+      </a>
     </div>
   );
 }
@@ -179,13 +206,36 @@ function ShareCard({ slug }: { slug: string }) {
   );
 }
 
+function ReferralCard() {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+      <h3 className="font-bold text-foreground text-sm mb-3">Referral Perks</h3>
+      <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+        Share Fluxora with another founder. If they run an audit, both parties get a <span className="text-accent font-bold">5% Liquidation Bonus</span> on their first Credex credit sale.
+      </p>
+      <div className="px-3 py-2 bg-secondary border border-dashed border-border rounded-xl text-center font-mono text-xs text-foreground uppercase tracking-widest">
+        FLUX-REF-2026
+      </div>
+    </div>
+  );
+}
+
 function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
-  if (annualSavings < 6000) return null;
+  if (annualSavings < 1000) return null;
   return (
     <div className="bg-gradient-to-br from-[#0B0E14] to-[#1E293B] text-white rounded-2xl p-6 border border-white/10 shadow-lg">
-      <h3 className="font-extrabold text-lg mb-2">Unlock Capital Recovery</h3>
-      <p className="text-muted-foreground text-sm mb-4">Wastage detected. Book a call to liquidate unused credits.</p>
-      <a href="https://credex.rocks" className="block w-full py-2 bg-accent text-accent-foreground font-bold rounded-xl text-center text-sm hover:opacity-90 transition-opacity">Book Consultation</a>
+      <h3 className="font-extrabold text-lg mb-2">High Recovery Potential Found</h3>
+      <p className="text-muted-foreground text-sm mb-4">
+        Our engine identified <strong>${annualSavings.toLocaleString()}</strong> in annual waste. Book a professional Credex consultation to execute these savings.
+      </p>
+      <a 
+        href="https://credex.rocks/consultation" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="block w-full py-2 bg-accent text-accent-foreground font-bold rounded-xl text-center text-sm hover:opacity-90 transition-opacity"
+      >
+        Book Consultation →
+      </a>
     </div>
   );
 }
@@ -314,6 +364,8 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
                 {result.aiSummary.split('\n').map((para, i) => <p key={i}>{para}</p>)}
               </div>
             </div>
+
+            <ReferralCard />
 
             <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
               <h2 className="text-sm font-bold mb-4">Spend Comparison</h2>

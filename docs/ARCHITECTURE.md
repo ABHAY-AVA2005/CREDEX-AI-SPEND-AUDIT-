@@ -33,53 +33,30 @@ We use **Zod** as the primary validation layer for four critical reasons:
 
 Here is the exact journey of a single audit:
 
-#### 1. User Input (The Starting Line)
-The user interacts with the `AuditForm.tsx`. They add their tools (e.g., Cursor, ChatGPT, AWS). This is "untrusted" data living in the browser's memory.
+#### 1. Ingestion & Validation
+The user interacts with `AuditForm.tsx`. As soon as they hit "Generate Audit," the form data is sent to a **Next.js Server Action** where **Zod** intercepts it for sanitization and type enforcement.
 
-#### 2. Zod Validation (The Guard)
-As soon as the user hits "Generate Audit," the form data is sent to a **Next.js Server Action**. Zod intercepts it. 
-*   **Action**: It validates that `tools` is an array and that every `seat` count is a valid integer.
-*   **Result**: Clean, validated JSON data is passed to the Audit Engine.
+#### 2. Audit Logic & Price Matching
+The **Audit Engine** orchestrates the analysis. It queries the **Pricing Knowledge Base** (`core/audit-engine/knowledge.ts`) for May 2026 retail values and passes them to the **Rule Engine** to identify overlaps and anomalies.
 
-#### 3. Audit Engine (The Orchestrator)
-This is the "Brain" of the app. It takes the clean user data and initiates the analysis. It doesn't do the math itself; it manages the flow between the **Pricing Knowledge Base** and the **Rule Engine**.
-
-#### 4. Pricing Knowledge Base (The Source of Truth)
-Located in `core/audit-engine/knowledge.ts`, this is a curated registry of real-world 2026 pricing. 
-*   **Step**: The engine looks up each tool the user entered (e.g., "ChatGPT Plus") and finds its official retail price ($20/seat).
-
-#### 5. Rule Engine (The Logic Layer)
-This is where the **Deterministic Rules** live. Unlike AI, which "guesses," the Rule Engine uses strict `if/then` logic:
-*   *Rule Example*: `if (user has Cursor) AND (user has GitHub Copilot) THEN (Flag as OVERLAP)`.
-*   *Rule Example*: `if (user is paying $30 for a $20 plan) THEN (Flag as PRICE_ANOMALY)`.
-
-#### 6. Savings Generator (The Math Engine)
-It compares the **User Input** against the **Pricing Knowledge Base**.
+#### 3. Savings Calculation
+The **Savings Generator** compares current spend against optimized recommendations.
 *   **Logic**: `(Current Monthly Spend) - (Optimized Monthly Spend) = Monthly Savings`.
-*   It aggregates all flags from the Rule Engine into a final "Potential Recovery" dollar amount.
+*   It produces a detailed JSON object containing flags for setiap tool (e.g., "Overlap found between Claude and ChatGPT").
 
-#### 7. Raw JSON Result (The Intermediate State)
-The engine produces a complex JSON object containing:
-*   Total current spend.
-*   Total optimized spend.
-*   A list of `recommendations` (Action, Savings, and Reasoning).
+#### 4. Cloud Persistence (Prisma 6)
+We save the audit result to **Supabase PostgreSQL** using a stable Prisma 6 architecture.
+*   **Unique Slug**: `nanoid` generates a URL-safe ID (e.g., `TDUtudVR4i`).
+*   **Benefit**: This creates a permanent, publicly shareable link that loads instantly for anyone, anywhere.
 
-#### 8. PostgreSQL DB (Persistence)
-We take that Raw JSON and save it to our database.
-*   **Why?**: This creates **Persistence**. It generates a unique `publicSlug` (like `flux-123xyz`). This allows the user to refresh the page or share the link with their team without losing the data.
+#### 5. AI Executive Summary
+The raw audit data is sent to **Gemini 1.5 Flash**. 
+*   **Role**: Gemini acts as a "Virtual CFO," translating raw math into a 2-paragraph executive memo that explains the strategic rationale for the savings.
 
-#### 9. Gemini AI Summarizer (The Translator)
-We send the **Raw JSON Result** to Google Gemini 1.5 Flash. 
-*   **Role**: Gemini acts as a "Financial Analyst." It reads the raw numbers and writes a 2-paragraph **Executive Summary** in plain English (e.g., *"Your team is double-paying for coding assistants..."*).
-
-#### 10. Public Share URL (The Viral Hook)
-The app generates a unique link: `fluxora.app/results/flux-123xyz`.
-*   When someone clicks this, the app pulls the data back from **PostgreSQL** using that slug.
-
-#### 11. Final Dashboard (The Visual Experience)
-The data is rendered in the `ResultsClient.tsx`. 
-*   **Components**: Charts, **Recommendation Cards**, the **AI Executive Summary**, and the **Benchmark Card**.
-*   **Final Step**: The user can now export this to a PDF or click the "Fluxora Marketplace" CTA to start recovering that money.
+#### 6. Final Dashboard & Conversion
+The `ResultsClient.tsx` renders the final experience:
+*   **Visuals**: Charts, Benchmark comparisons, and Actionable Steps.
+*   **Conversion**: A lead capture form connects the user's identity to the specific audit record for follow-up capital recovery in the Fluxora Marketplace.
 
 ---
 
@@ -100,5 +77,5 @@ The data is rendered in the `ResultsClient.tsx`.
 
 If we scale to 100k+ concurrent audits, our roadmap includes:
 1. **Redis Caching**: To prevent hitting the Postgres database for every public URL view.
-2. **Edge Runtimes**: Moving the audit engine to the Edge to minimize TTFB (Time to First Byte).
+2. **Edge Runtimes**: Moving the audit engine to the Edge to minimize latency.
 3. **Plaid Integration**: Automating the "Ingestion" step by reading real transaction data from bank feeds.

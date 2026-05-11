@@ -75,7 +75,7 @@ Deploy to **Vercel** with one click:
 
 1. **Deterministic Logic vs. AI Inference**: We chose hardcoded deterministic rules for the audit engine instead of LLM-based analysis. This ensures 100% mathematical accuracy and defensible reasoning that a CFO can trust.
 2. **Post-Result Lead Capture**: We traded off immediate email collection for a "Value First" approach. Showing results first maximizes user trust and conversion.
-3. **Prisma 7 Hardening**: We successfully migrated to Prisma 7, utilizing shared connection poolers and dynamic configuration to ensure 100% stability on Vercel/Next.js edge runtimes.
+3. **Production Stability (Prisma 6)**: We utilized Prisma 6 with shared connection poolers to ensure 100% stability on Vercel. This reliable architecture enables guaranteed persistence for every audit link generated.
 4. **Honeypot Protection**: We chose hidden honeypot fields for abuse protection. This filters bots with zero friction for human users.
 5. **Tailwind + Framer Motion**: We built the UI with Vanilla Tailwind for performance and Framer Motion for a premium "Fintech" feel.
 

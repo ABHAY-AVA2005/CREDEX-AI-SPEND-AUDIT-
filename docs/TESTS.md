@@ -175,6 +175,29 @@ npx vitest run core/audit-engine/index.test.ts
 
 ---
 
+---
+
+## 🛠️ Manual Integration Testing
+
+While the unit tests cover the math, the **Persistence Layer** is verified via the following manual protocols:
+
+### 1. Cloud Persistence Verification
+- **Goal**: Ensure audits are successfully saved to Supabase.
+- **Test**: Run a new audit on the live URL. If the **"OFFLINE MODE"** banner is NOT visible, the database sync is successful.
+- **Verification**: Check the Supabase Table Editor for a new row in the `Audit` table matching the timestamp.
+
+### 2. Public Link Retrieval
+- **Goal**: Ensure shareable links load correctly for external visitors.
+- **Test**: Copy the generated results URL and open it in a **Private/Incognito** window.
+- **Verification**: The dashboard must load the exact data from the session, even though no local storage is present in the incognito window.
+
+### 3. Lead Capture Persistence
+- **Goal**: Ensure emails are correctly linked to audit records.
+- **Test**: Enter a test email in the "Get the full report" form on the results page.
+- **Verification**: Verify that a new entry appears in the `Lead` table and that its `id` matches the `leadId` in the corresponding `Audit` record.
+
+---
+
 ## Coverage Summary
 
 The 7 tests cover:
