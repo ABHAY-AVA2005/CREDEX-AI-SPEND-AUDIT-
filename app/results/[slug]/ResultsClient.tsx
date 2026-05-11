@@ -334,22 +334,29 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         </div>
       )}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
-          <Link href="/" className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Home</span>
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-1 sm:gap-4">
+          <Link href="/" className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors group">
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-xs font-bold uppercase tracking-widest hidden min-[380px]:block">Home</span>
           </Link>
-          <h1 className="font-extrabold text-sm sm:text-lg tracking-tight truncate">Audit Results</h1>
+          <h1 className="font-stylish text-sm sm:text-xl font-black tracking-tight text-foreground truncate max-w-[120px] sm:max-w-none">
+            Audit Results
+          </h1>
           <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggle />
-            <Link href="/audit" className="text-xs sm:text-sm font-semibold text-accent hover:opacity-80 whitespace-nowrap">New Audit →</Link>
+            <Link 
+              href="/audit" 
+              className="px-3 py-1.5 bg-accent text-accent-foreground text-[10px] sm:text-sm font-black uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm whitespace-nowrap"
+            >
+              New Audit <span className="hidden sm:inline">→</span>
+            </Link>
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+      <div className="w-full max-w-6xl mx-auto px-4 py-6 sm:py-10 space-y-6 sm:space-y-8">
         {/* KPI Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mx-auto">
           {[
             { label: "Current Spend", value: `$${result.totalCurrentSpend.toLocaleString()}`, sub: "/mo", color: "text-foreground", icon: <DollarSign className="w-4 h-4" /> },
             { label: "Monthly Savings", value: `$${result.monthlySavings.toLocaleString()}`, sub: "/mo", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
@@ -357,7 +364,7 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
             { label: "Annual Savings", value: `$${result.annualSavings.toLocaleString()}`, sub: "/yr", color: "text-accent", icon: <TrendingDown className="w-4 h-4" /> },
           ].map((card, i) => (
             <motion.div key={i} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}
-              className="bg-card p-4 sm:p-5 rounded-xl border border-border shadow-sm">
+              className="bg-card p-4 sm:p-5 rounded-xl border border-border shadow-sm w-full mx-auto">
               <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-widest mb-2">
                 {card.icon} {card.label}
               </div>
@@ -369,12 +376,12 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full mx-auto">
           {/* Main Column (Left 2/3) */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6 w-full mx-auto">
             <HighSavingsCTA result={result} />
 
-            <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
+            <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-sm w-full mx-auto">
               <h2 className="text-xl font-black mb-6 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-accent" /> 
                 Executive Summary
@@ -384,9 +391,9 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
               </div>
             </div>
 
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-black px-2 flex items-center gap-2">
+            <div className="space-y-6 w-full mx-auto">
+              <div className="flex items-center justify-between px-2">
+                <h2 className="text-xl font-black flex items-center gap-2">
                   <TrendingDown className="w-5 h-5 text-accent" />
                   Audit Recommendations
                 </h2>
@@ -401,9 +408,9 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
           </div>
 
           {/* Sidebar (Right 1/3) */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-6 w-full mx-auto">
             <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
-              className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-secondary/30 border-border' : 'bg-accent/10 border-accent/20'} text-center`}>
+              className={`p-6 rounded-2xl border ${isSpendingWell ? 'bg-secondary/30 border-border' : 'bg-accent/10 border-accent/20'} text-center w-full mx-auto`}>
               {isSpendingWell ? (
                 <>
                   <CheckCircle2 className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
@@ -423,17 +430,19 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
             
             <BenchmarkCard result={result} />
 
-            <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+            <div className="bg-card rounded-xl border border-border p-6 shadow-sm w-full mx-auto">
               <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Spend Comparison</h2>
-              <ResponsiveContainer width="100%" height={120}>
-                <BarChart data={chartData} layout="vertical">
-                  <XAxis type="number" hide />
-                  <YAxis dataKey="name" type="category" width={70} tick={{ fontSize: 10, fill: 'currentColor' }} />
-                  <Bar dataKey="amount" radius={[0, 4, 4, 0]}>
-                    {chartData.map((e, i) => <Cell key={i} fill={e.fill} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="w-full h-[120px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} layout="vertical">
+                    <XAxis type="number" hide />
+                    <YAxis dataKey="name" type="category" width={70} tick={{ fontSize: 10, fill: 'currentColor' }} />
+                    <Bar dataKey="amount" radius={[0, 4, 4, 0]}>
+                      {chartData.map((e, i) => <Cell key={i} fill={e.fill} />)}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             <ReferralCard />
