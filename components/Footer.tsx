@@ -1,4 +1,5 @@
 import { Mail, ExternalLink } from "lucide-react";
+import { FluxoraLogo } from "@/components/Logo";
 
 export function Footer() {
   return (
@@ -7,9 +8,7 @@ export function Footer() {
         <div className="grid md:grid-cols-2 gap-8 items-start">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-accent rounded-sm flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rotate-45" />
-              </div>
+              <FluxoraLogo className="w-6 h-6" />
               <span className="font-black text-lg tracking-tighter uppercase italic">Fluxora</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">

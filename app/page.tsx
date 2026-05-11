@@ -9,8 +9,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { FluxoraLogo } from "@/components/Logo";
 
 export default function LandingPage() {
   return (
@@ -23,9 +24,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-foreground flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4 text-background" />
-            </div>
+            <FluxoraLogo className="w-6 h-6" />
             <span className="font-bold text-xl tracking-tight text-foreground">Fluxora</span>
           </div>
           
@@ -242,7 +241,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
           
           <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <ShieldCheck className="w-12 h-12 text-accent mx-auto mb-6" />
+            <FluxoraLogo className="w-12 h-12 mx-auto mb-6" />
             <h2 className="text-4xl font-bold mb-6 tracking-tight">Audit your stack before renewals hit.</h2>
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
               Connect your workspace to generate a full AI spend audit in under 60 seconds. <br className="hidden md:block"/> Get a CFO-ready report instantly.

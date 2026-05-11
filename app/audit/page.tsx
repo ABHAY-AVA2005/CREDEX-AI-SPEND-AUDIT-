@@ -2,6 +2,7 @@ import AuditForm from "@/components/audit/AuditForm";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { FluxoraLogo } from "@/components/Logo";
 
 export default function AuditPage() {
   return (
@@ -14,6 +15,7 @@ export default function AuditPage() {
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
+          <FluxoraLogo className="w-5 h-5" />
           <ThemeToggle />
         </div>
       </header>
