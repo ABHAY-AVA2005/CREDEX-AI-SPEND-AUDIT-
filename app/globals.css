@@ -191,14 +191,8 @@
   }
 }
 
-  @media (min-width: 768px) {
-    body::after {
-      display: block;
-    }
-  }
-
-  @keyframes grid-move {
-    0% { transform: perspective(1000px) rotateX(60deg) translateY(0); }
-    100% { transform: perspective(1000px) rotateX(60deg) translateY(100px); }
+@media (min-width: 768px) {
+  body::after {
+    display: block;
   }
 }

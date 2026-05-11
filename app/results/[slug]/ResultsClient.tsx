@@ -101,9 +101,6 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
     </motion.div>
   );
 }
-    </motion.div>
-  );
-}
 
 function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   const [email, setEmail] = useState("");
