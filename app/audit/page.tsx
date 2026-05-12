@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import AuditForm from "@/components/audit/AuditForm";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -34,7 +35,9 @@ export default function AuditPage() {
           </div>
           
           {/* The high-conversion single-page form */}
-          <AuditForm />
+          <Suspense fallback={<div className="p-12 text-center animate-pulse text-muted-foreground uppercase text-[10px] font-black tracking-widest bg-card/40 rounded-xl border border-border">Initializing Auditor...</div>}>
+            <AuditForm />
+          </Suspense>
         </div>
       </div>
     </div>
