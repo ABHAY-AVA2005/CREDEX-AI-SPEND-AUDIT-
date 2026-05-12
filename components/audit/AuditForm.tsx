@@ -101,11 +101,20 @@ export default function AuditForm() {
       if (referralCode) {
         sessionStorage.setItem("referral_code", referralCode);
       }
-      // Hit our server action to process the audit
       const results = await processAuditAction({
         ...data,
         referralCode: referralCode || undefined
       });
+
+      // 2. Check for persistence success
+      if (results.isPersisted === false) {
+        setIsSubmitting(false);
+        alert(`Audit processed, but saving failed: ${results.dbError || "Unknown Database Error"}. Your results won't be shareable.`);
+        // We still store it in session storage so they can at least see it once
+        sessionStorage.setItem("latest_audit_result", JSON.stringify(results));
+        router.push('/dashboard');
+        return;
+      }
       
       // We store the result in sessionStorage for immediate dashboard viewing
       sessionStorage.setItem("latest_audit_result", JSON.stringify(results));

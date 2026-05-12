@@ -58,6 +58,8 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   const publicSlug = nanoid(10);
 
   // 4. Persist to database (Now strictly required)
+  let isPersisted = false;
+  let dbErrorMsg: string | null = null;
 
   try {
     if (!process.env.DATABASE_URL) {
@@ -93,12 +95,12 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
           })),
         },
       },
-    });
     console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+    isPersisted = true;
   } catch (dbError) {
     console.error("[AuditAction] Critical Database Error:", dbError);
-    // Throwing here ensures the UI shows an error instead of a broken dashboard
-    throw new Error(`Database Error: ${dbError instanceof Error ? dbError.message : "Failed to save audit. Please check your DATABASE_URL."}`);
+    dbErrorMsg = dbError instanceof Error ? dbError.message : "Failed to save audit. Please check your DATABASE_URL.";
+    isPersisted = false;
   }
 
   return {
@@ -108,7 +110,8 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
     companyName: parsed.data.companyName,
     companySize: parsed.data.companySize,
     industry: parsed.data.industry,
-    isPersisted: true,
+    isPersisted,
+    dbError: dbErrorMsg || undefined,
   };
 }
 
