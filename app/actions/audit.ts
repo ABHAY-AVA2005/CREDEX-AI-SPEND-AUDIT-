@@ -57,9 +57,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
   // nanoid(10) is plenty for our collision needs.
   const publicSlug = nanoid(10);
 
-  // 4. Persist to database (Background Task - non-blocking for user results)
-  let isPersisted = false;
-  let dbErrorMsg: string | null = null;
+  // 4. Persist to database (Now strictly required)
 
   try {
     if (!process.env.DATABASE_URL) {
@@ -110,8 +108,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
     companyName: parsed.data.companyName,
     companySize: parsed.data.companySize,
     industry: parsed.data.industry,
-    isPersisted,
-    dbError: dbErrorMsg || undefined,
+    isPersisted: true,
   };
 }
 

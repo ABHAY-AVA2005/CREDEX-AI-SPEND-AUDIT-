@@ -13,8 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
-import { AuditFormSchema, AuditFormInput, AuditToolInput } from "@/schemas/audit";
-import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
+import { AuditFormSchema, AuditFormInput } from "@/schemas/audit";
 import { useRouter, useSearchParams } from "next/navigation";
 import { processAuditAction } from "@/app/actions/audit";
 
