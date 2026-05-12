@@ -14,22 +14,46 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
   let totalCurrentSpend = 0;
   let totalOptimizedSpend = 0;
   const recommendations: AuditRecommendation[] = [];
+  const redundancyWarnings: string[] = [];
 
-  // Track capabilities we've already covered so we can find redundancies.
+  // Track capabilities to find redundancies
   const coveredCapabilities = new Set<string>();
+  const toolCategories: Record<string, string[]> = {};
 
-  // Pre-pass: Identify if the user already has our "Target" tools
+  // Benchmarking Data (Heuristic for 2026)
+  const benchmarks: Record<string, number> = {
+    "PRE_SEED": 50, // $/employee/mo for AI
+    "SEED": 120,
+    "SERIES_A": 250,
+    "SERIES_B": 400,
+    "LATE_STAGE": 600
+  };
+
+  // Pre-pass: Identify tool categories and basic redundancies
   input.tools.forEach(tool => {
     const name = tool.toolName.toLowerCase();
-    if (name.includes("cursor")) coveredCapabilities.add("CODE");
-    if (name.includes("claude")) coveredCapabilities.add("WRITING");
+    const categories = [];
+    if (name.includes("cursor") || name.includes("copilot")) categories.push("CODE");
+    if (name.includes("claude") || name.includes("chatgpt") || name.includes("jasper")) categories.push("CHAT_AND_WRITING");
+    if (name.includes("openai") || name.includes("anthropic") || name.includes("gemini")) categories.push("API_PROVIDERS");
+
+    categories.forEach(cat => {
+      if (!toolCategories[cat]) toolCategories[cat] = [];
+      toolCategories[cat].push(tool.toolName);
+    });
+  });
+
+  // Generate redundancy warnings
+  Object.entries(toolCategories).forEach(([cat, tools]) => {
+    if (tools.length > 1) {
+      redundancyWarnings.push(`Redundant tools found in ${cat} category: ${tools.join(", ")}. You are paying for multiple services that do the same thing.`);
+    }
   });
 
   input.tools.forEach((tool) => {
     const currentCost = tool.monthlySpend;
     totalCurrentSpend += currentCost;
 
-    // Default state: Keep the tool as is.
     let action: AuditRecommendation["action"] = "KEEP";
     let newCost = currentCost;
     let suggestedTool: string | undefined = undefined;
@@ -42,12 +66,16 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     const useCasesLower = tool.useCases.map(u => u.toLowerCase());
 
     /**
-     * RULE 1: Replace expensive pure copywriting tools with Claude.
-     * Jasper and Copy.ai were great in 2023, but Claude 3.5 is now the king
-     * of creative writing at a much lower price point.
+     * RULE 1: Redundancy / Consolidation
      */
-    if ((toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) && currentCost > 20) {
-      if (!coveredCapabilities.has("WRITING")) {
+    if (toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) {
+      const hasClaude = input.tools.some(t => t.toolName.toLowerCase().includes("claude"));
+      if (hasClaude) {
+        action = "CONSOLIDATE";
+        newCost = 0;
+        suggestedTotalCost = 0;
+        reasoning = `Your existing Claude subscription already handles all writing use cases. You are paying for ${tool.toolName} twice.`;
+      } else {
         const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
         action = "REPLACE";
         suggestedTool = "Claude";
@@ -55,80 +83,58 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
         suggestedCostPerSeat = rec?.costPerSeat ?? 17;
         newCost = suggestedCostPerSeat * tool.seats;
         suggestedTotalCost = newCost;
-        reasoning = `Claude 3.5 Sonnet offers equivalent or better copywriting capabilities for a fraction of the cost of ${tool.toolName}.`;
-        coveredCapabilities.add("WRITING");
-      } else {
+        reasoning = `Claude 3.5 Sonnet offers superior writing capabilities for a fraction of the cost.`;
+      }
+    }
+
+    /**
+     * RULE 2: Cursor vs. Copilot
+     */
+    else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
+      const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor"));
+      if (hasCursor) {
         action = "CONSOLIDATE";
         newCost = 0;
         suggestedTotalCost = 0;
-        reasoning = `This capability (Writing) is already covered by your existing stack.`;
+        reasoning = `Cursor natively includes Claude 3.5 and GPT-4o. Keeping Github Copilot is redundant.`;
+      } else {
+        const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
+        action = "REPLACE";
+        suggestedTool = "Cursor";
+        suggestedPlan = "Pro";
+        suggestedCostPerSeat = rec?.costPerSeat ?? 20;
+        newCost = suggestedCostPerSeat * tool.seats;
+        suggestedTotalCost = newCost;
+        reasoning = `Cursor is the gold standard for engineering teams. It replaces Copilot and separate ChatGPT subscriptions.`;
       }
     }
-    // Also consolidate separate Claude if user has Cursor
-    else if (toolNameLower.includes("claude") && coveredCapabilities.has("CODE") && currentCost > 0) {
-       action = "CONSOLIDATE";
-       newCost = 0;
-       suggestedTotalCost = 0;
-       reasoning = `Your Cursor subscription already includes Claude 3.5 Sonnet natively. A separate subscription is likely redundant.`;
-    }
 
     /**
-     * RULE 2: Consolidate Copilot + ChatGPT for Coding into Cursor.
-     * Cursor is the new standard. If they have it, they don't need Copilot.
+     * RULE 3: API Gateway vs. Seats (Ryan Das Insight)
      */
-    else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
-       if (!coveredCapabilities.has("CODE")) {
-         const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
-         action = "REPLACE";
-         suggestedTool = "Cursor";
-         suggestedPlan = "Pro";
-         suggestedCostPerSeat = rec?.costPerSeat ?? 20;
-         newCost = suggestedCostPerSeat * tool.seats;
-         suggestedTotalCost = newCost;
-         reasoning = `Cursor includes Claude 3.5 Sonnet and GPT-4o natively in the IDE, replacing the need for separate Github Copilot and ChatGPT Plus subscriptions.`;
-         coveredCapabilities.add("CODE");
-       } else {
-         // If we already handled the coding capability, this tool is redundant.
-         action = "CONSOLIDATE";
-         newCost = 0;
-         suggestedTotalCost = 0;
-         reasoning = `This capability (Coding) is already covered by the recommended alternative (Cursor).`;
-       }
-    }
-
-    /**
-     * RULE 3: High seat counts on consumer plans.
-     * If you have 10+ seats, you're getting ripped off on consumer pricing. 
-     * Switch to a Team plan or a direct API gateway.
-     */
-    else if (tool.seats >= 10 && !tool.currentPlan.toLowerCase().includes("team") && !tool.currentPlan.toLowerCase().includes("enterprise")) {
+    else if (tool.type === "SEAT" && tool.seats >= 5 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
       action = "REPLACE";
-      suggestedTool = tool.toolName;
-      suggestedPlan = "Team / API";
-      // Industry heuristic: API gateways save ~60%
-      newCost = (currentCost * 0.4);
-      suggestedCostPerSeat = Math.round(newCost / tool.seats);
+      suggestedTool = "TypingMind / API Gateway";
+      suggestedPlan = "BYOK (Bring Your Own Key)";
+      // API usage is typically 60% cheaper for heavy teams
+      newCost = currentCost * 0.4;
       suggestedTotalCost = newCost;
-      reasoning = `With ${tool.seats} seats, you are paying a significant premium for consumer UI. Switching to an API-based gateway (like TypingMind) using your own API keys can reduce your cost to ~$8/seat while maintaining full capability.`;
+      reasoning = `For teams of ${tool.seats}+, paying per-seat for a UI is inefficient. Switching to an API Gateway can reduce costs by 60% while providing better monitoring for spend spikes.`;
     }
 
     /**
-     * RULE 4: Price Anomaly Detection.
-     * If you're paying >$50/seat, you're likely on a legacy contract or 
-     * a massive markup plan.
+     * RULE 4: Secondary Market (Fluxora Core)
      */
-    else if (tool.seats > 0 && (currentCost / tool.seats) > 50) {
-      const avgMarketRate = 30; // Industry standard for premium SaaS
-      action = "DOWNGRADE";
-      suggestedTool = tool.toolName;
-      suggestedPlan = "Standard / Direct";
-      suggestedCostPerSeat = avgMarketRate;
-      newCost = avgMarketRate * tool.seats;
+    else if (toolNameLower.includes("openai") || toolNameLower.includes("aws") || toolNameLower.includes("anthropic")) {
+      const discountFactor = 0.20;
+      action = "REPLACE";
+      suggestedTool = `${tool.toolName} (via Fluxora Credits)`;
+      suggestedPlan = "Secondary Marketplace";
+      newCost = currentCost * (1 - discountFactor);
       suggestedTotalCost = newCost;
-      reasoning = `Your current cost of $${Math.round(currentCost / tool.seats)}/seat is significantly above the market average. Switching to a standard direct plan could save substantial costs.`;
+      reasoning = `By utilizing Fluxora's secondary credit marketplace, you can instantly recover 20% of your ${tool.toolName} spend without changing a line of code.`;
     }
 
-    // Wrap up the math for this tool
     const savings = currentCost - newCost;
     totalOptimizedSpend += newCost;
 
@@ -148,11 +154,29 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     });
   });
 
+  // Benchmarking Comparison (Shashank Insight)
+  const spendPerEmp = totalCurrentSpend / (input.companySize || 1);
+  const stageBenchmark = benchmarks[input.fundingStage] || 150;
+  
+  let status: "EXCELLENT" | "GOOD" | "OVERSPENDING" | "CRITICAL" = "GOOD";
+  if (spendPerEmp > stageBenchmark * 1.5) status = "CRITICAL";
+  else if (spendPerEmp > stageBenchmark) status = "OVERSPENDING";
+  else if (spendPerEmp < stageBenchmark * 0.5) status = "EXCELLENT";
+
+  const percentile = Math.min(99, Math.max(1, Math.round((1 - (spendPerEmp / (stageBenchmark * 2))) * 100)));
+
   return {
     totalCurrentSpend,
     totalOptimizedSpend,
     monthlySavings: totalCurrentSpend - totalOptimizedSpend,
     annualSavings: (totalCurrentSpend - totalOptimizedSpend) * 12,
     recommendations,
+    redundancyWarnings,
+    benchmarkComparison: {
+      percentile,
+      averageForStage: stageBenchmark,
+      status
+    }
   };
 }
+
