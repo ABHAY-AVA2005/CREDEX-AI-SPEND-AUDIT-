@@ -200,23 +200,15 @@ export default function AuditForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Tool Type</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => form.setValue(`tools.${index}.type`, "SEAT")}
-                        className={`py-2 px-3 text-xs font-bold rounded-lg border-2 transition-all ${form.watch(`tools.${index}.type`) === "SEAT" ? "border-accent bg-accent/10 text-accent" : "border-border bg-background text-muted-foreground"}`}
-                      >
-                        Per-Seat Sub
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => form.setValue(`tools.${index}.type`, "API")}
-                        className={`py-2 px-3 text-xs font-bold rounded-lg border-2 transition-all ${form.watch(`tools.${index}.type`) === "API" ? "border-accent bg-accent/10 text-accent" : "border-border bg-background text-muted-foreground"}`}
-                      >
-                        API / Usage
-                      </button>
-                    </div>
+                    <label htmlFor={`type-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Billing Model</label>
+                    <select
+                      id={`type-${index}`}
+                      {...form.register(`tools.${index}.type`)}
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
+                    >
+                      <option value="SEAT">Per-Seat Subscription</option>
+                      <option value="API">API / Usage Based</option>
+                    </select>
                   </div>
 
                   <div>
@@ -224,16 +216,7 @@ export default function AuditForm() {
                     <select
                       id={`toolName-${index}`}
                       required
-                      {...form.register(`tools.${index}.toolName`, {
-                        onChange: (e) => {
-                          const val = e.target.value;
-                          if (val.toLowerCase().includes("api")) {
-                            form.setValue(`tools.${index}.type`, "API");
-                          } else {
-                            form.setValue(`tools.${index}.type`, "SEAT");
-                          }
-                        }
-                      })}
+                      {...form.register(`tools.${index}.toolName`)}
                       className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
                       <option value="">Select tool...</option>
