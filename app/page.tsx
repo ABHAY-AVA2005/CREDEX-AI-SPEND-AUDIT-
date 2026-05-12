@@ -55,8 +55,8 @@ export default function LandingPage() {
       </header>
 
       {/* Main Hero Section */}
-      <main className="flex-grow z-10 pt-16">
-        <section className="relative pt-20 pb-32 md:pt-32 md:pb-40 overflow-hidden">
+      <main className="flex-grow z-10 pt-4">
+        <section className="relative pt-12 pb-32 md:pt-16 md:pb-40 overflow-hidden">
           
           {/* Abstract background blobs for a bit of premium depth */}
           <div className="absolute top-1/4 -left-20 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
