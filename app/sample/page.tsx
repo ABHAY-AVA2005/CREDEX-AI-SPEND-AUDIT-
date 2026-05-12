@@ -53,7 +53,8 @@ export default function SampleAuditPage() {
         newCost: 420,
         reasoning: "Consolidate coding environments. Cursor provides superior context and eliminates the need for separate Copilot licenses."
       }
-    ]
+    ],
+    redundancyWarnings: []
   };
 
   return (
