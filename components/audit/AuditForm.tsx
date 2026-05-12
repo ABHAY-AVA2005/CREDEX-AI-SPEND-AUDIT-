@@ -28,6 +28,21 @@ export default function AuditForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const referralCode = searchParams.get("ref");
+  
+  const TOOL_CONFIG: Record<string, string[]> = {
+    "Cursor": ["Hobby", "Pro", "Business", "Enterprise"],
+    "GitHub Copilot": ["Individual", "Business", "Enterprise"],
+    "Claude": ["Free", "Pro", "Max", "Team", "Enterprise", "API direct"],
+    "ChatGPT": ["Plus", "Team", "Enterprise", "API direct"],
+    "Anthropic API direct": ["Usage-based"],
+    "OpenAI API direct": ["Usage-based"],
+    "Gemini": ["Pro", "Ultra", "API"],
+    "Windsurf": ["Hobby", "Pro", "Enterprise"],
+    "v0": ["Free", "Pro", "Enterprise"],
+  };
+
+  // Extracting unique tool names for the dropdown
+  const uniqueTools = Object.keys(TOOL_CONFIG);
 
   // Standard form setup with Zod validation
   const form = useForm<AuditFormInput>({
@@ -36,12 +51,9 @@ export default function AuditForm() {
       companyName: "",
       companySize: 10,
       industry: "Market Intelligence SaaS",
-      tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
+      tools: [{ toolName: "Cursor", currentPlan: "Pro", seats: 1, tokens: 0, monthlySpend: 20, type: "SEAT", useCases: ["Coding"] }],
     },
   } as any);
-
-  // Extracting unique tool names for the dropdown
-  const uniqueTools = Array.from(new Set(KNOWN_TOOLS.map(t => t.name)));
 
   // Field arrays handle the dynamic tool list (Add/Remove)
   const { fields, append, remove } = useFieldArray({
@@ -226,13 +238,16 @@ export default function AuditForm() {
 
                   <div>
                     <label htmlFor={`currentPlan-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Current Plan</label>
-                    <input
+                    <select
                       id={`currentPlan-${index}`}
-                      type="text"
                       {...form.register(`tools.${index}.currentPlan`)}
-                      placeholder="e.g. Pro, Team, Enterprise"
-                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                    />
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
+                    >
+                      <option value="">Select plan...</option>
+                      {(TOOL_CONFIG[form.watch(`tools.${index}.toolName`)] || []).map(plan => (
+                        <option key={plan} value={plan}>{plan}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
