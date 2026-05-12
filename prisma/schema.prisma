@@ -9,6 +9,7 @@ datasource db {
 
 model Audit {
   id             String      @id @default(cuid())
+  companyName    String?     @default("Your Company")
   companySize    Int
   industry       String?
   totalSpend     Float

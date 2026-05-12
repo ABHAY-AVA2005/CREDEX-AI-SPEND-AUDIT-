@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let company = "Startup";
 
   // Handle the demo slug explicitly
-  if (slug === "sample-demo") {
+  if (slug === "sample-demo" || slug === "sample-audit") {
     savings = 96096;
     company = "Acme Corp (Demo)";
   } else {
@@ -82,7 +82,7 @@ export default async function ResultsPage({ params }: Props) {
   const { slug } = await params;
 
   // 1. Check for the hardcoded Demo state
-  if (slug === "sample-demo") {
+  if (slug === "sample-demo" || slug === "sample-audit") {
     const sampleResult: ProcessedAuditResult = {
       companyName: "Acme Corp (Demo)",
       totalCurrentSpend: 18245,
@@ -145,7 +145,7 @@ export default async function ResultsPage({ params }: Props) {
     // Reconstruct the JSON result for the client-side dashboard
     const result = {
       publicSlug: audit.publicSlug || slug,
-      companyName: "Your Company",
+      companyName: audit.companyName || "Your Company",
       totalCurrentSpend: audit.totalSpend,
       totalOptimizedSpend: audit.optimizedSpend,
       monthlySavings: audit.savings,

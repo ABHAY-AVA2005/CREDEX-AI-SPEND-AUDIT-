@@ -71,6 +71,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
     
     await prisma.audit.create({
       data: {
+        companyName: parsed.data.companyName,
         companySize: parsed.data.companySize,
         industry: parsed.data.industry,
         totalSpend: result.totalCurrentSpend,
