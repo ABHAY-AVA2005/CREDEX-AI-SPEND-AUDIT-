@@ -6,6 +6,7 @@ export const AuditToolSchema = z.object({
   currentPlan: z.string().min(1, "Plan is required"),
   seats: z.number().min(1, "At least 1 seat required"),
   monthlySpend: z.number().min(0, "Spend must be 0 or more"),
+  type: z.enum(["SEAT", "API"]).default("SEAT"),
   useCases: z.array(z.string()).min(1, "Select at least one use case"),
 });
 
@@ -13,7 +14,9 @@ export const AuditFormSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
   companySize: z.number().min(1, "Company size is required"),
   industry: z.string().optional(),
+  fundingStage: z.enum(["PRE_SEED", "SEED", "SERIES_A", "SERIES_B", "LATE_STAGE"]).default("SEED"),
   tools: z.array(AuditToolSchema).min(1, "Add at least one tool"),
+  referralCode: z.string().optional(),
 });
 
 // Email capture schema — separate, after results are shown
@@ -49,4 +52,10 @@ export interface AuditResult {
   monthlySavings: number;
   annualSavings: number;
   recommendations: AuditRecommendation[];
+  redundancyWarnings: string[];
+  benchmarkComparison?: {
+    percentile: number;
+    averageForStage: number;
+    status: "EXCELLENT" | "GOOD" | "OVERSPENDING" | "CRITICAL";
+  };
 }

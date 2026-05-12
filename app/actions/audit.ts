@@ -72,19 +72,22 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
         data: {
           companySize: parsed.data.companySize,
           industry: parsed.data.industry,
+          fundingStage: parsed.data.fundingStage,
           totalSpend: result.totalCurrentSpend,
           optimizedSpend: result.totalOptimizedSpend,
           savings: result.monthlySavings,
           aiSummary,
           isPublic: true,
           publicSlug,
+          referralCode: parsed.data.referralCode,
           tools: {
-            create: result.recommendations.map((rec) => ({
+            create: result.recommendations.map((rec, i) => ({
               toolName: rec.originalTool,
               currentPlan: rec.originalPlan ?? "",
               seats: rec.originalSeats ?? 1,
               monthlySpend: rec.originalMonthlyCost ?? 0,
-              useCases: parsed.data.tools[result.recommendations.indexOf(rec)]?.useCases || [],
+              type: parsed.data.tools[i]?.type || "SEAT",
+              useCases: parsed.data.tools[i]?.useCases || [],
               suggestedTool: rec.suggestedTool,
               suggestedPlan: rec.suggestedPlan,
               suggestedSpend: rec.suggestedTotalCost,
@@ -125,13 +128,20 @@ export async function captureLeadEmail(
   annualSavings: number,
   aiSummary: string,
   role?: string,
-  teamSize?: number
+  teamSize?: number,
+  referredByCode?: string
 ): Promise<{ success: boolean }> {
   
   // 1. Save or Update Lead in DB
   try {
     const { getPrismaClient } = await import("@/lib/prisma");
     const prisma = getPrismaClient();
+
+    let referredById: string | undefined = undefined;
+    if (referredByCode) {
+      const referrer = await prisma.lead.findUnique({ where: { referralCode: referredByCode } });
+      if (referrer) referredById = referrer.id;
+    }
 
     const lead = await prisma.lead.upsert({
       where: { email },
@@ -144,7 +154,8 @@ export async function captureLeadEmail(
         email, 
         company: companyName, 
         role: role || undefined, 
-        teamSize: teamSize || undefined 
+        teamSize: teamSize || undefined,
+        referredById
       },
     });
 
@@ -241,6 +252,17 @@ export async function captureLeadEmail(
       </div>
 
       <div class="secondary-cta">
+        ${monthlySavings > 500 ? `
+        <div style="background: #1f2937; color: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; text-align: left;">
+          <h3 style="margin-top: 0; color: #10b981;">🚀 High-Impact Recovery Identified</h3>
+          <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">
+            Because your annual wastage exceeds <strong>$${annualSavings.toLocaleString()}</strong>, your account has been flagged for a complimentary <strong>Fluxora Capital Recovery Session</strong>.
+          </p>
+          <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">
+            One of our engineers will reach out to ${companyName} within 24 hours to discuss liquidating your redundant seats on the Fluxora Marketplace.
+          </p>
+        </div>
+        ` : ""}
         <p style="color: #4b5563; margin-bottom: 15px;">
           Ready to optimize your AI spending? Start reselling unused credits on Fluxora.
         </p>
