@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
 import { AuditFormSchema, AuditFormInput, AuditToolInput } from "@/schemas/audit";
+import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { processAuditAction } from "@/app/actions/audit";
 
@@ -252,9 +253,14 @@ export default function AuditForm() {
                       className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
                       <option value="">Select plan...</option>
-                      {(TOOL_CONFIG[form.watch(`tools.${index}.toolName`)] || []).map(plan => (
-                        <option key={plan} value={plan}>{plan}</option>
-                      ))}
+                      {(TOOL_CONFIG[form.watch(`tools.${index}.toolName`)] || []).map(plan => {
+                        const toolName = form.watch(`tools.${index}.toolName`);
+                        const toolInfo = KNOWN_TOOLS.find(t => t.name === toolName && t.plan === plan);
+                        const priceLabel = toolInfo ? ` ($${toolInfo.costPerSeat}/mo)` : "";
+                        return (
+                          <option key={plan} value={plan}>{plan}{priceLabel}</option>
+                        );
+                      })}
                     </select>
                   </div>
 
