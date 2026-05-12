@@ -37,19 +37,29 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## 📸 Product Showroom
 
-### 1. High-Precision Audit Dashboard
-![Dashboard](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-results.png)
-*Deterministic analysis of your AI stack with clear action items and financial justifications.*
+### 1. High-Performance Landing Page
+![Home Page](./public/Home%20Page.png)
+*A high-conversion, CFO-grade landing page designed for maximum trust and clarity.*
 
-### 2. Viral Sharing & Open Graph
-![Sharing](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-share.png)
-*Unique, anonymous shareable URLs with professional Open Graph previews for Twitter/LinkedIn.*
+### 2. Multi-Step Intelligence Audit
+![Audit Form](./public/audit%20screenshot%201.png)
+*Interactive tool intake with dynamic Seat vs. API tracking and functional overlap detection.*
 
-### 3. Embeddable Partner Widget
-![Widget](https://raw.githubusercontent.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-/main/public/screenshot-form.png)
-*A lightweight interactive widget for partners to drive audits from their own sites.*
+### 3. Executive Recovery Roadmap
+![Audit Results](./public/audit%20screenshot%202.png)
+*Detailed financial justifications for every recommendation, powered by our deterministic engine.*
 
-> **Watch the 30-second Demo:** [Loom Video Link Placeholder](https://www.loom.com/share/your-video-id)
+### 4. Peer Benchmarking & KPIs
+![Audit KPIs](./public/audit%20screenshot%203.png)
+*Real-time comparison against industry spend-per-employee benchmarks for high-growth teams.*
+
+### 5. Deterministic Logic Trace
+![Audit Logic](./public/audit%20screenshot%204.png)
+*Total transparency: Founders can see the exact math used to calculate their recovery potential.*
+
+### 6. CFO-Ready Export & Lead Capture
+![Audit Export](./public/audit%20screenshot%205.png)
+*Finalized reports with integrated lead capture and professional PDF memo generation.*
 
 ## 🏗️ Strategic Decisions & Trade-offs
 
