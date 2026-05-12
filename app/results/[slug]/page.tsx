@@ -136,7 +136,6 @@ export default async function ResultsPage({ params }: Props) {
       annualSavings: audit.savings * 12,
       aiSummary: audit.aiSummary ?? "",
       companySize: audit.companySize,
-      fundingStage: audit.fundingStage || undefined,
       isPersisted: true,
       redundancyWarnings: [],
       recommendations: audit.tools.map((t) => ({

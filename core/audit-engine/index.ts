@@ -148,7 +148,7 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
 
   // Benchmarking (Shashank Insight)
   const spendPerEmp = totalCurrentSpend / (input.companySize || 1);
-  const stageBenchmark = benchmarks[input.fundingStage] || 150;
+  const stageBenchmark = 150; // Standardized benchmark for 2026 AI Intensity
   
   let status: "EXCELLENT" | "GOOD" | "OVERSPENDING" | "CRITICAL" = "GOOD";
   if (spendPerEmp > stageBenchmark * 1.5) status = "CRITICAL";

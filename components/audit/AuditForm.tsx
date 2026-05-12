@@ -36,7 +36,6 @@ export default function AuditForm() {
       companyName: "",
       companySize: 10,
       industry: "",
-      fundingStage: "SEED",
       tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
     },
   } as any);
@@ -139,7 +138,7 @@ export default function AuditForm() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2">
+            <div>
               <label htmlFor="companyName" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Company Name</label>
               <input
                 id="companyName"
@@ -150,7 +149,6 @@ export default function AuditForm() {
                 className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
             </div>
-
             <div>
               <label htmlFor="companySize" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Employees</label>
               <input
@@ -160,22 +158,6 @@ export default function AuditForm() {
                 {...form.register("companySize", { valueAsNumber: true })}
                 className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
-            </div>
-
-            <div>
-              <label htmlFor="fundingStage" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Funding Stage</label>
-              <select
-                id="fundingStage"
-                required
-                {...form.register("fundingStage")}
-                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
-              >
-                <option value="PRE_SEED">Pre-Seed</option>
-                <option value="SEED">Seed</option>
-                <option value="SERIES_A">Series A</option>
-                <option value="SERIES_B">Series B</option>
-                <option value="LATE_STAGE">Late Stage / Public</option>
-              </select>
             </div>
           </div>
         </section>

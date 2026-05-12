@@ -25,7 +25,6 @@ export interface ProcessedAuditResult extends AuditResult {
   companyName: string;
   companySize?: number;
   industry?: string;
-  fundingStage?: string;
   isPersisted?: boolean;
   dbError?: string;
 }
@@ -74,7 +73,6 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
         data: {
           companySize: parsed.data.companySize,
           industry: parsed.data.industry,
-          fundingStage: parsed.data.fundingStage,
           totalSpend: result.totalCurrentSpend,
           optimizedSpend: result.totalOptimizedSpend,
           savings: result.monthlySavings,
@@ -114,7 +112,6 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
     companyName: parsed.data.companyName,
     companySize: parsed.data.companySize,
     industry: parsed.data.industry,
-    fundingStage: parsed.data.fundingStage,
     isPersisted,
     dbError: dbErrorMsg || undefined,
   };

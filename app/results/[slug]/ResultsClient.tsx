@@ -276,13 +276,13 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
           <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-            Target: ${benchmark.averageForStage}/emp (Stage: {result.fundingStage?.replace("_", " ")})
+            Target: ${benchmark.averageForStage}/emp (Peer Benchmark)
           </p>
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
           {benchmark.status === "EXCELLENT" || benchmark.status === "GOOD" ? (
-            <>Your AI intensity is <strong className="text-emerald-500 font-black">optimal</strong>. You are spending efficiently compared to other {result.fundingStage?.replace("_", " ")} startups.</>
+            <>Your AI intensity is <strong className="text-emerald-500 font-black">optimal</strong>. You are spending efficiently compared to peer companies.</>
           ) : (
             <>Your spend is <strong className="text-amber-500 font-black">above average</strong>. Peer teams of your size usually spend ~${benchmark.averageForStage}/mo per employee on AI infrastructure.</>
           )}

@@ -15,7 +15,6 @@ export const AuditFormSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
   companySize: z.number().min(1, "Company size is required"),
   industry: z.string().optional(),
-  fundingStage: z.enum(["PRE_SEED", "SEED", "SERIES_A", "SERIES_B", "LATE_STAGE"]),
   tools: z.array(AuditToolSchema).min(1, "Add at least one tool"),
   referralCode: z.string().optional(),
 });
