@@ -34,12 +34,14 @@ export async function generateAuditSummary(
       - Current Spend: $${result.totalCurrentSpend}/mo
       - Optimized Spend: $${result.totalOptimizedSpend}/mo
       - Monthly Savings: $${result.monthlySavings}/mo
+      - Redundancy Alerts: ${result.redundancyWarnings.join("; ")}
+      - Peer Benchmark: ${result.benchmarkComparison?.percentile}th percentile (${result.benchmarkComparison?.status})
       - Recommendations: ${result.recommendations.map(r => `${r.action} ${r.originalTool} (Logic: ${r.reasoning})`).join(", ")}
       
-      Write a highly transparent, 2-paragraph executive summary (80-120 words).
-      Paragraph 1: Be specific about the math. Explain exactly HOW the $${result.monthlySavings} in monthly savings was calculated (e.g., functional overlap or seat optimization). Use phrases like "Our deterministic logic identified..." or "Based on verified 2026 pricing data...".
-      Paragraph 2: Provide a clear path forward. Mention reselling unused credits on Credex.rocks to liquidate these specific assets.
-      Tone: Technical, transparent, and authoritative. Build trust by 'showing the work' in the summary.
+      Write a highly transparent, 2-paragraph executive summary (100-140 words).
+      Paragraph 1: Be specific about the math. Mention the redundancy alerts and how they impact the ${result.benchmarkComparison?.percentile}th percentile ranking. Explain exactly HOW the $${result.monthlySavings} in monthly savings was calculated.
+      Paragraph 2: Provide a clear path forward. Focus on consolidation and liquidating redundant assets via Credex.rocks.
+      Tone: Technical, transparent, and authoritative. Build trust by 'showing the work'.
     `;
 
     // Using gemini-2.0-flash for the fastest possible response time.
