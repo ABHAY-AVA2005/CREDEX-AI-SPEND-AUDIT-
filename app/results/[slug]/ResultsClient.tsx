@@ -521,7 +521,7 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         </motion.div>
       </div>
 
-      <div className="w-full max-w-6xl mx-auto px-4 py-6 sm:py-10 space-y-12 sm:space-y-16">
+      <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 sm:space-y-8">
         {/* KPI Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mx-auto">
           {[
@@ -656,7 +656,7 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         </div>
 
         {/* Full Width Recommendations & Lead Capture */}
-        <div className="space-y-6 w-full pt-12 border-t border-border/30">
+        <div className="space-y-6 w-full pt-6 border-t border-border/20">
           <div className="flex items-center justify-between px-2">
             <h2 className="text-3xl font-black flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-xl text-primary"><TrendingDown className="w-8 h-8" /></div>
