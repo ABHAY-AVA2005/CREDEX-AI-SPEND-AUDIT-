@@ -281,11 +281,8 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
-          {benchmark.status === "EXCELLENT" || benchmark.status === "GOOD" ? (
-            <>Your AI intensity is <strong className="text-emerald-500 font-black">optimal</strong>. You are spending efficiently compared to peer companies.</>
-          ) : (
-            <>Your spend is <strong className="text-amber-500 font-black">above average</strong>. Peer teams of your size usually spend ~${benchmark.averageForStage}/mo per employee on AI infrastructure.</>
-          )}
+          Your AI spend per developer is <strong className="text-foreground">${Math.round(result.totalCurrentSpend / (result.companySize || 1)).toLocaleString()}</strong> — 
+          peer companies your size average <strong className="text-foreground">${benchmark.averageForStage.toLocaleString()}</strong>.
         </p>
 
         <div className="pt-4 border-t border-border/50">
