@@ -50,8 +50,8 @@ export default function AuditForm() {
     defaultValues: {
       companyName: "",
       companySize: 0,
-      industry: "Market Intelligence SaaS",
-      tools: [{ toolName: "Cursor", currentPlan: "Pro", seats: 0, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: ["Coding"] }],
+      industry: "",
+      tools: [{ toolName: "", currentPlan: "", seats: 0, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
     },
   } as any);
 
