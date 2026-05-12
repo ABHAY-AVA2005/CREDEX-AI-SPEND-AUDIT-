@@ -29,6 +29,7 @@ export default function AuditForm() {
   const referralCode = searchParams.get("ref");
 
   // Standard form setup with Zod validation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<AuditFormInput>({
     resolver: zodResolver(AuditFormSchema),
     defaultValues: {
