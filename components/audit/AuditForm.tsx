@@ -37,8 +37,8 @@ export default function AuditForm() {
       industry: "",
       fundingStage: "SEED",
       tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
-    } as AuditFormInput,
-  });
+    },
+  } as any);
 
   // Extracting unique tool names for the dropdown
   const uniqueTools = Array.from(new Set(KNOWN_TOOLS.map(t => t.name)));

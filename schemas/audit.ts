@@ -7,7 +7,7 @@ export const AuditToolSchema = z.object({
   seats: z.number().min(0, "Seats must be 0 or more"),
   tokens: z.number().optional(),
   monthlySpend: z.number().min(0, "Spend must be 0 or more"),
-  type: z.enum(["SEAT", "API"]).default("SEAT"),
+  type: z.enum(["SEAT", "API"]),
   useCases: z.array(z.string()).min(1, "Select at least one use case"),
 });
 
@@ -15,7 +15,7 @@ export const AuditFormSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
   companySize: z.number().min(1, "Company size is required"),
   industry: z.string().optional(),
-  fundingStage: z.enum(["PRE_SEED", "SEED", "SERIES_A", "SERIES_B", "LATE_STAGE"]).default("SEED"),
+  fundingStage: z.enum(["PRE_SEED", "SEED", "SERIES_A", "SERIES_B", "LATE_STAGE"]),
   tools: z.array(AuditToolSchema).min(1, "Add at least one tool"),
   referralCode: z.string().optional(),
 });
