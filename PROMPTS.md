@@ -18,15 +18,17 @@ Analyze this deterministic audit data for {{companyName}}:
 - Current Spend: ${{totalCurrentSpend}}/mo
 - Optimized Spend: ${{totalOptimizedSpend}}/mo
 - Monthly Savings: ${{monthlySavings}}/mo
+- Redundancy Alerts: {{redundancyWarnings}}
+- Peer Benchmark: {{percentile}}th percentile ({{status}})
 - Recommendations: {{recommendations_summary}}
 
-Write a highly transparent, 2-paragraph executive summary (80-120 words).
+Write a highly transparent, 2-paragraph executive summary (100-140 words).
 
-Paragraph 1: Be specific about the math. Explain exactly HOW the ${{monthlySavings}} in monthly savings was calculated (e.g., functional overlap or seat optimization). Use phrases like "Our deterministic logic identified..." or "Based on verified 2026 pricing data...".
+Paragraph 1: Be specific about the math. Mention the redundancy alerts and how they impact the {{percentile}}th percentile ranking. Explain exactly HOW the ${{monthlySavings}} in monthly savings was calculated.
 
-Paragraph 2: Provide a clear path forward. Mention reselling unused credits on Credex.rocks to liquidate these specific assets.
+Paragraph 2: Provide a clear path forward. Focus on consolidation and liquidating redundant assets via Credex.rocks.
 
-Tone: Technical, transparent, and authoritative. Build trust by 'showing the work' in the summary.
+Tone: Technical, transparent, and authoritative. Build trust by 'showing the work'.
 ```
 
 ## Fallback Logic
