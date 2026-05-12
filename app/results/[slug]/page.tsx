@@ -139,8 +139,7 @@ export default async function ResultsPage({ params }: Props) {
       fundingStage: audit.fundingStage || undefined,
       isPersisted: true,
       redundancyWarnings: [],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recommendations: audit.tools.map((t: any) => ({
+      recommendations: audit.tools.map((t) => ({
         originalTool: t.toolName,
         originalPlan: t.currentPlan,
         originalSeats: t.seats,
