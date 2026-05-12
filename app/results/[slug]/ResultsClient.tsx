@@ -419,7 +419,14 @@ function ConsultationCTA({ annualSavings }: { annualSavings: number }) {
   );
 }
 
-export default function ResultsClient({ result: serverResult }: { result: ProcessedAuditResult | null; isShared?: boolean; }) {
+export default function ResultsClient({ 
+  result: serverResult, 
+  hasDbConfig 
+}: { 
+  result: ProcessedAuditResult | null; 
+  isShared?: boolean;
+  hasDbConfig?: boolean;
+}) {
   const [result, setResult] = useState<ProcessedAuditResult | null>(serverResult);
   const [isRecovering, setIsRecovering] = useState(!serverResult);
 
@@ -430,7 +437,6 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          // If we are recovering from session storage, it might not be persisted yet
           setResult({ ...parsed, isPersisted: parsed.isPersisted ?? false });
         } catch (e) {
           console.error("Local recovery failed:", e);
@@ -442,8 +448,9 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
 
   if (isRecovering) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground font-bold tracking-widest uppercase text-xs">Recovering Audit...</div>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
+        <div className="animate-pulse text-muted-foreground font-bold tracking-widest uppercase text-[10px]">Recovering Audit Data...</div>
       </div>
     );
   }
@@ -451,9 +458,44 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
   if (!result) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-4xl font-serif font-black mb-4">404: Audit Not Found</h2>
-        <p className="text-muted-foreground max-w-md mb-8">This audit may have expired or was never persisted to our database. Start a new analysis to see your savings.</p>
-        <Link href="/audit" className="px-8 py-4 bg-accent text-accent-foreground rounded-2xl font-bold hover:opacity-90 transition-all">New Audit →</Link>
+        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-8 animate-bounce">
+          <Zap className="w-10 h-10 text-primary" />
+        </div>
+        
+        {!hasDbConfig ? (
+          <>
+            <h2 className="text-4xl font-black mb-4 tracking-tighter">Database Not Configured</h2>
+            <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
+              Your Vercel environment is missing the <code className="bg-secondary px-1.5 py-0.5 rounded text-primary">DATABASE_URL</code>. 
+              The audit was calculated but could not be saved to the cloud.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="text-4xl font-black mb-4 tracking-tighter">Audit Not Found</h2>
+            <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
+              This specific report ID doesn&apos;t exist in our registry. It may have been deleted or the link is incorrect.
+            </p>
+          </>
+        )}
+        
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-8 py-4 bg-secondary text-foreground rounded-2xl font-bold hover:bg-secondary/80 transition-all border border-white/5"
+          >
+            🔄 Refresh Page
+          </button>
+          <Link href="/audit" className="px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold hover:opacity-90 transition-all shadow-xl shadow-primary/20">
+            Start New Audit →
+          </Link>
+        </div>
+
+        {!hasDbConfig && (
+          <div className="mt-12 p-4 border border-amber-500/30 bg-amber-500/5 rounded-xl text-amber-500 text-[10px] font-bold uppercase tracking-widest max-w-sm">
+            Warning: Database persistence is currently disabled. Share links will not work until a database is connected.
+          </div>
+        )}
       </div>
     );
   }

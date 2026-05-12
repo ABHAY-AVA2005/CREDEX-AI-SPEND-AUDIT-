@@ -63,46 +63,44 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
 
   try {
     if (!process.env.DATABASE_URL) {
-      console.warn("[AuditAction] Skipping DB persistence: DATABASE_URL not found.");
-      dbErrorMsg = "DATABASE_URL environment variable is missing.";
-    } else {
-      const { getPrismaClient } = await import("@/lib/prisma");
-      const prisma = getPrismaClient();
-      
-      await prisma.audit.create({
-        data: {
-          companySize: parsed.data.companySize,
-          industry: parsed.data.industry,
-          totalSpend: result.totalCurrentSpend,
-          optimizedSpend: result.totalOptimizedSpend,
-          savings: result.monthlySavings,
-          aiSummary,
-          isPublic: true,
-          publicSlug,
-          referralCode: parsed.data.referralCode,
-          tools: {
-            create: result.recommendations.map((rec, i) => ({
-              toolName: rec.originalTool,
-              currentPlan: rec.originalPlan ?? "",
-              seats: rec.originalSeats ?? 1,
-              monthlySpend: rec.originalMonthlyCost ?? 0,
-              type: parsed.data.tools[i]?.type || "SEAT",
-              useCases: parsed.data.tools[i]?.useCases || [],
-              suggestedTool: rec.suggestedTool,
-              suggestedPlan: rec.suggestedPlan,
-              suggestedSpend: rec.suggestedTotalCost,
-              reasoning: rec.reasoning,
-            })),
-          },
-        },
-      });
-      isPersisted = true;
-      console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
+      throw new Error("DATABASE_URL is not configured. Please add it to your environment variables.");
     }
+
+    const { getPrismaClient } = await import("@/lib/prisma");
+    const prisma = getPrismaClient();
+    
+    await prisma.audit.create({
+      data: {
+        companySize: parsed.data.companySize,
+        industry: parsed.data.industry,
+        totalSpend: result.totalCurrentSpend,
+        optimizedSpend: result.totalOptimizedSpend,
+        savings: result.monthlySavings,
+        aiSummary,
+        isPublic: true,
+        publicSlug,
+        referralCode: parsed.data.referralCode,
+        tools: {
+          create: result.recommendations.map((rec, i) => ({
+            toolName: rec.originalTool,
+            currentPlan: rec.originalPlan ?? "",
+            seats: rec.originalSeats ?? 1,
+            monthlySpend: rec.originalMonthlyCost ?? 0,
+            type: parsed.data.tools[i]?.type || "SEAT",
+            useCases: parsed.data.tools[i]?.useCases || [],
+            suggestedTool: rec.suggestedTool,
+            suggestedPlan: rec.suggestedPlan,
+            suggestedSpend: rec.suggestedTotalCost,
+            reasoning: rec.reasoning,
+          })),
+        },
+      },
+    });
+    console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
   } catch (dbError) {
     console.error("[AuditAction] Critical Database Error:", dbError);
-    dbErrorMsg = dbError instanceof Error ? dbError.message : "Unknown database error";
-    isPersisted = false;
+    // Throwing here ensures the UI shows an error instead of a broken dashboard
+    throw new Error(`Database Error: ${dbError instanceof Error ? dbError.message : "Failed to save audit. Please check your DATABASE_URL."}`);
   }
 
   return {

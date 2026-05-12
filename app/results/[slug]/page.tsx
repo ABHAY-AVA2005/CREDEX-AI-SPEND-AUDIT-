@@ -15,6 +15,9 @@ interface Props {
   params: { slug: string };
 }
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // ── Dynamic SEO Metadata ──
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -123,24 +126,25 @@ export default async function ResultsPage({ params }: Props) {
   // 2. Fetch from Database for real user audits
   try {
     const prisma = getPrismaClient();
+    // Aggressive lookup: slug OR id
     const audit = await prisma.audit.findFirst({
-      where: { 
+      where: {
         OR: [
           { publicSlug: slug },
-          { id: slug } // Fallback to ID if slug isn't found
+          { id: slug }
         ]
       },
       include: { tools: true },
     });
 
     if (!audit) {
-      // If not in DB, we return the client component but tell it to check local storage
+      console.warn(`[ResultsPage] Audit not found in DB for slug: ${slug}`);
       return <ResultsClient result={null} isShared={true} />;
     }
 
     // Reconstruct the JSON result for the client-side dashboard
     const result = {
-      publicSlug: slug,
+      publicSlug: audit.publicSlug || slug,
       companyName: "Your Company",
       totalCurrentSpend: audit.totalSpend,
       totalOptimizedSpend: audit.optimizedSpend,
@@ -165,9 +169,11 @@ export default async function ResultsPage({ params }: Props) {
       })),
     };
 
-    return <ResultsClient result={result} isShared={true} />;
+    const hasDbConfig = !!process.env.DATABASE_URL;
+    return <ResultsClient result={result} isShared={true} hasDbConfig={hasDbConfig} />;
   } catch (err) {
-    console.error("Results data fetch failed:", err);
-    return <ResultsClient result={null} isShared={true} />;
+    console.error(`[ResultsPage] Critical fetch error for ${slug}:`, err);
+    const hasDbConfig = !!process.env.DATABASE_URL;
+    return <ResultsClient result={null} isShared={true} hasDbConfig={hasDbConfig} />;
   }
 }
