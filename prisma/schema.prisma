@@ -18,6 +18,7 @@ model Audit {
   aiSummary      String?
   isPublic       Boolean     @default(false)
   publicSlug     String?     @unique
+  referralCode   String?     // Track the source
   leadId         String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
@@ -32,6 +33,7 @@ model AuditTool {
   currentPlan    String
   seats          Int
   monthlySpend   Float
+  type           String   @default("SEAT")
   useCases       String[]
   suggestedTool  String?
   suggestedPlan  String?
@@ -41,12 +43,16 @@ model AuditTool {
 }
 
 model Lead {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  company   String?
-  role      String?
-  teamSize  Int?
-  createdAt DateTime @default(now())
-  audits    Audit[]
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  company        String?
+  role           String?
+  teamSize       Int?
+  referralCode   String   @unique @default(nanoid(8))
+  referredById   String?
+  referredBy     Lead?    @relation("ReferralTree", fields: [referredById], references: [id])
+  referrals      Lead[]   @relation("ReferralTree")
+  createdAt      DateTime @default(now())
+  audits         Audit[]
 }
