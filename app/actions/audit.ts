@@ -94,7 +94,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
             reasoning: rec.reasoning,
           })),
         },
-      },
+      });
     console.log(`[AuditAction] Successfully persisted audit ${publicSlug}`);
     isPersisted = true;
   } catch (dbError) {
