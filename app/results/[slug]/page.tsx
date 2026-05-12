@@ -28,7 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } else {
     try {
       const prisma = getPrismaClient();
-      const audit = await prisma.audit.findFirst({ where: { publicSlug: slug } });
+      const audit = await prisma.audit.findFirst({ 
+        where: { 
+          OR: [
+            { publicSlug: slug },
+            { id: slug }
+          ]
+        } 
+      });
       if (audit) {
         savings = audit.savings * 12; // annualized for the headline
         company = "Your AI Stack";
@@ -117,7 +124,12 @@ export default async function ResultsPage({ params }: Props) {
   try {
     const prisma = getPrismaClient();
     const audit = await prisma.audit.findFirst({
-      where: { publicSlug: slug, isPublic: true },
+      where: { 
+        OR: [
+          { publicSlug: slug },
+          { id: slug } // Fallback to ID if slug isn't found
+        ]
+      },
       include: { tools: true },
     });
 
