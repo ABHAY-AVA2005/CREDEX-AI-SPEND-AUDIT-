@@ -65,16 +65,14 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     const toolNameLower = tool.toolName.toLowerCase();
     const useCasesLower = tool.useCases.map(u => u.toLowerCase());
 
-    /**
-     * RULE 1: Redundancy / Consolidation
-     */
+    // Rule 1: Redundancy / Consolidation (Rami Insight)
     if (toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) {
       const hasClaude = input.tools.some(t => t.toolName.toLowerCase().includes("claude"));
       if (hasClaude) {
         action = "CONSOLIDATE";
         newCost = 0;
         suggestedTotalCost = 0;
-        reasoning = `Your existing Claude subscription already handles all writing use cases. You are paying for ${tool.toolName} twice.`;
+        reasoning = `You already have Claude. Paying for ${tool.toolName} is basically lighting money on fire.`;
       } else {
         const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
         action = "REPLACE";
@@ -83,20 +81,18 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
         suggestedCostPerSeat = rec?.costPerSeat ?? 17;
         newCost = suggestedCostPerSeat * tool.seats;
         suggestedTotalCost = newCost;
-        reasoning = `Claude 3.5 Sonnet offers superior writing capabilities for a fraction of the cost.`;
+        reasoning = `Claude 3.5 Sonnet is just better and cheaper than legacy writing wrappers.`;
       }
     }
 
-    /**
-     * RULE 2: Cursor vs. Copilot
-     */
+    // Rule 2: Cursor vs. Copilot
     else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
       const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor"));
       if (hasCursor) {
         action = "CONSOLIDATE";
         newCost = 0;
         suggestedTotalCost = 0;
-        reasoning = `Cursor natively includes Claude 3.5 and GPT-4o. Keeping Github Copilot is redundant.`;
+        reasoning = `Cursor natively includes Claude 3.5. Keeping Github Copilot is redundant.`;
       } else {
         const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
         action = "REPLACE";
@@ -105,34 +101,29 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
         suggestedCostPerSeat = rec?.costPerSeat ?? 20;
         newCost = suggestedCostPerSeat * tool.seats;
         suggestedTotalCost = newCost;
-        reasoning = `Cursor is the gold standard for engineering teams. It replaces Copilot and separate ChatGPT subscriptions.`;
+        reasoning = `Cursor is the gold standard right now. It replaces Copilot and separate ChatGPT coding subs.`;
       }
     }
 
-    /**
-     * RULE 3: API Gateway vs. Seats (Ryan Das Insight)
-     */
+    // Rule 3: API Gateway vs. Seats (Ryan Das Insight)
     else if (tool.type === "SEAT" && tool.seats >= 5 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
       action = "REPLACE";
-      suggestedTool = "TypingMind / API Gateway";
-      suggestedPlan = "BYOK (Bring Your Own Key)";
-      // API usage is typically 60% cheaper for heavy teams
+      suggestedTool = "API Gateway (TypingMind)";
+      suggestedPlan = "Usage-based (BYOK)";
       newCost = currentCost * 0.4;
       suggestedTotalCost = newCost;
-      reasoning = `For teams of ${tool.seats}+, paying per-seat for a UI is inefficient. Switching to an API Gateway can reduce costs by 60% while providing better monitoring for spend spikes.`;
+      reasoning = `For teams of ${tool.seats}+, paying per-seat is a waste. An API Gateway saves like 60% and stops billing spikes.`;
     }
 
-    /**
-     * RULE 4: Secondary Market (Fluxora Core)
-     */
+    // Rule 4: The Secondary Market Loop (The Credex play)
     else if (toolNameLower.includes("openai") || toolNameLower.includes("aws") || toolNameLower.includes("anthropic")) {
       const discountFactor = 0.20;
       action = "REPLACE";
-      suggestedTool = `${tool.toolName} (via Fluxora Credits)`;
-      suggestedPlan = "Secondary Marketplace";
+      suggestedTool = `${tool.toolName} (via Marketplace Credits)`;
+      suggestedPlan = "Secondary Market";
       newCost = currentCost * (1 - discountFactor);
       suggestedTotalCost = newCost;
-      reasoning = `By utilizing Fluxora's secondary credit marketplace, you can instantly recover 20% of your ${tool.toolName} spend without changing a line of code.`;
+      reasoning = `We can get you the exact same ${tool.toolName} service for 20% less via our credit marketplace.`;
     }
 
     const savings = currentCost - newCost;
@@ -154,7 +145,7 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     });
   });
 
-  // Benchmarking Comparison (Shashank Insight)
+  // Benchmarking (Shashank Insight)
   const spendPerEmp = totalCurrentSpend / (input.companySize || 1);
   const stageBenchmark = benchmarks[input.fundingStage] || 150;
   
@@ -179,4 +170,3 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     }
   };
 }
-
