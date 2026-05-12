@@ -145,7 +145,7 @@ export default async function ResultsPage({ params }: Props) {
     // Reconstruct the JSON result for the client-side dashboard
     const result = {
       publicSlug: audit.publicSlug || slug,
-      companyName: audit.companyName || "Your Company",
+      companyName: audit.companyName || "Organization",
       totalCurrentSpend: audit.totalSpend,
       totalOptimizedSpend: audit.optimizedSpend,
       monthlySavings: audit.savings,
