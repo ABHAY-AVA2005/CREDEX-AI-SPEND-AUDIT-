@@ -107,7 +107,8 @@ export default async function ResultsPage({ params }: Props) {
           newCost: 5200,
           reasoning: "Redeploy $3,200 in expiring AWS reserved credits before the 38-day deadline."
         }
-      ]
+      ],
+      redundancyWarnings: []
     };
     return <ResultsClient result={sampleResult} isShared={true} />;
   }
@@ -134,7 +135,10 @@ export default async function ResultsPage({ params }: Props) {
       monthlySavings: audit.savings,
       annualSavings: audit.savings * 12,
       aiSummary: audit.aiSummary ?? "",
+      companySize: audit.companySize,
+      fundingStage: audit.fundingStage || undefined,
       isPersisted: true,
+      redundancyWarnings: [],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recommendations: audit.tools.map((t: any) => ({
         originalTool: t.toolName,
