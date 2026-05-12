@@ -290,12 +290,15 @@ export default function AuditForm() {
 
                   <div>
                     <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
-                    <input
-                      id={`monthlySpend-${index}`}
-                      type="number"
-                      {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
-                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                    />
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">$</span>
+                      <input
+                        id={`monthlySpend-${index}`}
+                        type="number"
+                        {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
+                        className="w-full pl-10 p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div className="md:col-span-2">
