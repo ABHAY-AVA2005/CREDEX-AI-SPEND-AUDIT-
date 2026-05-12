@@ -40,7 +40,7 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
         </div>
       </div>
 
-      <div className="bg-card/40 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden hover:border-primary/40 transition-all duration-500 shadow-2xl relative">
+      <div className="bg-card/40 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden hover:border-primary/40 transition-all duration-500 shadow-2xl relative will-change-transform">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         
         <div className="p-6 sm:p-8 relative z-10">
@@ -144,6 +144,32 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
   );
 }
 
+function RedundancyWarnings({ warnings }: { warnings: string[] }) {
+  if (!warnings || warnings.length === 0) return null;
+
+  return (
+    <div className="bg-amber-500/10 border border-amber-500/20 rounded-3xl p-8 mb-8 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-10">
+        <Shield className="w-12 h-12 text-amber-500" />
+      </div>
+      <h3 className="font-black text-amber-500 text-xl mb-4 tracking-tight flex items-center gap-2">
+        <Zap className="w-5 h-5 fill-amber-500" /> Redundancy Alerts
+      </h3>
+      <ul className="space-y-3">
+        {warnings.map((warning, i) => (
+          <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground leading-relaxed">
+            <span className="text-amber-500 font-black">•</span>
+            <span>{warning}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-6 pt-4 border-t border-amber-500/10 text-[10px] font-bold text-amber-500/60 uppercase tracking-widest">
+        Action Required: Consolidate overlapping tool subscriptions to recover capital.
+      </div>
+    </div>
+  );
+}
+
 function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
@@ -157,7 +183,8 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await captureLeadEmail(email, result.companyName || "Lead", result.publicSlug, result.monthlySavings, result.annualSavings, result.aiSummary, role, teamSize ? parseInt(teamSize) : undefined);
+      const referredByCode = sessionStorage.getItem("referral_code") || undefined;
+      await captureLeadEmail(email, result.companyName || "Lead", result.publicSlug, result.monthlySavings, result.annualSavings, result.aiSummary, role, teamSize ? parseInt(teamSize) : undefined, referredByCode);
       setSubmitted(true);
     } catch (e: unknown) {
       console.error("Audit submission failed:", e);
@@ -214,26 +241,15 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
 }
 
 function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
-  const totalSeats = result.recommendations.reduce((acc, r) => acc + (r.originalSeats || 1), 0);
-  const spendPerSeat = totalSeats > 0 ? Math.round(result.totalCurrentSpend / totalSeats) : 0;
-  
-  // Industry-specific benchmarking logic
-  const industry = result.industry?.toLowerCase() || "general";
-  let benchmarkAverage = 20; // Default
-  let peerCategory = "Industry Average";
+  const benchmark = result.benchmarkComparison;
+  if (!benchmark) return null;
 
-  if (industry.includes("fintech") || industry.includes("finance")) {
-    benchmarkAverage = 45;
-    peerCategory = "Fintech Peers";
-  } else if (industry.includes("saas") || industry.includes("tech")) {
-    benchmarkAverage = 30;
-    peerCategory = "SaaS Peers";
-  } else if (industry.includes("agency") || industry.includes("marketing")) {
-    benchmarkAverage = 15;
-    peerCategory = "Agency Peers";
-  }
-
-  const isEfficient = spendPerSeat <= benchmarkAverage;
+  const statusColors = {
+    "EXCELLENT": "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+    "GOOD": "text-primary bg-primary/10 border-primary/20",
+    "OVERSPENDING": "text-amber-500 bg-amber-500/10 border-amber-500/20",
+    "CRITICAL": "text-red-500 bg-red-500/10 border-red-500/20"
+  };
 
   return (
     <div className="bg-card border border-border rounded-2xl p-6 shadow-sm relative overflow-hidden group">
@@ -241,34 +257,39 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
         <TrendingDown className="w-12 h-12 text-primary" />
       </div>
       <h3 className="font-bold text-foreground text-sm mb-4">Peer Benchmarking</h3>
-      <div className="text-3xl font-black mb-2 text-foreground">
-        ${spendPerSeat}<span className="text-xs text-muted-foreground font-medium uppercase tracking-widest ml-1">/seat/mo</span>
+      
+      <div className="flex items-center justify-between mb-4">
+        <div className="text-3xl font-black text-foreground">
+          {benchmark.percentile}<span className="text-xs text-muted-foreground font-medium uppercase tracking-widest ml-1">th percentile</span>
+        </div>
+        <div className={`px-2 py-1 rounded text-[8px] font-black uppercase tracking-widest border ${statusColors[benchmark.status]}`}>
+          {benchmark.status}
+        </div>
       </div>
       
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full ${isEfficient ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
           <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-            VS {peerCategory} (${benchmarkAverage})
+            Target: ${benchmark.averageForStage}/emp (Stage: {result.fundingStage?.replace("_", " ")})
           </p>
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
-          {isEfficient ? (
-            <>Your stack is <strong className="text-emerald-500 font-black">Highly Efficient</strong> for {industry === "general" ? "your size" : `the ${result.industry} sector`}. You are spending ${benchmarkAverage - spendPerSeat} less than the peer median.</>
+          {benchmark.status === "EXCELLENT" || benchmark.status === "GOOD" ? (
+            <>Your AI intensity is <strong className="text-emerald-500 font-black">optimal</strong>. You are spending efficiently compared to other {result.fundingStage?.replace("_", " ")} startups.</>
           ) : (
-            <>Your AI intensity is <strong className="text-amber-500 font-black">{Math.round((spendPerSeat/benchmarkAverage) * 100)}% higher</strong> than peers in {industry === "general" ? "your category" : result.industry}. This usually indicates functional redundancy in your workflows.</>
+            <>Your spend is <strong className="text-amber-500 font-black">above average</strong>. Peer teams of your size usually spend ~${benchmark.averageForStage}/mo per employee on AI infrastructure.</>
           )}
         </p>
 
-        {/* Use Case Efficiency Badge */}
         <div className="pt-4 border-t border-border/50">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle2 className="w-3 h-3 text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-foreground">Workflow Optimization</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-foreground">Market Insight</span>
           </div>
           <p className="text-[10px] text-muted-foreground italic leading-tight">
-            Based on your tool-mix, we detected <strong className="text-primary">{result.recommendations.filter(r => r.action !== "KEEP").length} consolidation opportunities</strong> across your primary use cases.
+            Engineering teams at your stage are increasingly moving to **API Gateways** to monitor and cap usage spikes.
           </p>
         </div>
       </div>
@@ -295,6 +316,40 @@ function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
       >
         Book Strategy Session <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </Link>
+    </div>
+  );
+}
+
+function ReferralCard({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const referralUrl = typeof window !== 'undefined' ? `${window.location.origin}/audit?ref=${slug.substring(0, 8)}` : "";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(referralUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="bg-accent/5 border border-accent/20 rounded-2xl p-6 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+        <Zap className="w-12 h-12 text-accent" />
+      </div>
+      <h3 className="font-bold text-foreground text-sm mb-2 flex items-center gap-2">
+        <span className="flex h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+        Viral Growth Reward
+      </h3>
+      <p className="text-[10px] text-muted-foreground leading-relaxed mb-4">
+        Share your audit results. If another team recovers &gt;$500, you both get <strong className="text-foreground">3 months of Fluxora Pro</strong> free.
+      </p>
+      
+      <button 
+        onClick={handleCopy}
+        className="w-full py-2.5 bg-accent text-accent-foreground font-black text-[10px] uppercase tracking-widest rounded-xl hover:opacity-90 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-accent/10"
+      >
+        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        {copied ? "Link Copied!" : "Copy Referral Link"}
+      </button>
     </div>
   );
 }
@@ -490,6 +545,7 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full mx-auto">
           {/* Main Column (Left 2/3) */}
           <div className="lg:col-span-2 space-y-6 w-full mx-auto">
+            <RedundancyWarnings warnings={result.redundancyWarnings} />
             <HighSavingsCTA result={result} />
 
             <div className="bg-card rounded-3xl border border-border p-8 sm:p-10 shadow-2xl relative overflow-hidden group">
@@ -570,6 +626,8 @@ export default function ResultsClient({ result: serverResult }: { result: Proces
             </motion.div>
 
             <ConsultationCTA annualSavings={result.annualSavings} />
+            
+            <ReferralCard slug={result.publicSlug} />
             
             <BenchmarkCard result={result} />
 

@@ -14,7 +14,7 @@ import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
 import { AuditFormSchema, AuditFormInput } from "@/schemas/audit";
 import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { processAuditAction } from "@/app/actions/audit";
 
 // We store the draft in localStorage so founders don't lose their 
@@ -25,6 +25,8 @@ export default function AuditForm() {
   const [isClient, setIsClient] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const referralCode = searchParams.get("ref");
 
   // Standard form setup with Zod validation
   const form = useForm<AuditFormInput>({
@@ -84,8 +86,14 @@ export default function AuditForm() {
 
     setIsSubmitting(true);
     try {
+      if (referralCode) {
+        sessionStorage.setItem("referral_code", referralCode);
+      }
       // Hit our server action to process the audit
-      const results = await processAuditAction(data);
+      const results = await processAuditAction({
+        ...data,
+        referralCode: referralCode || undefined
+      });
       
       // We store the result in sessionStorage for immediate dashboard viewing
       sessionStorage.setItem("latest_audit_result", JSON.stringify(results));
@@ -125,7 +133,7 @@ export default function AuditForm() {
         <section className="space-y-6">
           <div>
             <h2 className="text-2xl font-stylish font-black tracking-tight text-foreground">1. Company Profile</h2>
-            <p className="text-muted-foreground text-sm">Basic details about your organization.</p>
+            <p className="text-muted-foreground text-sm">Basic details for accurate benchmarking.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -139,13 +147,10 @@ export default function AuditForm() {
                 placeholder="e.g. Acme Corp"
                 className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
-              {form.formState.errors.companyName && (
-                <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companyName.message}</p>
-              )}
             </div>
 
             <div>
-              <label htmlFor="companySize" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Team Size</label>
+              <label htmlFor="companySize" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Employees</label>
               <input
                 id="companySize"
                 type="number"
@@ -153,20 +158,22 @@ export default function AuditForm() {
                 {...form.register("companySize", { valueAsNumber: true })}
                 className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
-              {form.formState.errors.companySize && (
-                <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.companySize.message}</p>
-              )}
             </div>
 
             <div>
-              <label htmlFor="industry" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Industry (Optional)</label>
-              <input
-                id="industry"
-                type="text"
-                {...form.register("industry")}
-                placeholder="e.g. SaaS, Fintech"
-                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
-              />
+              <label htmlFor="fundingStage" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Funding Stage</label>
+              <select
+                id="fundingStage"
+                required
+                {...form.register("fundingStage")}
+                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
+              >
+                <option value="PRE_SEED">Pre-Seed</option>
+                <option value="SEED">Seed</option>
+                <option value="SERIES_A">Series A</option>
+                <option value="SERIES_B">Series B</option>
+                <option value="LATE_STAGE">Late Stage / Public</option>
+              </select>
             </div>
           </div>
         </section>
@@ -176,7 +183,7 @@ export default function AuditForm() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-stylish font-black tracking-tight text-foreground">2. AI & SaaS Stack</h2>
-              <p className="text-muted-foreground text-sm">Add the tools your team uses daily.</p>
+              <p className="text-muted-foreground text-sm">Add your tools. Distinguish between per-seat subs and API usage.</p>
             </div>
           </div>
 
@@ -188,15 +195,10 @@ export default function AuditForm() {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-6 border-2 border-border rounded-2xl relative bg-card shadow-sm hover:border-accent/30 transition-all"
               >
-                {/* Individual Tool Header */}
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-[10px] font-black bg-foreground text-background px-2 py-0.5 rounded uppercase tracking-widest">Tool #{index + 1}</span>
                   {fields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => remove(index)}
-                      className="text-destructive hover:opacity-80 transition-opacity"
-                    >
+                    <button type="button" onClick={() => remove(index)} className="text-destructive hover:opacity-80 transition-opacity">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   )}
@@ -204,93 +206,88 @@ export default function AuditForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Tool Type</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => form.setValue(`tools.${index}.type`, "SEAT")}
+                        className={`py-2 px-3 text-xs font-bold rounded-lg border-2 transition-all ${form.watch(`tools.${index}.type`) === "SEAT" ? "border-accent bg-accent/10 text-accent" : "border-border bg-background text-muted-foreground"}`}
+                      >
+                        Per-Seat Sub
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => form.setValue(`tools.${index}.type`, "API")}
+                        className={`py-2 px-3 text-xs font-bold rounded-lg border-2 transition-all ${form.watch(`tools.${index}.type`) === "API" ? "border-accent bg-accent/10 text-accent" : "border-border bg-background text-muted-foreground"}`}
+                      >
+                        API / Usage
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
                     <label htmlFor={`toolName-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Select Tool</label>
                     <select
                       id={`toolName-${index}`}
                       required
                       {...form.register(`tools.${index}.toolName`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
-                      <option value="">Select a tool...</option>
-                      {uniqueTools.map(t => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      <option value="">Select tool...</option>
+                      {uniqueTools.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
-                    {form.formState.errors.tools?.[index]?.toolName && (
-                      <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.toolName?.message}</p>
-                    )}
                   </div>
 
                   <div>
                     <label htmlFor={`currentPlan-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Current Plan</label>
-                    <select
+                    <input
                       id={`currentPlan-${index}`}
-                      required
+                      type="text"
                       {...form.register(`tools.${index}.currentPlan`)}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
-                    >
-                      <option value="">Select a plan...</option>
-                      {KNOWN_TOOLS
-                        .filter(t => t.name === form.watch(`tools.${index}.toolName`))
-                        .map(t => (
-                          <option key={t.plan} value={t.plan}>{t.plan} — ${t.costPerSeat}/seat</option>
-                        ))}
-                    </select>
-                    {form.formState.errors.tools?.[index]?.currentPlan && (
-                      <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.currentPlan?.message}</p>
-                    )}
+                      placeholder="e.g. Pro, Team, Enterprise"
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                    />
                   </div>
 
-                  <div>
-                    <label htmlFor={`seats-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Seats / Users</label>
-                    <input
-                      id={`seats-${index}`}
-                      type="number"
-                      required
-                      {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                    />
-                    {form.formState.errors.tools?.[index]?.seats && (
-                      <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.seats?.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
-                    <input
-                      id={`monthlySpend-${index}`}
-                      type="number"
-                      required
-                      {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                    />
-                    {form.formState.errors.tools?.[index]?.monthlySpend && (
-                      <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.monthlySpend?.message}</p>
-                    )}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor={`seats-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">{form.watch(`tools.${index}.type`) === "SEAT" ? "Seats" : "Users"}</label>
+                      <input
+                        id={`seats-${index}`}
+                        type="number"
+                        {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
+                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
+                      <input
+                        id={`monthlySpend-${index}`}
+                        type="number"
+                        {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
+                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div className="md:col-span-2">
-                    <label htmlFor={`useCases-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Use Cases</label>
+                    <label htmlFor={`useCases-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Primary Use Case</label>
                     <input
                       id={`useCases-${index}`}
                       required
+                      placeholder="e.g. Coding, Content, API"
                       onChange={(e) => {
-                        // Turning the comma-separated string back into an array for the schema
                         const val = e.target.value.split(",").map(s => s.trim()).filter(Boolean);
                         form.setValue(`tools.${index}.useCases`, val);
                       }}
-                      defaultValue={form.getValues(`tools.${index}.useCases`).join(", ")}
-                      placeholder="e.g. Coding, Chat, Design"
-                      className="w-full p-3.5 rounded-xl border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
                     />
-                    {form.formState.errors.tools?.[index]?.useCases && (
-                      <p className="text-red-500 text-xs mt-2 font-medium">{form.formState.errors.tools[index]?.useCases?.message}</p>
-                    )}
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
+
 
           <button
             type="button"
