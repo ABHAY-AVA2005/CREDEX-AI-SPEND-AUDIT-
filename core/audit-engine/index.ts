@@ -133,6 +133,7 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       originalTool: tool.toolName,
       originalPlan: tool.currentPlan,
       originalSeats: tool.seats,
+      originalTokens: tool.tokens,
       originalMonthlyCost: currentCost,
       action,
       suggestedTool,

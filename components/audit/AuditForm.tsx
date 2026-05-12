@@ -35,7 +35,7 @@ export default function AuditForm() {
       companyName: "",
       companySize: 10,
       industry: "",
-      tools: [{ toolName: "", currentPlan: "", seats: 1, monthlySpend: 0, useCases: [] }],
+      tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, useCases: [] }],
     },
   });
 
@@ -230,7 +230,16 @@ export default function AuditForm() {
                     <select
                       id={`toolName-${index}`}
                       required
-                      {...form.register(`tools.${index}.toolName`)}
+                      {...form.register(`tools.${index}.toolName`, {
+                        onChange: (e) => {
+                          const val = e.target.value;
+                          if (val.toLowerCase().includes("api")) {
+                            form.setValue(`tools.${index}.type`, "API");
+                          } else {
+                            form.setValue(`tools.${index}.type`, "SEAT");
+                          }
+                        }
+                      })}
                       className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all appearance-none"
                     >
                       <option value="">Select tool...</option>
@@ -251,23 +260,36 @@ export default function AuditForm() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor={`seats-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">{form.watch(`tools.${index}.type`) === "SEAT" ? "Seats" : "Users"}</label>
+                      <label htmlFor={`seats-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Seats</label>
                       <input
                         id={`seats-${index}`}
                         type="number"
+                        disabled={form.watch(`tools.${index}.type`) === "API"}
                         {...form.register(`tools.${index}.seats`, { valueAsNumber: true })}
-                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       />
                     </div>
                     <div>
-                      <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
+                      <label htmlFor={`tokens-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Est. Tokens/Mo (k)</label>
                       <input
-                        id={`monthlySpend-${index}`}
+                        id={`tokens-${index}`}
                         type="number"
-                        {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
-                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                        disabled={form.watch(`tools.${index}.type`) !== "API"}
+                        {...form.register(`tools.${index}.tokens`, { valueAsNumber: true })}
+                        placeholder="e.g. 500"
+                        className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor={`monthlySpend-${index}`} className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Monthly Bill ($)</label>
+                    <input
+                      id={`monthlySpend-${index}`}
+                      type="number"
+                      {...form.register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
+                      className="w-full p-3 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
+                    />
                   </div>
 
                   <div className="md:col-span-2">
@@ -291,7 +313,7 @@ export default function AuditForm() {
 
           <button
             type="button"
-            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, monthlySpend: 0, useCases: [] })}
+            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, useCases: [] })}
             className="w-full py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 hover:bg-secondary transition-all text-sm font-bold uppercase tracking-widest"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Tool to Stack

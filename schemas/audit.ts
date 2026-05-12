@@ -4,7 +4,8 @@ export const AuditToolSchema = z.object({
   id: z.string().optional(),
   toolName: z.string().min(1, "Tool name is required"),
   currentPlan: z.string().min(1, "Plan is required"),
-  seats: z.number().min(1, "At least 1 seat required"),
+  seats: z.number().min(0, "Seats must be 0 or more"),
+  tokens: z.number().optional(),
   monthlySpend: z.number().min(0, "Spend must be 0 or more"),
   type: z.enum(["SEAT", "API"]).default("SEAT"),
   useCases: z.array(z.string()).min(1, "Select at least one use case"),
@@ -35,6 +36,7 @@ export interface AuditRecommendation {
   originalTool: string;
   originalPlan?: string;
   originalSeats?: number;
+  originalTokens?: number;
   originalMonthlyCost?: number;
   action: "KEEP" | "REPLACE" | "DOWNGRADE" | "CONSOLIDATE";
   suggestedTool?: string;

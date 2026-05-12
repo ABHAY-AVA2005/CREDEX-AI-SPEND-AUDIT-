@@ -51,7 +51,9 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
               </div>
               <div>
                 <h3 className="font-black text-xl tracking-tight text-foreground group-hover:text-primary transition-colors">{rec.originalTool}</h3>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">{rec.originalPlan} · {rec.originalSeats} Seats</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
+                  {rec.originalPlan} · {rec.originalSeats && rec.originalSeats > 0 ? `${rec.originalSeats} Seats` : `${rec.originalTokens || 0}k Tokens`}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-6">
@@ -122,7 +124,10 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
                     <ul className="space-y-2">
                       <li className="flex items-start gap-3 text-[11px] text-muted-foreground leading-tight">
                         <span className="text-primary font-black">01</span>
-                        <span>Analyzed <strong className="text-foreground">{rec.originalTool}</strong> usage against your <strong className="text-foreground">{rec.originalSeats} seat</strong> {rec.originalPlan} license.</span>
+                        <span>
+                          Analyzed <strong className="text-foreground">{rec.originalTool}</strong> usage against your 
+                          <strong className="text-foreground"> {rec.originalSeats && rec.originalSeats > 0 ? `${rec.originalSeats} seat` : `${rec.originalTokens || 0}k token`}</strong> {rec.originalPlan} license.
+                        </span>
                       </li>
                       <li className="flex items-start gap-3 text-[11px] text-muted-foreground leading-tight">
                         <span className="text-primary font-black">02</span>
