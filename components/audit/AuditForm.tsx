@@ -35,7 +35,7 @@ export default function AuditForm() {
     defaultValues: {
       companyName: "",
       companySize: 10,
-      industry: "",
+      industry: "Market Intelligence SaaS",
       tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
     },
   } as any);
@@ -137,7 +137,7 @@ export default function AuditForm() {
             <p className="text-muted-foreground text-sm">Basic details for accurate benchmarking.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label htmlFor="companyName" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Company Name</label>
               <input
@@ -156,6 +156,16 @@ export default function AuditForm() {
                 type="number"
                 required
                 {...form.register("companySize", { valueAsNumber: true })}
+                className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
+              />
+            </div>
+            <div>
+              <label htmlFor="industry" className="block text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Industry</label>
+              <input
+                id="industry"
+                type="text"
+                {...form.register("industry")}
+                placeholder="e.g. SaaS, Fintech"
                 className="w-full p-4 rounded-xl border-2 border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:bg-background transition-all"
               />
             </div>
