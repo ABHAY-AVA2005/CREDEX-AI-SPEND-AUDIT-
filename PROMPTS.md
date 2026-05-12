@@ -1,41 +1,37 @@
-# Fluxora AI Audit Prompts
+# The AI Prompts: How I talk to Gemini
 
-This document tracks the prompts used for AI-driven summarization within the Fluxora platform. 
+I use AI for the "Executive Summary" because raw math can be a bit boring to read. Here is the exact prompt I’m using in the backend.
 
-> [!IMPORTANT]
-> Fluxora uses deterministic math for all audit calculations. AI is strictly used for human-readable executive summaries and natural language transparency.
+## The Executive Audit Letter
 
-## Executive Audit Summary
+**What it does:** It takes the deterministic math (the truth) and turns it into a letter that a founder can actually understand.
+**The Model:** `gemini-2.0-flash`
+**The Code:** `lib/gemini.ts`
 
-**Purpose**: Generates a 100-word "Founder-to-Founder" summary based on deterministic audit results.
-**Model**: `gemini-2.0-flash`
-**Location**: `lib/gemini.ts`
-
-### Prompt
+### The Prompt text:
 ```text
-You are an expert AI SaaS financial auditor for Fluxora.
-Analyze this deterministic audit data for {{companyName}}:
+You are a Senior AI Financial Auditor working for Fluxora.
+Your job is to look at this math for {{companyName}} and explain it simply:
 - Current Spend: ${{totalCurrentSpend}}/mo
 - Optimized Spend: ${{totalOptimizedSpend}}/mo
-- Monthly Savings: ${{monthlySavings}}/mo
-- Redundancy Alerts: {{redundancyWarnings}}
-- Peer Benchmark: {{percentile}}th percentile ({{status}})
-- Recommendations: {{recommendations_summary}}
+- Total Savings: ${{monthlySavings}}/mo
+- The Problems: {{redundancyWarnings}}
+- Benchmarking: They are in the {{percentile}}th percentile (Status: {{status}})
+- The Plan: {{recommendations_summary}}
 
-Write a highly transparent, 2-paragraph executive summary (100-140 words).
+Write 2 short paragraphs (about 120 words total).
 
-Paragraph 1: Be specific about the math. Mention the redundancy alerts and how they impact the {{percentile}}th percentile ranking. Explain exactly HOW the ${{monthlySavings}} in monthly savings was calculated.
+In Paragraph 1: Explain the math. Don't be vague. Tell them exactly where the ${{monthlySavings}} is coming from (like "you're double-paying for Claude"). Use terms like "Our data shows" or "Based on May 2026 prices."
 
-Paragraph 2: Provide a clear path forward. Focus on consolidation and liquidating redundant assets via Credex.rocks.
+In Paragraph 2: Give them an action plan. Tell them to consolidate their tools and maybe sell the extra credits on Credex.rocks to get some cash back.
 
-Tone: Technical, transparent, and authoritative. Build trust by 'showing the work'.
+Tone: Professional but direct. No "AI fluff." Just the facts.
 ```
 
-## Fallback Logic
-In the event of an API failure or missing API key, Fluxora falls back to a high-fidelity template:
+## Why I wrote it this way?
+I tried a few versions that were way too "salesy." Founders hate that. I found that if I just tell the AI to "show the math," it builds way more trust. People want to know *why* they are saving money, not just that they *could* save it.
 
-```text
-{{companyName}}'s AI stack is currently incurring ${{totalCurrentSpend}}/mo in operational expenditure. Our deterministic audit engine identifies a high-probability path to reduce this to ${{totalOptimizedSpend}}/mo, recovering approximately ${{monthlySavings}} in monthly liquidity. 
+## The "Plan B" (Fallback)
+If the API fails or something goes wrong, I have this template ready:
 
-This recovery is primarily driven by resolving functional overlap across your stack and liquidating redundant enterprise licenses. To capture this recovery potential, we recommend listing unused seats on the Credex.rocks marketplace and consolidating workflows into unified environments.
-```
+"Your AI stack is costing you ${{totalCurrentSpend}}/mo. Our engine found a way to drop that to ${{totalOptimizedSpend}}/mo, which puts ${{monthlySavings}} back in your pocket. This usually happens because of tool overlap or paying for seats you don't need. You should probably head over to Credex.rocks and see if you can liquidate some of those unused assets for cash."

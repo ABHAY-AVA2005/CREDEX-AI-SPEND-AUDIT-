@@ -1,86 +1,41 @@
-## 🛠️ Technical Choices & Justification
+# How Fluxora actually works (The Architecture)
 
-To satisfy the core project constraints, we have made the following foundational choices:
+## 🛠️ The Tech Choices
+I went with a pretty standard but "modern" stack to move fast:
+1. **Next.js 15:** Use it mostly for **Server Actions**. I don't want any of the audit math or DB keys to ever touch the browser. It’s safer and faster.
+2. **TypeScript:** Since I'm doing financial math, I need types. I don't want `undefined` bugs when telling a CEO they're wasting $10k.
+3. **Tailwind CSS:** No templates here. Hand-coded everything to get that "CFO Blueprint" look. It’s much lighter and easier to customize.
 
-1. **Framework: Next.js 15 (React 19)**: Chosen for its **Server Actions** capability, which allows us to perform secure, server-side database operations (Prisma) and API calls (Gemini/Resend) without exposing sensitive logic or secrets to the client.
-2. **Language: TypeScript**: Non-negotiable for a financial tool. TypeScript ensures that the **Deterministic Audit Engine** operates on strictly typed data, eliminating runtime errors in savings calculations.
-3. **UI: Hand-Coded Tailwind**: We avoided all website builders. The interface is built with raw **Tailwind CSS** and **Radix UI** primitives to ensure maximum performance and a unique, premium aesthetic that cannot be achieved with templates.
-
-## 🏗️ High-Level System Overview
-
+## 🏗️ High-Level Flow
 ```mermaid
 graph TD
-    A[User Input] -->|Zod Validation| B(Audit Engine)
-    B -->|Deterministic Rules| C{Rule Engine}
-    C -->|Price Matching| D[Pricing Knowledge Base]
-    C -->|Logic| E[Savings Generator]
-    E --> F[Raw JSON Result]
-    F -->|Persistence| G[(PostgreSQL DB)]
-    F -->|Analysis| H[Gemini AI Summarizer]
-    G --> I[Public Share URL]
-    H --> J[Executive Summary]
-    J --> K[Final Dashboard]
-    I --> K
+    A[User Form] -->|Zod Check| B(Audit Engine)
+    B -->|The Logic| C{Rule Engine}
+    C -->|Price DB| D[Pricing Knowledge]
+    C -->|Math| E[Savings Result]
+    E --> F[JSON Data]
+    F -->|Supabase| G[(PostgreSQL)]
+    F -->|Gemini| H[AI Summary]
+    G --> I[Share Link]
+    H --> J[Final Report]
+    I --> J
 ```
 
-## 🛡️ Architectural Decision: Why Zod? (vs. SQL)
+## 🛡️ Why Zod? (The "Bouncer" Strategy)
+I use **Zod** as a "Bouncer" at the front door. 
+- **Fail-Fast:** If a user types "abc" in a dollar field, Zod kills it before it ever hits my math engine.
+- **Auto-Types:** It generates my TS types automatically so the data is always clean.
+- **Good Errors:** It lets me show "Please enter a valid number" instantly without a round-trip.
 
-A common question is: *"Why use Zod for validation instead of just relying on SQL constraints?"* 
+## 🏗️ The Audit Pipeline: Step-by-Step
+1. **Ingestion:** User hits the form. Zod cleans it.
+2. **The Logic:** The **Audit Engine** (my "Brain") checks for **Redundancy**. Like if you have 3 different LLM tools, it flags them.
+3. **Math:** We compare your spend against 2026 retail prices in our `knowledge.ts` file. 
+4. **Persistence:** We save everything to **Postgres (via Prisma)** and generate a unique `nanoid` slug for the public link.
+5. **AI summary:** We send the raw math to **Gemini**. It writes the "human" part of the report so the CFO actually understands the rationale.
 
-We use **Zod** as the primary validation layer for four critical reasons:
-1. **Early Failure (Fail-Fast)**: Zod catches "dirty" input (e.g., text in a number field) at the application boundary. If we waited for SQL, we would have already executed complex JavaScript math on invalid data, leading to `NaN` errors or server crashes.
-2. **Type Safety**: Zod automatically generates TypeScript types. This ensures that the **Audit Engine** receives data that is 100% compliant with our expected schemas, reducing "undefined" bugs.
-3. **Complex Logic**: SQL is great for checking types, but Zod is better for business logic validation (e.g., "The seat count must be greater than 1 if the plan is 'Enterprise'").
-4. **User Experience**: Zod allows us to return human-readable error messages to the frontend instantly without waiting for a database round-trip.
-
-## 🏗️ The Fluxora Pipeline: Step-by-Step
-
-Here is the exact journey of a single audit:
-
-#### 1. Ingestion & Validation
-The user interacts with `AuditForm.tsx`. As soon as they hit "Generate Audit," the form data is sent to a **Next.js Server Action** where **Zod** intercepts it for sanitization and type enforcement.
-
-#### 2. Audit Logic & Redundancy Detection
-The **Audit Engine** orchestrates the analysis. It queries the **Pricing Knowledge Base** (`core/audit-engine/knowledge.ts`) for May 2026 retail values. It then performs a **Category-Based Redundancy Sweep** (e.g., checking for overlapping "Code" or "Chat" tools) to identify cases where a user is paying twice for the same LLM capability.
-
-#### 3. Savings Calculation
-The **Savings Generator** compares current spend against optimized recommendations.
-*   **Logic**: `(Current Monthly Spend) - (Optimized Monthly Spend) = Monthly Savings`.
-*   It produces a detailed JSON object containing flags for setiap tool (e.g., "Overlap found between Claude and ChatGPT").
-
-#### 4. Cloud Persistence (Prisma 6)
-We save the audit result to **Supabase PostgreSQL** using a stable Prisma 6 architecture.
-*   **Unique Slug**: `nanoid` generates a URL-safe ID (e.g., `TDUtudVR4i`).
-*   **Benefit**: This creates a permanent, publicly shareable link that loads instantly for anyone, anywhere.
-
-#### 5. AI Executive Summary
-The raw audit data is sent to **Gemini 1.5 Flash**. 
-*   **Role**: Gemini acts as a "Virtual CFO," translating raw math into a 2-paragraph executive memo that explains the strategic rationale for the savings.
-
-#### 6. Final Dashboard & Benchmarking
-The `ResultsClient.tsx` renders the final experience:
-*   **Visuals**: Charts, Redundancy Alerts, and Actionable Steps.
-*   **Benchmarking**: A Stage-Based system (Seed, Series A, etc.) compares the user's spend-per-employee against industry peers, providing a percentile rank and "CFO-Grade" status.
-*   **Conversion**: A lead capture form connects the user's identity to the specific audit record for follow-up capital recovery in the Fluxora Marketplace.
-
----
-
-### 📊 Summary Table
-
-| Step | Component | Input | Output |
-| :--- | :--- | :--- | :--- |
-| **Ingestion** | `AuditForm` | User Clicks | Form Data |
-| **Sanitization** | **Zod** | Form Data | Validated JSON |
-| **Analysis** | **Audit Engine** | Validated JSON | Savings Logic |
-| **Intelligence** | **Gemini AI** | Raw Math | Executive Memo |
-| **Storage** | **PostgreSQL** | Audit Results | Shared Link (Slug) |
-| **Delivery** | **Dashboard** | Slug | Visual UI |
-
-**This pipeline ensures that Fluxora is both Mathematically Precise (Deterministic) and Human-Friendly (AI Summaries).**
-
-## 🚀 Future Scalability
-
-If we scale to 100k+ concurrent audits, our roadmap includes:
-1. **Redis Caching**: To prevent hitting the Postgres database for every public URL view.
-2. **Edge Runtimes**: Moving the audit engine to the Edge to minimize latency.
-3. **Plaid Integration**: Automating the "Ingestion" step by reading real transaction data from bank feeds.
+## 🚀 Scaling to 10k audits a day?
+If this thing goes viral, I'd have to change a few things:
+- **Redis:** I'd add a cache layer so I'm not hitting Postgres for every single public link view.
+- **Edge Runtimes:** Move the logic to the Edge to lower latency for users in different regions.
+- **Direct Auth:** Instead of manual input, I'd eventually need a **Plaid** or **Mercury** integration to just "read" the spend automatically.
