@@ -37,7 +37,7 @@ export default function AuditForm() {
       industry: "",
       fundingStage: "SEED",
       tools: [{ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
-    },
+    } as AuditFormInput,
   });
 
   // Extracting unique tool names for the dropdown
@@ -314,7 +314,7 @@ export default function AuditForm() {
 
           <button
             type="button"
-            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] })}
+            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] } as any)}
             className="w-full py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 hover:bg-secondary transition-all text-sm font-bold uppercase tracking-widest"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Tool to Stack
