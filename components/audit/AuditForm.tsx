@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
-import { AuditFormSchema, AuditFormInput } from "@/schemas/audit";
+import { AuditFormSchema, AuditFormInput, AuditToolInput } from "@/schemas/audit";
 import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { processAuditAction } from "@/app/actions/audit";
@@ -314,7 +314,7 @@ export default function AuditForm() {
 
           <button
             type="button"
-            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] } as any)}
+            onClick={() => append({ toolName: "", currentPlan: "", seats: 1, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] } as AuditToolInput)}
             className="w-full py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 hover:bg-secondary transition-all text-sm font-bold uppercase tracking-widest"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Tool to Stack
