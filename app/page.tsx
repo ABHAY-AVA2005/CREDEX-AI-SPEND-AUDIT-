@@ -15,17 +15,17 @@ import { FluxoraLogo } from "@/components/Logo";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-accent/30 selection:text-foreground">
+    <div className="min-h-screen bg-transparent text-foreground selection:bg-primary/20 relative">
       
       {/* Subtle glow at the top - dimmed for dark mode */}
       <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-accent/10 to-transparent z-0 pointer-events-none"></div>
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-2 sm:gap-4 group cursor-pointer">
             <FluxoraLogo className="w-8 h-8 sm:w-12 sm:h-12" />
-            <span className="font-stylish text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground transition-all group-hover:text-primary">Fluxora</span>
+            <span className="font-stylish text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground transition-all group-hover:text-primary">FLUXORA.</span>
           </div>
           
           <nav className="flex items-center gap-3 sm:gap-6">
@@ -39,6 +39,12 @@ export default function LandingPage() {
               Marketplace
             </a>
             <Link 
+              href="/consultation" 
+              className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
+            >
+              Strategy
+            </Link>
+            <Link 
               href="/audit" 
               className="px-3 py-1.5 sm:px-4 sm:py-2 bg-primary text-primary-foreground text-xs sm:text-sm font-medium rounded-xl sm:rounded-2xl hover:opacity-90 transition-all shadow-sm active:scale-95 whitespace-nowrap"
             >
@@ -49,7 +55,7 @@ export default function LandingPage() {
       </header>
 
       {/* Main Hero Section */}
-      <main className="flex-grow z-10">
+      <main className="flex-grow z-10 pt-16">
         <section className="relative pt-20 pb-32 md:pt-32 md:pb-40 overflow-hidden">
           
           {/* Abstract background blobs for a bit of premium depth */}
@@ -73,10 +79,10 @@ export default function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl sm:text-6xl md:text-8xl font-sans font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
+              className="text-5xl sm:text-6xl md:text-8xl font-stylish font-black tracking-tighter mb-8 text-foreground leading-[0.95]"
             >
               Paying for AI tools?<br />
-              <span className="text-primary font-stylish font-extrabold tracking-tight">Stop overpaying.</span>
+              <span className="text-primary font-stylish font-extrabold tracking-tight italic">Stop overpaying.</span>
             </motion.h1>
             
             {/* Subtext explaining the deterministic value prop */}
@@ -86,7 +92,7 @@ export default function LandingPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-6 md:mt-8 max-w-2xl text-base md:text-xl text-muted-foreground mx-auto mb-10 md:mb-12 leading-relaxed"
             >
-              Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. Fluxora uses deterministic math to recover up to 40% of your AI budget.
+              Identify unused licenses, overlapping tools, and excessive cloud spend in under 60 seconds. FLUXORA. uses deterministic math to recover up to 40% of your AI budget.
             </motion.p>
             
             {/* CTA Group */}
@@ -150,7 +156,7 @@ export default function LandingPage() {
         </section>
 
         {/* Social Proof Section */}
-        <section className="py-24 bg-secondary/20 border-y border-border">
+        <section className="py-24 bg-primary/5 backdrop-blur-sm border-y border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-stylish font-bold text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
@@ -196,7 +202,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-24 bg-background">
+        <section className="py-24 bg-transparent">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-stylish font-bold text-foreground tracking-tight text-center mb-16">Frequently Asked Questions</h2>
             <div className="space-y-8">
@@ -236,7 +242,7 @@ export default function LandingPage() {
         </section>
 
         {/* Final CTA Section */}
-        <section className="py-24 relative bg-card text-foreground overflow-hidden border-y border-border">
+        <section className="py-24 relative bg-transparent text-foreground overflow-hidden border-y border-border">
           {/* Subtle noise pattern overlay */}
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
           

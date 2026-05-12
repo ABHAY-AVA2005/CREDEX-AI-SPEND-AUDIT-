@@ -36,12 +36,15 @@ export default function DashboardPage() {
 
   // Loading state while we wait for hydration/session storage access
   if (!result) return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-muted-foreground bg-background">
-      <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mb-4"></div>
-      <p className="font-medium mb-6">Preparing your financial breakdown...</p>
-      <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
-        <ArrowLeft className="w-4 h-4" /> Back to Home
-      </Link>
+    <div className="min-h-screen bg-transparent flex flex-col p-8">
+            <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all group pr-4 border-r border-white/10">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
+            </Link>
+      <div className="flex-grow flex flex-col items-center justify-center text-muted-foreground">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mb-4 shadow-lg shadow-primary/20"></div>
+        <p className="font-black text-xs uppercase tracking-[0.2em] text-primary mb-6 animate-pulse">Preparing your financial breakdown...</p>
+      </div>
     </div>
   );
 

@@ -20,7 +20,7 @@ export async function generateAuditSummary(
   
   // High-quality fallback for when the API is down or the key is missing.
   // Never show the user a blank summary.
-  const fallbackSummary = `${companyName} is currently spending $${result.totalCurrentSpend.toLocaleString()}/mo on AI tools. Our deterministic audit identifies a path to reduce this to $${result.totalOptimizedSpend.toLocaleString()}/mo, recovering $${result.annualSavings.toLocaleString()} annually. We recommend consolidating overlapping capabilities and considering the Credex.rocks marketplace to liquidate any unused enterprise credits.`;
+  const fallbackSummary = `${companyName}'s AI stack is currently incurring $${result.totalCurrentSpend.toLocaleString()}/mo in operational expenditure. Our deterministic audit engine identifies a high-probability path to reduce this to $${result.totalOptimizedSpend.toLocaleString()}/mo, recovering approximately $${result.monthlySavings.toLocaleString()} in monthly liquidity. \n\nThis recovery is primarily driven by resolving functional overlap across your stack and liquidating redundant enterprise licenses. To capture this recovery potential, we recommend listing unused seats on the Credex.rocks marketplace and consolidating workflows into unified environments.`;
 
   if (!process.env.GEMINI_API_KEY) {
     console.warn("Soft-fail: GEMINI_API_KEY missing. Using fallback summary.");
@@ -29,17 +29,17 @@ export async function generateAuditSummary(
 
   try {
     const prompt = `
-      You are an expert AI SaaS financial auditor for Credex.rocks.
-      Analyze this audit data for ${companyName}:
+      You are an expert AI SaaS financial auditor for Fluxora.
+      Analyze this deterministic audit data for ${companyName}:
       - Current Spend: $${result.totalCurrentSpend}/mo
       - Optimized Spend: $${result.totalOptimizedSpend}/mo
       - Monthly Savings: $${result.monthlySavings}/mo
-      - Recommendations: ${result.recommendations.map(r => r.action + " " + r.originalTool).join(", ")}
+      - Recommendations: ${result.recommendations.map(r => `${r.action} ${r.originalTool} (Logic: ${r.reasoning})`).join(", ")}
       
-      Write a highly professional, 2-paragraph executive summary (80-120 words).
-      Paragraph 1: Summarize the wastage and the 'Aha!' moment.
-      Paragraph 2: Mention that they can resell unused credits on Credex.rocks to turn costs back into cash.
-      Tone: Professional, direct, and slightly urgent.
+      Write a highly transparent, 2-paragraph executive summary (80-120 words).
+      Paragraph 1: Be specific about the math. Explain exactly HOW the $${result.monthlySavings} in monthly savings was calculated (e.g., functional overlap or seat optimization). Use phrases like "Our deterministic logic identified..." or "Based on verified 2026 pricing data...".
+      Paragraph 2: Provide a clear path forward. Mention reselling unused credits on Credex.rocks to liquidate these specific assets.
+      Tone: Technical, transparent, and authoritative. Build trust by 'showing the work' in the summary.
     `;
 
     // Using gemini-2.0-flash for the fastest possible response time.

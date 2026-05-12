@@ -107,7 +107,7 @@ export default function AuditForm() {
   if (!isClient) return null;
 
   return (
-    <div className="bg-card border border-border shadow-lg rounded-xl p-6 md:p-10">
+    <div className="bg-card/40 backdrop-blur-md border border-border shadow-lg rounded-xl p-6 md:p-10">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
         
         {/* Honeypot for bot protection — hidden from humans */}
@@ -124,7 +124,7 @@ export default function AuditForm() {
         {/* ── Section 1: Company Profile ── */}
         <section className="space-y-6">
           <div>
-            <h2 className="text-2xl font-serif font-black tracking-tight text-foreground">1. Company Profile</h2>
+            <h2 className="text-2xl font-stylish font-black tracking-tight text-foreground">1. Company Profile</h2>
             <p className="text-muted-foreground text-sm">Basic details about your organization.</p>
           </div>
 
@@ -175,7 +175,7 @@ export default function AuditForm() {
         <section className="space-y-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-serif font-black tracking-tight text-foreground">2. AI & SaaS Stack</h2>
+              <h2 className="text-2xl font-stylish font-black tracking-tight text-foreground">2. AI & SaaS Stack</h2>
               <p className="text-muted-foreground text-sm">Add the tools your team uses daily.</p>
             </div>
           </div>

@@ -131,7 +131,7 @@
     height: 100%;
   }
   body {
-    @apply text-foreground min-h-screen relative overflow-x-hidden bg-transparent font-sans antialiased;
+    @apply text-foreground min-h-screen relative overflow-x-hidden bg-transparent font-sans antialiased cursor-default;
     width: 100%;
   }
   
@@ -167,7 +167,7 @@
     bottom: -50%;
     width: 200%;
     height: 200%;
-    z-index: -1;
+    z-index: 0;
     background-image: 
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);

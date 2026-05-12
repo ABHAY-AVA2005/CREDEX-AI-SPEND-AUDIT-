@@ -40,10 +40,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            <div className="flex-grow">
+          <div className="min-h-screen bg-transparent text-foreground selection:bg-primary/20 relative">
+            <main className="flex-grow relative">
               {children}
-            </div>
+            </main>
             <Footer />
           </div>
         </ThemeProvider>

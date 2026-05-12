@@ -6,7 +6,7 @@ import { FluxoraLogo } from "@/components/Logo";
 
 export default function AuditPage() {
   return (
-    <div className="min-h-screen bg-background/50 text-foreground selection:bg-primary/20">
+    <div className="min-h-screen bg-transparent text-foreground selection:bg-primary/20">
       
       {/* Global Header — Pins the 'Back' button to the far left for consistent navigation */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">

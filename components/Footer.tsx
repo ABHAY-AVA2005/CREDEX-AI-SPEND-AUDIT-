@@ -3,13 +3,13 @@ import { FluxoraLogo } from "@/components/Logo";
 
 export function Footer() {
   return (
-    <footer className="w-full py-12 border-t border-border bg-card/30 backdrop-blur-sm">
+    <footer className="w-full py-12 border-t border-border bg-transparent backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           <div className="space-y-4 text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center gap-4">
               <FluxoraLogo className="w-10 h-10 md:w-12 md:h-12" />
-              <span className="font-stylish text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">Fluxora</span>
+              <span className="font-stylish text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">FLUXORA.</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
               The deterministic AI spend auditor for high-growth startups. Built to uncover waste and reclaim capital.
@@ -33,7 +33,7 @@ export function Footer() {
  
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold text-center md:text-left">
-            © 2026 Fluxora Audit Engine. All rights reserved.
+            © 2026 FLUXORA. Audit Engine. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="https://credex.rocks" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold hover:text-foreground transition-colors flex items-center gap-1">

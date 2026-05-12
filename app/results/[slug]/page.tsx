@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | Fluxora`;
+  const title = `AI Spend Audit — Save $${savings.toLocaleString()}/yr | FLUXORA.`;
   const description = `See exactly where ${company} is overspending on AI tools and how to recover $${savings.toLocaleString()} annually.`;
 
   return {

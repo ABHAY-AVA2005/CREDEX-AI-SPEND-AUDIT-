@@ -23,6 +23,7 @@ export interface ProcessedAuditResult extends AuditResult {
   aiSummary: string;
   publicSlug: string;
   companyName: string;
+  industry?: string;
   isPersisted?: boolean;
   dbError?: string;
 }
@@ -106,6 +107,7 @@ export async function processAuditAction(data: AuditFormInput): Promise<Processe
     aiSummary,
     publicSlug,
     companyName: parsed.data.companyName,
+    industry: parsed.data.industry,
     isPersisted,
     dbError: dbErrorMsg || undefined,
   };
