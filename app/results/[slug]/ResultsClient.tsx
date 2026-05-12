@@ -12,7 +12,6 @@ import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
 import { AuditRecommendation } from "@/schemas/audit";
 import { ProcessedAuditResult } from "@/app/actions/audit";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 
 

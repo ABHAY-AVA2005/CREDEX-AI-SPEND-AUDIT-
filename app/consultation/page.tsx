@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Calendar, Shield, Zap, ArrowRight, CheckCircle2, 
-  MessageSquare, User, Building, Mail
+  MessageSquare, User, Building, Mail, ArrowLeft
 } from "lucide-react";
 import Link from "next/link";
 import { FluxoraLogo } from "@/components/Logo";
