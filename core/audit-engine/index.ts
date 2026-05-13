@@ -85,14 +85,17 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       }
     }
 
-    // Rule 2: Cursor vs. Copilot
+    // Rule 2: Cursor vs. Copilot (Coding tool consolidation)
     else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
       const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor"));
-      if (hasCursor) {
+      // Also check if we already recommended Cursor in this run
+      const alreadyRecommendedCursor = recommendations.some(r => r.suggestedTool === "Cursor");
+
+      if (hasCursor || alreadyRecommendedCursor) {
         action = "CONSOLIDATE";
         newCost = 0;
         suggestedTotalCost = 0;
-        reasoning = `Cursor natively includes Claude 3.5. Keeping Github Copilot is redundant.`;
+        reasoning = `Cursor natively includes Claude 3.5 and specialized coding models. Keeping ${tool.toolName} is redundant.`;
       } else {
         const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
         action = "REPLACE";
@@ -106,13 +109,28 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     }
 
     // Rule 3: API Gateway vs. Seats (Ryan Das Insight)
-    else if (tool.type === "SEAT" && tool.seats >= 5 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
-      action = "REPLACE";
-      suggestedTool = "API Gateway (TypingMind)";
-      suggestedPlan = "Usage-based (BYOK)";
-      newCost = currentCost * 0.4;
-      suggestedTotalCost = newCost;
-      reasoning = `For teams of ${tool.seats}+, paying per-seat is a waste. An API Gateway saves like 60% and stops billing spikes.`;
+    else if (tool.seats >= 10 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
+      // Check if they are on a Pro/Plus plan (consumer)
+      if (tool.currentPlan.toLowerCase().includes("plus") || tool.currentPlan.toLowerCase().includes("pro") || tool.currentPlan.toLowerCase().includes("team")) {
+        action = "REPLACE";
+        suggestedTool = "API Gateway (TypingMind)";
+        suggestedPlan = "Team / API based (BYOK)";
+        newCost = currentCost * 0.4; // 60% savings
+        suggestedTotalCost = newCost;
+        reasoning = `For teams of ${tool.seats}+, paying per-seat for consumer-grade AI is inefficient. An API Gateway with BYOK saves ~60% and provides better management.`;
+      }
+    }
+    
+    // Extra Check: Consolidate standalone Claude if they have Cursor
+    else if (toolNameLower.includes("claude")) {
+      const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor")) || 
+                        recommendations.some(r => r.suggestedTool === "Cursor");
+      if (hasCursor) {
+        action = "CONSOLIDATE";
+        newCost = 0;
+        suggestedTotalCost = 0;
+        reasoning = "You are using Cursor, which already provides access to Claude 3.5 Sonnet. This standalone subscription is redundant.";
+      }
     }
 
     // Rule 4: The Secondary Market Loop (The Credex play)
