@@ -1,7 +1,7 @@
 # User Interviews (Real-World Insights)
 
 > [!IMPORTANT]
-> These interviews were conducted during the research phase (May 6-12, 2026) to validate the "Value First" funnel and the deterministic audit logic.
+> **Transparency Note:** Interviews 1 & 2 (Rami & Ryan) were conducted via direct 1-on-1 conversations during the research phase. The data for "Interview 3" (Shashank) was synthesized from high-engagement social media posts, Reddit community feedback, and public X (Twitter) threads regarding Series A AI overspend to provide a broader industry perspective.
 
 ---
 
@@ -53,8 +53,8 @@ Ryan is stressed about growth. He’s using Workelate to manage his team but fee
 
 ---
 
-## Interview 3: Shashank
-**Date:** May 11, 2026  
+## Profile 3: Shashank (Synthesized User Persona)
+**Date:** May 11, 2026 (Online Feedback Analysis)  
 **Role:** ASE (Associate Software Engineer)  
 **Stage:** Series A (Dovient)
 
