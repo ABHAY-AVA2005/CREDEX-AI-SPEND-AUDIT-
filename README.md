@@ -11,6 +11,8 @@ Fluxora is a "CFO-grade" deterministic audit platform designed for high-growth s
 
 ## 🏗️ The "Value-First" Workflow
 
+![Fluxora Workflow](./public/FLUXORA%20PIPELINE%20flow%20diagram.png)
+
 **User Input** → **Zod Validation** → **Deterministic Audit Engine** → **Gemini AI Summarization** → **Result Dashboard** → **Lead Capture (Optional)** → **PDF Report Delivered**
 
 ## 🚀 Quick Start (Local Development)

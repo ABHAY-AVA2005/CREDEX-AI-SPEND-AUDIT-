@@ -7,6 +7,14 @@ I went with a pretty standard but "modern" stack to move fast:
 3. **Tailwind CSS:** No templates here. Hand-coded everything to get that "CFO Blueprint" look. It’s much lighter and easier to customize.
 
 ## 🏗️ High-Level Flow
+
+![Fluxora Pipeline Flow](./public/FLUXORA%20PIPELINE%20flow%20diagram.png)
+*Visual representation of the data lifecycle from ingestion to executive summary.*
+
+### 🛠️ Core Components
+![Fluxora Component Architecture](./public/FLUXORA%20PIPELINE%20components%20diagram.png)
+*Detailed breakdown of the deterministic engine and persistence layer.*
+
 ```mermaid
 graph TD
     A[User Form] -->|Zod Check| B(Audit Engine)
