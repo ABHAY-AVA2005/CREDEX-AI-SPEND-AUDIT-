@@ -4,7 +4,7 @@
 > **Quick Start: Run all tests in 1 second**
 > 1. Open your terminal in the project root.
 > 2. Run: `npm test`
-> 3. Verify that you see `5 passed` in the output.
+> 3. Verify that you see `7 passed` in the output.
 
 ## Overview
 All automated tests are located in the `core/audit-engine/` directory and cover the deterministic recommendation engine logic. Tests verify financial calculations, edge cases, and multi-tool scenarios.
@@ -56,7 +56,7 @@ All automated tests are located in the `core/audit-engine/` directory and cover 
 **What it covers:** For teams with 10+ seats on consumer plans (ChatGPT Plus, Claude Pro), the engine recommends switching to Team plans or direct API access for 40-60% savings.
 - **Input:** 20 seats of ChatGPT Plus at $400/mo
 - **Expected Output:** REPLACE action, suggested plan = Team / API, new cost ~$240/mo (40% savings)
-- **Why:** Consumer plans scale expensively; bulk Team plans are much cheaper per user
+- **Why:** Consumer plans scale expensively; bulk Team plans or API-based access with token management are much cheaper per user
 - **Edge case tested:** Seat count threshold logic (10 is the trigger) and per-user cost recalculation
 
 ---
@@ -202,7 +202,7 @@ While the unit tests cover the math, the **Persistence Layer** is verified via t
 
 The 7 tests cover:
 - ✅ **Recommendation Types:** REPLACE (3 tests), CONSOLIDATE (2 tests), KEEP (2 tests), DOWNGRADE (1 test)
-- ✅ **Financial Calculations:** Accurate savings calculations for single and multi-seat scenarios
+- ✅ **Financial Calculations:** Accurate savings calculations for single-seat, multi-seat, and usage-based token scenarios
 - ✅ **Rule Priority:** Correct rule ordering when multiple rules could apply
 - ✅ **Edge Cases:** Minimum/maximum seat counts, team size thresholds, tool overlap detection
 - ✅ **Database Persistence:** (Tested manually; not in unit tests — see CI workflow for integration)

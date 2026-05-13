@@ -28,7 +28,7 @@ I use **Zod** as a "Bouncer" at the front door.
 - **Good Errors:** It lets me show "Please enter a valid number" instantly without a round-trip.
 
 ## 🏗️ The Audit Pipeline: Step-by-Step
-1. **Ingestion:** User hits the form. Zod cleans it.
+1. **Ingestion:** User hits the form. Zod cleans it. We capture seats for subscriptions and monthly token estimates (in thousands) for API-based tools.
 2. **The Logic:** The **Audit Engine** (my "Brain") checks for **Redundancy**. Like if you have 3 different LLM tools, it flags them.
 3. **Math:** We compare your spend against 2026 retail prices in our `knowledge.ts` file. 
 4. **Persistence:** We save everything to **Postgres (via Prisma)** and generate a unique `nanoid` slug for the public link.

@@ -5,7 +5,7 @@ Fluxora is a "CFO-grade" deterministic audit platform designed for high-growth s
 ## 🌟 Key Features
 - **Category-Based Redundancy Detection:** Automatically flags overlapping tool subscriptions (e.g., Cursor + Copilot) to eliminate wastage.
 - **Stage-Based Peer Benchmarking:** Compare your AI spend-per-employee against industry averages for Pre-Seed, Seed, and Series A teams.
-- **Seat vs. API Tracking:** Distinct monitoring for per-seat licenses and usage-based API spend to catch unexpected cost spikes.
+- **Seat vs. API Tracking:** Distinct monitoring for per-seat licenses and usage-based API spend (token-level tracking) to catch unexpected cost spikes.
 - **Deterministic Audit Engine:** Hardcoded math based on verified 2026 pricing registry data.
 - **CFO-Ready PDF Reports:** Generate professional financial memos with shareable, anonymous URLs.
 
@@ -43,7 +43,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### 2. Multi-Step Intelligence Audit
 ![Audit Form](./public/audit%20screenshot%201.png)
-*Interactive tool intake with dynamic Seat vs. API tracking and functional overlap detection.*
+*Interactive tool intake with dynamic Seat vs. API tracking (including monthly token estimates) and functional overlap detection.*
 
 ### 3. Executive Recovery Roadmap
 ![Audit Results](./public/audit%20screenshot%202.png)
