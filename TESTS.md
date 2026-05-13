@@ -118,6 +118,12 @@ In your terminal, run the following command:
 npm test
 ```
 
+### Step 3: Full Validation (Lint + Test)
+To ensure the entire project is clean and error-free:
+```bash
+npm run validate
+```
+
 ---
 
 ## 🛠️ Troubleshooting: "Script Execution Disabled" (Windows)
