@@ -372,7 +372,7 @@ function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
       </h3>
       <p className="text-muted-foreground mb-6 max-w-2xl mx-auto leading-relaxed">
         Our deterministic engine identified <strong className="text-foreground">${result.annualSavings.toLocaleString()}</strong> in annual wastage. 
-        The most efficient path to recovery is liquidating these unused seats via the <strong className="text-primary">Credex.rocks Marketplace</strong>.
+        We recommend scheduling a tailored strategy session to renegotiate contracts, eliminate licenses, and direct vendor savings.
       </p>
       <Link 
         href="/consultation" 

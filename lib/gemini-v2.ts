@@ -59,7 +59,7 @@ export async function generateAuditSummaryV2(
     
     Write 2 tight paragraphs (100–150 words total):
     Paragraph 1: Summarise the waste precisely. Reference exact dollar amounts and ${revenueEnrichment ? "MRR/ARR percentages" : "peer benchmark"}.
-    Paragraph 2: Concrete next steps — consolidation, liquidating redundant licences on Credex.rocks.
+    Paragraph 2: Concrete next steps — consolidation, direct contract renegotiation, and vendor cost optimization.
     
     Tone: Technical, transparent, no fluff. Start sentences with "Our data shows…" or "The engine identified…".
   `;
@@ -90,7 +90,7 @@ function buildFallback(
     `Our deterministic engine has identified a path to $${result.totalOptimizedSpend.toLocaleString()}/mo, ` +
     `recovering $${result.monthlySavings.toLocaleString()}/mo ($${result.annualSavings.toLocaleString()}/yr).${revLine}\n\n` +
     `The primary driver is functional overlap across the tool stack. ` +
-    `We recommend consolidating redundant licences and listing unused seats on the Credex.rocks marketplace ` +
-    `to capture immediate liquidity.`
+    `We recommend consolidating redundant licences and renegotiating custom contract volume discounts ` +
+    `to capture immediate savings.`
   );
 }
