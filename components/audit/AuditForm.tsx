@@ -61,31 +61,10 @@ export default function AuditForm() {
     name: "tools",
   });
 
-  // Load from localStorage on mount. 
   // We use isClient to avoid hydration mismatch in Next.js.
   useEffect(() => {
     setIsClient(true);
-    const saved = localStorage.getItem(FORM_STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        form.reset(parsed);
-      } catch (e) {
-        // If it's corrupted, just let it be.
-        console.error("Soft-fail: Failed to parse saved form draft", e);
-      }
-    }
-  }, [form]);
-
-  // Save to localStorage every time the user types. 
-  // Safety first!
-  useEffect(() => {
-    if (!isClient) return;
-    const subscription = form.watch((value) => {
-      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [form, isClient]);
+  }, []);
 
   // Anti-spam honeypot. Keep it simple and effective.
   const [honeypot, setHoneypot] = useState("");
