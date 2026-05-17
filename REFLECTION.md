@@ -19,7 +19,7 @@ Mid-week, I had a functional prototype and I was obsessed with "Lead Gen." I imp
 ## 3. What I would build in Week 2: The "1-Click Liquidate"
 If I had another seven days, I would transform Fluxora from a "Diagnostic Tool" into an "Execution Engine." Currently, we tell you that you're overspending, but we don't fix it for you. 
 
-**Automated Liquidation:** I would build a "Liquidate with 1-Click" button. This would integrate directly with the **Credex Marketplace API**. When our engine identifies a $2,000 redundancy in OpenAI credits, the user could hit one button to automatically list those credits for resale on Credex. This turns a "Report" into "Actual Cash" in under 10 seconds.
+**Automated Liquidation:** I would build a "Liquidate with 1-Click" button. This would integrate directly with partner billing APIs. When our engine identifies a $2,000 redundancy in OpenAI credits, the user could hit one button to automatically request direct tier downgrades or credit refunds. This turns a "Report" into "Actual Cash" in under 10 seconds.
 
 **Mercury/Ramp Integration:** I would also move away from manual input. I’d implement a read-only connection to the user's corporate cards (via Plaid or Mercury). Instead of asking the user to type in their tools, I’d just read their transaction history and flag "Ghost Seats"—subscriptions that are being paid for but have zero activity in the company's Slack or GitHub logs. This would move Fluxora from a "once-a-quarter" utility to a "real-time" financial OS for the AI-native company.
 
@@ -37,7 +37,7 @@ My usage of AI this week was a highly structured collaboration. I used two prima
 - **Code Quality (8/10):** The use of Zod for "Fail-Fast" validation and the move to Next.js Server Actions ensures a highly secure, modern, and type-safe codebase, though I’d like to refactor some of the Tailwind "spaghetti" in the results page.
 - **Design Sense (9/10):** I'm extremely proud of the "Midnight Blueprint" look. It’s not just a "Dark Mode"—it’s a specific, desaturated aesthetic that feels like a tool for engineers and CFOs, distinguishin it from generic SaaS.
 - **Problem Solving (10/10):** Navigating the Prisma 7 regression while maintaining a feature-complete build for the deadline was a high-pressure win that required both technical and strategic thinking.
-- **Entrepreneurial Thinking (10/10):** I focused purely on the "Value-First" loop. Every feature, from the benchmarking to the marketplace CTAs, is designed to lead the user toward a high-conversion financial event.
+- **Entrepreneurial Thinking (10/10):** I focused purely on the "Value-First" loop. Every feature, from the benchmarking to the consultation booking, is designed to lead the user toward a high-conversion financial event.
 
 ## 6. The v2 Re-architecting: CFO Sliders & Dynamic Weights
 

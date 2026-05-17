@@ -88,4 +88,3 @@ Open [http://localhost:3000](http://localhost:3000).
 ## 🔗 Links
 - **GitHub:** [https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-)
 - **Deployed URL:** [https://fluxora-credex-ai-spend-audit-tool.vercel.app/](https://fluxora-credex-ai-spend-audit-tool.vercel.app/)
-- **Marketplace:** [https://credex.rocks](https://credex.rocks)

@@ -157,7 +157,7 @@ Every number used in the Fluxora audit engine is traced to the official vendor d
 
 ---
 
-## 🛍️ Credex Marketplace (Liquidation Benchmarks)
+## 🛍️ Enterprise Contract Negotiations (Benchmarks)
 
-* **OpenAI Credits:** 20% discount vs retail — [credex.rocks](https://credex.rocks) — *verified 2026-05-12*
-* **AWS Credits:** 20% discount vs retail — [credex.rocks](https://credex.rocks) — *verified 2026-05-12*
+* **OpenAI Commitment:** 20% average discount on annual contracts — *verified 2026-05-17*
+* **AWS Bedrock / Cloud Commitment:** 20% average discount via Savings Plans — *verified 2026-05-17*

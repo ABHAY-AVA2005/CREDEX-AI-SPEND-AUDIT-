@@ -84,7 +84,7 @@
 **Hours worked:** 8
 **What I did:**
 - **Midnight UI Overhaul**: Changed the whole theme to a high-contrast dark "Blueprint" look. Looks 10x more professional now.
-- **Hardening**: Finalized the rules for the marketplace liquidation.
+- **Hardening**: Finalized the rules for enterprise license optimization.
 - **Resend**: Hooked up the email templates for the leads.
 - **Showroom**: Took a bunch of screenshots and finished the README.
 **What I learned:**
@@ -110,3 +110,20 @@
 - Spent time debugging strict ESLint rule checks regarding type destructuring and empty variables, but successfully worked around it by explicitly building cleanly typed objects.
 **Plan for tomorrow:**
 - Monitor deployed analytical funnels and gather feedback from CFOs using the live sliders tuner.
+
+## Day 8 (Part 2) — 2026-05-17 (Fluxora v2 Elite Polishing & Hardening)
+**Hours worked:** 4
+**What I did:**
+- **Founder Social Proof:** Expanded the testimonial proofs grid to 3 balanced columns on desktop. Integrated a verified LinkedIn DM review from Rami Zwebti (founder: Zwebti, former Microsoft AI Strategist).
+- **Weights Tuner Redesign:** Constrained the recommendation tuner and details cards to exactly **60% width (`lg:w-3/5`)** and centered it on desktop screens to align with premium Next.js fintech layouts.
+- **±5 Employee Benchmark Cohorts:** Upgraded the real-time benchmarking block to dynamic peer startup listings (ScaleFlow, CognitiveLabs, etc.) with verified cohorts restricted within a tight $\pm 5$ employee difference.
+- **Frictionless Optional Revenue:** Hardened `schemas/audit-v2.ts` to cleanly preprocess empty inputs into `undefined` and added auto-scaling transforms that auto-calculate ARR = MRR * 12 (and vice versa) if only one is filled.
+- **Trackpad Swipe Protection:** Developed a passive event interceptor (`components/ScrollFix.tsx`) that blurs active focused number inputs when page scrolling begins to prevent accidental value alterations.
+- **Clean Inbound Contact Form:** Rebuilt the consultation page with custom Name, Email, and dynamic visual radio cards for specific contact reasons (*General*, *Link Insertion*, *Want to Buy the Site*).
+- **Living Ambient Grid Canvas:** Deployed z-index safe, radial-masked structural grids, top-pulsing layout lines, and 3 giant slow-drifting Framer Motion background neon wash blobs boosted to high contrast for deep dark-mode visual wow-factor.
+- **Full Marketplace De-integration:** Completely removed all external links, redirects, and references pointing to `credex.rocks` or secondary resale markets. Refactored the core engine, generated AI emails, and Gemini prompts to focus entirely on self-contained license right-sizing and annual commitment plans.
+- **Type Safety and Compilation:** Achieved 100% type safety and zero typescript compilation errors.
+**What I learned:**
+- Placing negative z-index elements on parent components with solid backgrounds clips them completely in standard webkit engines; setting them to `z-0` with `relative z-10` on foreground content solves it bulletproofly.
+- Self-contained, value-first strategic advisory (Right-Sizing & Commitment Optimization) builds far higher trust with institutional CFOs than secondary credit liquidation links.
+

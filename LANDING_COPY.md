@@ -18,10 +18,10 @@ Nope. The math is 100% deterministic code. We only use AI to write the summary l
 Yeah. We don't ask for your bank account or Stripe login. You just tell us what you're using, and we compare it against our pricing database. You keep your data, we just give you the report.
 
 **3. What do I get at the end?**
-A link you can send to your CFO that makes you look like a genius. Plus a PDF report and a path to sell any unused credits on the Credex marketplace if you have a massive surplus.
+A link you can send to your CFO that makes you look like a genius. Plus a PDF report and a detailed optimization roadmap to consolidate your active license contracts.
 
 **4. How do you actually find savings?**
 We look for "Redundancy." If you're paying for Cursor (which has Claude built-in) and also paying for Claude Pro for the same dev... that's a waste. We flag that stuff immediately.
 
 **5. Is it really free?**
-The audit is 100% free. We make money if you decide to buy or sell credits on our partner marketplace later. No catch.
+The audit is 100% free. We make money if you decide to book a specialized consultation or contract negotiation strategy with us later. No catch.
