@@ -426,6 +426,22 @@ export default function ResultsClient({
 }) {
   const [result, setResult] = useState<ProcessedAuditResult | null>(serverResult);
   const [isRecovering, setIsRecovering] = useState(!serverResult);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      if (isDownloadOpen) {
+        setIsDownloadOpen(false);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [isDownloadOpen]);
+
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDownloadOpen(!isDownloadOpen);
+  };
 
   useEffect(() => {
     if (!serverResult) {
@@ -590,18 +606,37 @@ export default function ResultsClient({
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button 
-              onClick={() => window.print()} 
-              className="flex items-center gap-2 px-8 py-4 bg-secondary/50 backdrop-blur-md border border-white/10 text-foreground font-black rounded-2xl hover:bg-white/10 transition-all active:scale-95 group shadow-xl"
-            >
-              <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform text-primary" /> Download PDF Audit
-            </button>
-            <button 
-              onClick={downloadCSV} 
-              className="flex items-center gap-2 px-8 py-4 bg-secondary/50 backdrop-blur-md border border-white/10 text-foreground font-black rounded-2xl hover:bg-white/10 transition-all active:scale-95 group shadow-xl"
-            >
-              <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform text-primary" /> Download CSV Audit
-            </button>
+            <div className="relative">
+              <button 
+                onClick={toggleDropdown}
+                className="flex items-center gap-2 px-8 py-4 bg-secondary/50 backdrop-blur-md border border-white/10 text-foreground font-black rounded-2xl hover:bg-white/10 transition-all active:scale-95 group shadow-xl"
+              >
+                <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform text-primary" /> Download Audit
+              </button>
+
+              {isDownloadOpen && (
+                <div className="absolute right-0 left-0 sm:left-auto sm:w-56 mt-2 origin-top-right bg-card/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <button
+                    onClick={() => {
+                      window.print();
+                      setIsDownloadOpen(false);
+                    }}
+                    className="w-full text-left px-5 py-3 text-sm text-foreground hover:bg-primary/15 transition-colors flex items-center gap-3 font-semibold"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-primary" /> PDF Format
+                  </button>
+                  <button
+                    onClick={() => {
+                      downloadCSV();
+                      setIsDownloadOpen(false);
+                    }}
+                    className="w-full text-left px-5 py-3 text-sm text-foreground hover:bg-primary/15 transition-colors flex items-center gap-3 font-semibold border-t border-white/5"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" /> CSV Spreadsheet
+                  </button>
+                </div>
+              )}
+            </div>
             <Link 
               href="/consultation" 
               className="flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-black rounded-2xl hover:opacity-90 transition-all shadow-2xl shadow-primary/20 active:scale-95 group"
