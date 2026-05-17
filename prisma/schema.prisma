@@ -1,3 +1,7 @@
+// prisma/schema.prisma — v2
+// Updated to include revenue context fields.
+// All new fields are optional — backward compatible with existing data.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,14 +16,28 @@ model Audit {
   companyName    String?
   companySize    Int
   industry       String?
+  fundingStage   String?     // NEW: PRE_SEED | SEED | SERIES_A | SERIES_B | LATE_STAGE
   totalSpend     Float
   optimizedSpend Float
   savings        Float
   currency       String      @default("USD")
+
+  // Revenue context — optional enrichment layer
+  mrr                    Float?  // NEW
+  arr                    Float?  // NEW
+  growthRateMoM          Float?  // NEW: e.g. 0.15 = 15% MoM
+  runwayMonths           Int?    // NEW
+  burnEfficiencyScore    Float?  // NEW: vs industry median
+  aiSpendAsMrrPercent    Float?  // NEW
+  savingsAsMrrPercent    Float?  // NEW
+
+  // Recommendation weights used for this audit (stored as JSON)
+  recommendationWeights  Json?   // NEW: { costSavings, lowMigrationRisk, ... }
+
   aiSummary      String?
   isPublic       Boolean     @default(false)
   publicSlug     String?     @unique
-  referralCode   String?     // Track the source
+  referralCode   String?
   leadId         String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
@@ -40,6 +58,11 @@ model AuditTool {
   suggestedPlan  String?
   suggestedSpend Float?
   reasoning      String?
+
+  // Weighted scoring — NEW
+  compositeScore Float?   // Composite weight score 0–10
+  scoreBreakdown Json?    // { costSavingsScore, migrationRiskScore, ... }
+
   audit          Audit    @relation(fields: [auditId], references: [id], onDelete: Cascade)
 }
 

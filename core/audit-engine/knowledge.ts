@@ -73,3 +73,6 @@ export const KNOWN_TOOLS: KnownTool[] = [
   { name: "Gemini API", plan: "1.5 Pro", costPerSeat: 0, capabilities: ["CHAT", "CODE"], isEnterprise: false },
   { name: "Gemini API", plan: "1.5 Flash", costPerSeat: 0, capabilities: ["CHAT", "CODE"], isEnterprise: false },
 ];
+
+import { EXTENDED_TOOLS } from "./knowledge-extended";
+export const ALL_KNOWN_TOOLS = [...KNOWN_TOOLS, ...EXTENDED_TOOLS];

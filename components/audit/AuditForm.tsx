@@ -13,10 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
-import { AuditFormSchema, AuditFormInput, AuditToolInput } from "@/schemas/audit";
-import { KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
+import { AuditToolInput } from "@/schemas/audit";
+import { ALL_KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
 import { useRouter, useSearchParams } from "next/navigation";
-import { processAuditAction } from "@/app/actions/audit";
+import { AuditFormSchemaV2, AuditFormInputV2 } from "@/schemas/audit-v2";
+import { processAuditActionV2 } from "@/app/actions/audit-v2";
+import RevenueContextStep from "./RevenueContextStep";
 
 // We store the draft in localStorage so founders don't lose their 
 // progress if they accidentally close the tab while looking up pricing.
@@ -29,29 +31,34 @@ export default function AuditForm() {
   const searchParams = useSearchParams();
   const referralCode = searchParams.get("ref");
   
-  const TOOL_CONFIG: Record<string, string[]> = {
-    "Cursor": ["Hobby", "Pro", "Business", "Enterprise"],
-    "GitHub Copilot": ["Individual", "Business", "Enterprise"],
-    "Claude": ["Free", "Pro", "Max", "Team", "Enterprise", "API direct"],
-    "ChatGPT": ["Plus", "Team", "Enterprise", "API direct"],
-    "Anthropic API direct": ["Usage-based"],
-    "OpenAI API direct": ["Usage-based"],
-    "Gemini": ["Pro", "Ultra", "API"],
-    "Windsurf": ["Hobby", "Pro", "Enterprise"],
-    "v0": ["Free", "Pro", "Enterprise"],
-  };
+  // Dynamically build TOOL_CONFIG based on our unified tool registry
+  const TOOL_CONFIG = React.useMemo(() => {
+    const config: Record<string, string[]> = {};
+    ALL_KNOWN_TOOLS.forEach(tool => {
+      if (!config[tool.name]) {
+        config[tool.name] = [];
+      }
+      if (!config[tool.name].includes(tool.plan)) {
+        config[tool.name].push(tool.plan);
+      }
+    });
+    return config;
+  }, []);
 
   // Extracting unique tool names for the dropdown
-  const uniqueTools = Object.keys(TOOL_CONFIG);
+  const uniqueTools = React.useMemo(() => {
+    return Object.keys(TOOL_CONFIG).sort();
+  }, [TOOL_CONFIG]);
 
   // Standard form setup with Zod validation
-  const form = useForm<AuditFormInput>({
-    resolver: zodResolver(AuditFormSchema),
+  const form = useForm<AuditFormInputV2>({
+    resolver: zodResolver(AuditFormSchemaV2),
     defaultValues: {
       companyName: "",
       companySize: 0,
       industry: "",
       tools: [{ toolName: "", currentPlan: "", seats: 0, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
+      revenueContext: { mrr: 0, arr: 0 },
     },
   } as any);
 
@@ -69,7 +76,7 @@ export default function AuditForm() {
   // Anti-spam honeypot. Keep it simple and effective.
   const [honeypot, setHoneypot] = useState("");
 
-  const onSubmit = async (data: AuditFormInput) => {
+  const onSubmit = async (data: AuditFormInputV2) => {
     if (honeypot) { 
       // Silently redirect bots to the dashboard without hitting the engine
       router.push('/dashboard');
@@ -81,7 +88,7 @@ export default function AuditForm() {
       if (referralCode) {
         sessionStorage.setItem("referral_code", referralCode);
       }
-      const results = await processAuditAction({
+      const results = await processAuditActionV2({
         ...data,
         referralCode: referralCode || undefined
       });
@@ -172,6 +179,9 @@ export default function AuditForm() {
           </div>
         </section>
 
+        {/* ── Optional Revenue Context (Feature 1) ── */}
+        <RevenueContextStep form={form} />
+
         {/* ── Section 2: AI Stack ── */}
         <section className="space-y-8">
           <div className="flex items-center justify-between">
@@ -234,7 +244,7 @@ export default function AuditForm() {
                       <option value="">Select plan...</option>
                       {(TOOL_CONFIG[form.watch(`tools.${index}.toolName`)] || []).map(plan => {
                         const toolName = form.watch(`tools.${index}.toolName`);
-                        const toolInfo = KNOWN_TOOLS.find(t => t.name === toolName && t.plan === plan);
+                        const toolInfo = ALL_KNOWN_TOOLS.find(t => t.name === toolName && t.plan === plan);
                         const priceLabel = toolInfo ? ` ($${toolInfo.costPerSeat}/mo)` : "";
                         return (
                           <option key={plan} value={plan}>{plan}{priceLabel}</option>

@@ -12,6 +12,11 @@ import Link from "next/link";
 import { captureLeadEmail } from "@/app/actions/audit";
 import { AuditRecommendation } from "@/schemas/audit";
 import { ProcessedAuditResult } from "@/app/actions/audit";
+import { ProcessedAuditResultV2 } from "@/app/actions/audit-v2";
+import WeightsTuner from "@/components/audit/WeightsTuner";
+import RevenueInsightCard from "@/components/results/RevenueInsightCard";
+import { applyWeightsAndRank } from "@/core/recommendation-weights";
+import type { RecommendationWeights } from "@/core/recommendation-weights";
 
 
 
@@ -420,13 +425,16 @@ export default function ResultsClient({
   result: serverResult, 
   hasDbConfig 
 }: { 
-  result: ProcessedAuditResult | null; 
+  result: ProcessedAuditResultV2 | null; 
   isShared?: boolean;
   hasDbConfig?: boolean;
 }) {
-  const [result, setResult] = useState<ProcessedAuditResult | null>(serverResult);
+  const [result, setResult] = useState<ProcessedAuditResultV2 | null>(serverResult);
   const [isRecovering, setIsRecovering] = useState(!serverResult);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [displayedRecs, setDisplayedRecs] = useState<AuditRecommendation[]>(
+    serverResult?.weightedRecommendations?.map(r => r.recommendation) || serverResult?.recommendations || []
+  );
 
   useEffect(() => {
     const handleOutsideClick = () => {
@@ -451,13 +459,27 @@ export default function ResultsClient({
         try {
           const parsed = JSON.parse(saved);
           setResult({ ...parsed, isPersisted: parsed.isPersisted ?? false });
+          setDisplayedRecs(
+            parsed.weightedRecommendations?.map(
+              (r: { recommendation: AuditRecommendation }) => r.recommendation
+            ) || parsed.recommendations || []
+          );
         } catch (e) {
           console.error("Local recovery failed:", e);
         }
       }
       setIsRecovering(false);
+    } else {
+      setDisplayedRecs(serverResult.weightedRecommendations?.map(r => r.recommendation) || serverResult.recommendations || []);
     }
   }, [serverResult]);
+
+  const handleWeightsChange = (weights: RecommendationWeights) => {
+    if (!result) return;
+    const maxSavings = Math.max(...result.recommendations.map(r => r.savings), 0);
+    const ranked = applyWeightsAndRank(result.recommendations, weights, maxSavings);
+    setDisplayedRecs(ranked.map(r => r.recommendation));
+  };
 
   const downloadCSV = () => {
     if (!result) return;
@@ -678,6 +700,9 @@ export default function ResultsClient({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full mx-auto">
           {/* Main Column (Left 2/3) */}
           <div className="lg:col-span-2 space-y-6 w-full mx-auto">
+            {result.revenueEnrichment && (
+              <RevenueInsightCard enrichment={result.revenueEnrichment} />
+            )}
             <RedundancyWarnings warnings={result.redundancyWarnings} />
             <HighSavingsCTA result={result} />
 
@@ -720,7 +745,7 @@ export default function ResultsClient({
                   Our engineering report identifies <strong className="text-foreground">Functional Redundancy</strong> across your stack. Below is the technical dependency mapping used to calculate your recovery potential.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {result.recommendations.map((rec, i) => (
+                  {displayedRecs.map((rec, i) => (
                     <div key={i} className="p-4 bg-secondary/30 rounded-2xl border border-white/5 flex items-center justify-between group hover:border-primary/30 transition-all">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-background rounded-lg flex items-center justify-center text-[10px] font-black">{rec.originalTool.charAt(0)}</div>
@@ -791,8 +816,11 @@ export default function ResultsClient({
               Audit Recommendations
             </h2>
           </div>
+          
+          <WeightsTuner onWeightsChange={handleWeightsChange} />
+
           <div className="grid grid-cols-1 gap-6">
-            {result.recommendations.map((rec, i) => (
+            {displayedRecs.map((rec, i) => (
               <RecommendationCard key={i} rec={rec} index={i} />
             ))}
           </div>
