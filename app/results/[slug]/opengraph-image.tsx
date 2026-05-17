@@ -82,7 +82,7 @@ export default async function OGImage({ params }: { params: { slug: string } }) 
 
         {/* Footer */}
         <div style={{ marginTop: "auto", color: "#475569", fontSize: 22 }}>
-          credex.rocks · AI Spend Audit · Free Tool
+          Fluxora · AI Spend Audit · Free Tool
         </div>
       </div>
     ),

@@ -94,13 +94,13 @@ export default function ConsultationPage() {
                 <span className="text-primary font-stylish font-extrabold italic">Strategy Session.</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Connect with a Credex-certified auditor to execute your recovery plan, liquidate unused credits, and optimize your 2026 AI budget for maximum ROI.
+                Connect with a specialized financial auditor to execute your recovery plan, consolidate workflows, and optimize your 2026 AI budget for maximum ROI.
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
               {[
-                { title: "Credit Liquidation", desc: "Convert unused licenses into secondary market capital.", icon: <Zap className="w-5 h-5" /> },
+                { title: "License Right-Sizing", desc: "Convert excess software licenses into immediate bottom-line recovery.", icon: <Zap className="w-5 h-5" /> },
                 { title: "Contract Review", desc: "Expert analysis of your enterprise AI agreements.", icon: <Calendar className="w-5 h-5" /> },
                 { title: "Functional Audit", desc: "Eliminate tool overlap with deterministic mapping.", icon: <Shield className="w-5 h-5" /> },
                 { title: "Direct Recovery", desc: "Average recovery of $1,200/seat per year.", icon: <CheckCircle2 className="w-5 h-5" /> }
@@ -225,7 +225,7 @@ export default function ConsultationPage() {
 
       <footer className="py-8 border-t border-white/5 text-center">
         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-          © 2026 Fluxora Spend Intelligence • Licensed by Credex
+          © 2026 Fluxora Spend Intelligence • All Rights Reserved
         </p>
       </footer>
     </div>

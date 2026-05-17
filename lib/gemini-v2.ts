@@ -59,7 +59,7 @@ export async function generateAuditSummaryV2(
     
     Write 2 tight paragraphs (100–150 words total):
     Paragraph 1: Summarise the waste precisely. Reference exact dollar amounts and ${revenueEnrichment ? "MRR/ARR percentages" : "peer benchmark"}.
-    Paragraph 2: Concrete next steps — consolidation, direct contract renegotiation, and vendor cost optimization.
+    Paragraph 2: Concrete next steps — consolidating duplicate seat licenses and right-sizing contract tiers.
     
     Tone: Technical, transparent, no fluff. Start sentences with "Our data shows…" or "The engine identified…".
   `;
@@ -90,7 +90,7 @@ function buildFallback(
     `Our deterministic engine has identified a path to $${result.totalOptimizedSpend.toLocaleString()}/mo, ` +
     `recovering $${result.monthlySavings.toLocaleString()}/mo ($${result.annualSavings.toLocaleString()}/yr).${revLine}\n\n` +
     `The primary driver is functional overlap across the tool stack. ` +
-    `We recommend consolidating redundant licences and renegotiating custom contract volume discounts ` +
-    `to capture immediate savings.`
+    `We recommend consolidating redundant licences and right-sizing active enterprise license allotments ` +
+    `to capture immediate bottom-line recovery.`
   );
 }

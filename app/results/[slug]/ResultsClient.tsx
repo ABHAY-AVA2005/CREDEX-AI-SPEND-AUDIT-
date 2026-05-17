@@ -368,11 +368,11 @@ function HighSavingsCTA({ result }: { result: ProcessedAuditResult }) {
     <div className="bg-primary/10 border border-primary/20 rounded-3xl p-8 mb-8 text-center relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
       <h3 className="font-black text-primary text-2xl mb-3 tracking-tight flex items-center justify-center gap-2">
-        <Zap className="w-6 h-6 fill-primary" /> High Liquidity Opportunity
+        <Zap className="w-6 h-6 fill-primary" /> High Recovery Opportunity
       </h3>
       <p className="text-muted-foreground mb-6 max-w-2xl mx-auto leading-relaxed">
         Our deterministic engine identified <strong className="text-foreground">${result.annualSavings.toLocaleString()}</strong> in annual wastage. 
-        We recommend scheduling a tailored strategy session to renegotiate contracts, eliminate licenses, and direct vendor savings.
+        The most efficient path to recovery is consolidating redundant licenses and right-sizing enterprise seat allotments.
       </p>
       <Link 
         href="/consultation" 

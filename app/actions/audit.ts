@@ -260,26 +260,26 @@ export async function captureLeadEmail(
             Because your annual wastage exceeds <strong>$${annualSavings.toLocaleString()}</strong>, your account has been flagged for a complimentary <strong>Fluxora Capital Recovery Session</strong>.
           </p>
           <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">
-            One of our engineers will reach out to ${companyName} within 24 hours to discuss liquidating your redundant seats on the Fluxora Marketplace.
+            One of our engineers will reach out to ${companyName} within 24 hours to assist you in executing your cost consolidation strategy.
           </p>
         </div>
         ` : ""}
         <p style="color: #4b5563; margin-bottom: 15px;">
-          Ready to optimize your AI spending? Start reselling unused credits on Fluxora.
+          Ready to optimize your AI spending? Book a strategy session with a Fluxora specialist to right-size your licenses.
         </p>
-        <a href="https://credex.rocks" class="cta-button" style="background: #1f2937;">
-          🚀 Visit Credex Marketplace
+        <a href="https://fluxora-credex-ai-spend-audit-tool.vercel.app/consultation" class="cta-button" style="background: #1f2937;">
+          🚀 Schedule Strategy Session
         </a>
       </div>
     </div>
 
     <div class="footer">
       <p>
-        <strong>Fluxora</strong> - The marketplace for AI and cloud credits<br>
+        <strong>Fluxora</strong> - AI Spend Intelligence Engine<br>
         Optimize your tech stack • Maximize your budget
       </p>
       <p style="margin-top: 15px;">
-        Questions? Reply to this email or visit <a href="https://credex.rocks">credex.rocks</a>
+        Questions? Reply to this email.
       </p>
     </div>
   </div>

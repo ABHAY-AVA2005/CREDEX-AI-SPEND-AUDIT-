@@ -122,15 +122,15 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       }
     }
 
-    // Rule 4: Direct Volume & Contract Negotiation Loop
+    // Rule 4: The Enterprise Commitment Plan
     else if (toolNameLower.includes("openai") || toolNameLower.includes("aws") || toolNameLower.includes("anthropic")) {
       const discountFactor = 0.20;
       action = "REPLACE";
-      suggestedTool = tool.toolName;
-      suggestedPlan = "Enterprise Volume";
+      suggestedTool = `${tool.toolName} (via Commitment Optimization)`;
+      suggestedPlan = "Annual Commitment";
       newCost = currentCost * (1 - discountFactor);
       suggestedTotalCost = newCost;
-      reasoning = `We can leverage consolidated contracts or enterprise volume tiers to secure a 20% direct discount on your ${tool.toolName} spend.`;
+      reasoning = `We can negotiate a 20% discount on your ${tool.toolName} contract by switching to enterprise commitment tiers.`;
     }
 
     const savings = currentCost - newCost;

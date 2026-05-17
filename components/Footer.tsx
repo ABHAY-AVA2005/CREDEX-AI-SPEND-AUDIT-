@@ -1,4 +1,4 @@
-import { Mail, ExternalLink } from "lucide-react";
+import { Mail } from "lucide-react";
 import { FluxoraLogo } from "@/components/Logo";
 
 export function Footer() {
@@ -36,9 +36,10 @@ export function Footer() {
             © 2026 FLUXORA. Audit Engine. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="https://credex.rocks" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold hover:text-foreground transition-colors flex items-center gap-1">
-              Credex.rocks <ExternalLink className="w-3 h-3" />
-            </a>
+            {/* Self-contained branding */}
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">
+              Fluxora Audits
+            </span>
           </div>
         </div>
       </div>

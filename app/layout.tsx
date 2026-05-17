@@ -22,7 +22,7 @@ const stylishFont = Inter({
 
 export const metadata: Metadata = {
   title: "Fluxora AI Spend Audit | Optimize your SaaS stack",
-  description: "Audit your startup's AI tool spending, detect overspending, and discover how to save by buying and selling credits on Credex.rocks.",
+  description: "Audit your startup's AI tool spending, detect overspending, right-size enterprise seats, and optimize your bottom line.",
 };
 
 export default function RootLayout({

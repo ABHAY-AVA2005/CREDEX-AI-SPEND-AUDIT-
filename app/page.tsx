@@ -30,7 +30,6 @@ export default function LandingPage() {
           
           <nav className="flex items-center gap-3 sm:gap-6">
             <ThemeToggle />
-
             <Link 
               href="/consultation" 
               className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
@@ -186,23 +185,8 @@ export default function LandingPage() {
               </Link>
             </motion.div>
 
-            {/* Direct Support Note */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="mt-6 flex flex-col items-center"
-            >
-              <p className="text-muted-foreground text-sm">
-                Need customized enterprise assistance? Book a direct{" "}
-                <Link 
-                  href="/consultation" 
-                  className="text-accent font-bold hover:underline"
-                >
-                  Strategy Session →
-                </Link>
-              </p>
-            </motion.div>
+            {/* Space buffer */}
+            <div className="h-6" />
 
             {/* Logo Wall — using text-based logos for a cleaner, modern look */}
             <motion.div
@@ -293,7 +277,7 @@ export default function LandingPage() {
                 },
                 {
                   q: "What happens after the audit?",
-                  a: "You get a shareable URL and a PDF report. If you have significant wastage, we offer direct consultation to assist with contract renegotiations and software stack consolidation."
+                  a: "You get a shareable URL and a PDF report containing detailed recommendations on workflow consolidation."
                 },
                 {
                   q: "Is my data private?",
@@ -333,10 +317,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <p className="text-muted-foreground text-sm mt-6 font-medium">
-              No account or credit card required. — Or book a personalized{" "}
-              <Link href="/consultation" className="text-accent hover:underline">
-                Strategy Session
-              </Link>
+              No account or credit card required.
             </p>
           </div>
         </section>
