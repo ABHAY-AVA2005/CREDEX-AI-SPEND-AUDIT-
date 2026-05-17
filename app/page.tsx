@@ -72,43 +72,68 @@ export default function LandingPage() {
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             <motion.div
               animate={{
-                x: [0, 45, -20, 0],
-                y: [0, -35, 45, 0],
-                scale: [1, 1.15, 0.9, 1],
+                x: [0, 80, -40, 0],
+                y: [0, -60, 80, 0],
+                scale: [1, 1.2, 0.85, 1],
               }}
               transition={{
-                duration: 20,
+                duration: 22,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute top-1/4 -left-20 w-80 h-80 md:w-[480px] md:h-[480px] bg-primary/10 rounded-full blur-[80px] opacity-60 dark:opacity-40"
+              className="absolute top-1/4 -left-20 w-96 h-96 md:w-[650px] md:h-[650px] bg-primary/30 rounded-full blur-[120px] opacity-80 dark:opacity-60"
             />
             <motion.div
               animate={{
-                x: [0, -45, 35, 0],
-                y: [0, 55, -35, 0],
-                scale: [1, 0.9, 1.15, 1],
+                x: [0, -80, 60, 0],
+                y: [0, 90, -60, 0],
+                scale: [1, 0.85, 1.2, 1],
               }}
               transition={{
-                duration: 25,
+                duration: 26,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute bottom-1/3 -right-20 w-80 h-80 md:w-[480px] md:h-[480px] bg-accent/10 rounded-full blur-[80px] opacity-60 dark:opacity-40"
+              className="absolute bottom-1/4 -right-20 w-96 h-96 md:w-[650px] md:h-[650px] bg-accent/25 rounded-full blur-[120px] opacity-80 dark:opacity-50"
             />
             <motion.div
               animate={{
-                x: [0, 35, -35, 0],
-                y: [0, 45, 25, 0],
-                scale: [1, 1.05, 0.95, 1],
+                x: [0, 60, -60, 0],
+                y: [0, 70, 40, 0],
+                scale: [1, 1.1, 0.9, 1],
               }}
               transition={{
-                duration: 28,
+                duration: 30,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute top-1/2 left-1/3 w-64 h-64 bg-secondary/15 rounded-full blur-[80px] opacity-40 dark:opacity-25"
+              className="absolute top-1/2 left-1/4 w-80 h-80 md:w-[500px] md:h-[500px] bg-secondary/25 rounded-full blur-[120px] opacity-60 dark:opacity-40"
             />
+
+            {/* Drifting interactive premium ambient light particles */}
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{
+                  x: "0px",
+                  y: "0px",
+                }}
+                animate={{
+                  y: ["0px", "-40px", "40px", "0px"],
+                  x: ["0px", "30px", "-30px", "0px"],
+                }}
+                transition={{
+                  duration: 15 + i * 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute w-2 h-2 md:w-3.5 md:h-3.5 rounded-full bg-primary/60 blur-[3px]"
+                style={{
+                  left: `${15 + i * 15}%`,
+                  top: `${25 + i * 12}%`,
+                }}
+              />
+            ))}
           </div>
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
