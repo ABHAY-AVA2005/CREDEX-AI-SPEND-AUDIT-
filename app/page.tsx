@@ -161,12 +161,17 @@ export default function LandingPage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-stylish font-bold text-foreground tracking-tight">Trusted by Founders & Finance Teams</h2>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
                   quote: "Fluxora found $2,400 in annual wastage across our engineering team in under a minute. It's the first thing I send to our portfolio companies now.",
                   author: "Sarah Chen",
                   role: "Founding Partner at SeedFlow Ventures"
+                },
+                {
+                  quote: "Just took Fluxora for a spin and liked how it surfaces patterns across multiple subscriptions and suggests cost reductions; the savings estimate felt grounded and the PDF export is handy for teams.",
+                  author: "Rami Zwebti",
+                  role: "Founder & CEO at Zwebti (Former Microsoft AI Strategist)"
                 },
                 {
                   quote: "I thought we were lean. Fluxora proved we were double-paying for LLM subscriptions across three different departments.",
@@ -180,19 +185,21 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-card p-8 rounded-2xl border border-border shadow-sm relative"
+                  className="bg-card p-8 rounded-2xl border border-border shadow-sm relative flex flex-col justify-between"
                 >
-                  <div className="text-accent mb-4 text-4xl font-serif leading-none">“</div>
-                  <p className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
-                    {testimonial.quote}
-                  </p>
-                  <div className="flex items-center gap-3">
+                  <div>
+                    <div className="text-accent mb-4 text-4xl font-serif leading-none">“</div>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic">
+                      {testimonial.quote}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 mt-auto pt-4 border-t border-border/10">
                     <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground font-bold">
                       {testimonial.author[0]}
                     </div>
                     <div>
                       <p className="font-bold text-foreground text-sm">{testimonial.author}</p>
-                      <p className="text-muted-foreground text-xs">{testimonial.role}</p>
+                      <p className="text-muted-foreground text-[10px] leading-tight">{testimonial.role}</p>
                     </div>
                   </div>
                 </motion.div>
