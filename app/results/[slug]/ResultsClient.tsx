@@ -443,6 +443,54 @@ export default function ResultsClient({
     }
   }, [serverResult]);
 
+  const downloadCSV = () => {
+    if (!result) return;
+    
+    // CSV headers
+    const headers = [
+      "Tool Name",
+      "Current Plan",
+      "Seats / Tokens",
+      "Current Monthly Cost ($)",
+      "Action",
+      "Suggested Tool",
+      "Suggested Plan",
+      "Optimized Monthly Cost ($)",
+      "Monthly Savings ($)",
+      "Reasoning"
+    ];
+
+    // CSV rows
+    const rows = result.recommendations.map(rec => [
+      `"${rec.originalTool.replace(/"/g, '""')}"`,
+      `"${(rec.originalPlan || "").replace(/"/g, '""')}"`,
+      rec.originalSeats && rec.originalSeats > 0 ? rec.originalSeats : `${rec.originalTokens || 0}k Tokens`,
+      rec.originalMonthlyCost ?? 0,
+      `"${rec.action}"`,
+      `"${(rec.suggestedTool || "").replace(/"/g, '""')}"`,
+      `"${(rec.suggestedPlan || "").replace(/"/g, '""')}"`,
+      rec.suggestedTotalCost ?? rec.originalMonthlyCost ?? 0,
+      rec.savings,
+      `"${(rec.reasoning || "").replace(/"/g, '""')}"`
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    // Create a blob and trigger download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${result.companyName.toLowerCase().replace(/\s+/g, "_")}_ai_spend_audit.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (isRecovering) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center">
@@ -547,6 +595,12 @@ export default function ResultsClient({
               className="flex items-center gap-2 px-8 py-4 bg-secondary/50 backdrop-blur-md border border-white/10 text-foreground font-black rounded-2xl hover:bg-white/10 transition-all active:scale-95 group shadow-xl"
             >
               <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform text-primary" /> Download PDF Audit
+            </button>
+            <button 
+              onClick={downloadCSV} 
+              className="flex items-center gap-2 px-8 py-4 bg-secondary/50 backdrop-blur-md border border-white/10 text-foreground font-black rounded-2xl hover:bg-white/10 transition-all active:scale-95 group shadow-xl"
+            >
+              <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform text-primary" /> Download CSV Audit
             </button>
             <Link 
               href="/consultation" 
