@@ -112,7 +112,7 @@ export default function LandingPage() {
               </Link>
               
               <Link 
-                href="/sample" 
+                href="/results/sample-demo" 
                 className="flex items-center justify-center px-8 md:px-10 py-4 md:py-5 text-base md:text-lg font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-secondary transition-all w-full sm:w-auto active:scale-[0.98]"
               >
                 View Sample Report
