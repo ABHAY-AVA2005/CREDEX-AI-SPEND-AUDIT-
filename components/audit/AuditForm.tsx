@@ -49,9 +49,9 @@ export default function AuditForm() {
     resolver: zodResolver(AuditFormSchema),
     defaultValues: {
       companyName: "",
-      companySize: 0,
+      companySize: "" as unknown as number,
       industry: "",
-      tools: [{ toolName: "", currentPlan: "", seats: 0, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] }],
+      tools: [{ toolName: "", currentPlan: "", seats: "" as unknown as number, tokens: "" as unknown as number, monthlySpend: "" as unknown as number, type: "SEAT", useCases: [] }],
     },
   } as any);
 
@@ -322,7 +322,7 @@ export default function AuditForm() {
 
           <button
             type="button"
-            onClick={() => append({ toolName: "", currentPlan: "", seats: 0, tokens: 0, monthlySpend: 0, type: "SEAT", useCases: [] } as AuditToolInput)}
+            onClick={() => append({ toolName: "", currentPlan: "", seats: "" as unknown as number, tokens: "" as unknown as number, monthlySpend: "" as unknown as number, type: "SEAT", useCases: [] } as AuditToolInput)}
             className="w-full py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 hover:bg-secondary transition-all text-sm font-bold uppercase tracking-widest"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Tool to Stack

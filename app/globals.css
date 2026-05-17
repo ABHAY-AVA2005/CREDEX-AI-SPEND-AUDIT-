@@ -196,3 +196,53 @@
     display: block;
   }
 }
+@media print {
+  body::before,
+  body::after,
+  .grid-perspective,
+  header,
+  footer,
+  .print-hidden,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  .bg-card, .bg-secondary, .bg-primary\/10 {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  .text-primary, .text-accent {
+    color: #4338ca !important;
+  }
+
+  .max-w-6xl {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  h1 { font-size: 24pt !important; }
+  h2 { font-size: 18pt !important; }
+
+  .recommendation-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+}
