@@ -34,7 +34,7 @@ export default function LandingPage() {
               href="/consultation" 
               className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
             >
-              Strategy
+              Consultation & Planning
             </Link>
             <Link 
               href="/audit" 
