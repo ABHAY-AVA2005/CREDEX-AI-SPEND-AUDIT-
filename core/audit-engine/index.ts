@@ -16,18 +16,7 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
   const recommendations: AuditRecommendation[] = [];
   const redundancyWarnings: string[] = [];
 
-  // Track capabilities to find redundancies
-  const coveredCapabilities = new Set<string>();
   const toolCategories: Record<string, string[]> = {};
-
-  // Benchmarking Data (Heuristic for 2026)
-  const benchmarks: Record<string, number> = {
-    "PRE_SEED": 50, // $/employee/mo for AI
-    "SEED": 120,
-    "SERIES_A": 250,
-    "SERIES_B": 400,
-    "LATE_STAGE": 600
-  };
 
   // Pre-pass: Identify tool categories and basic redundancies
   input.tools.forEach(tool => {
