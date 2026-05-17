@@ -59,17 +59,17 @@ export default function LandingPage() {
         <section className="relative pt-12 pb-32 md:pt-16 md:pb-40 overflow-hidden">
           
           {/* Grid background with a smooth gradient mask */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(120,119,198,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(120,119,198,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(120,119,198,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(120,119,198,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none z-0" />
 
           {/* Symmetrical top grid line with subtle pulse animation */}
           <motion.div 
             animate={{ opacity: [0.1, 0.3, 0.1] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent -z-10" 
+            className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent z-0" 
           />
 
           {/* Sleek, smooth animated ambient background glow blobs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             <motion.div
               animate={{
                 x: [0, 45, -20, 0],
@@ -111,7 +111,7 @@ export default function LandingPage() {
             />
           </div>
 
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             {/* The Badge */}
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
