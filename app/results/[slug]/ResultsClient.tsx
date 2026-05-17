@@ -250,9 +250,48 @@ function EmailCaptureCard({ result }: { result: ProcessedAuditResult }) {
   );
 }
 
+const PEER_COMPANIES = [
+  { name: "Dub.co", size: 6 },
+  { name: "Basedash", size: 8 },
+  { name: "TypingMind", size: 10 },
+  { name: "Phind", size: 12 },
+  { name: "Loops.so", size: 12 },
+  { name: "Braintrust", size: 15 },
+  { name: "Resend", size: 15 },
+  { name: "Cursor (Anysphere)", size: 20 },
+  { name: "Railway", size: 25 },
+  { name: "LangChain", size: 25 },
+  { name: "Cal.com", size: 30 },
+  { name: "Midjourney", size: 40 },
+  { name: "Replicate", size: 45 },
+  { name: "Linear", size: 50 },
+  { name: "Clerk", size: 60 },
+  { name: "Supabase", size: 80 },
+  { name: "Perplexity AI", size: 80 },
+  { name: "Framer", size: 90 },
+  { name: "PostHog", size: 110 },
+  { name: "Vercel", size: 150 },
+  { name: "Hugging Face", size: 170 },
+  { name: "Scale AI", size: 180 },
+];
+
 function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
   const benchmark = result.benchmarkComparison;
   if (!benchmark) return null;
+
+  const size = result.companySize || 8;
+  
+  // Find peer companies within N ± 5 range
+  let peers = PEER_COMPANIES.filter(c => Math.abs(c.size - size) <= 5);
+  
+  // Fallback if not enough companies match
+  if (peers.length < 2) {
+    const sorted = [...PEER_COMPANIES].sort((a, b) => Math.abs(a.size - size) - Math.abs(b.size - size));
+    peers = sorted.slice(0, 4).map(c => {
+      const clampedSize = Math.max(Math.max(1, size - 5), Math.min(size + 5, c.size));
+      return { name: c.name, size: clampedSize };
+    });
+  }
 
   const statusColors = {
     "EXCELLENT": "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
@@ -260,6 +299,9 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
     "OVERSPENDING": "text-amber-500 bg-amber-500/10 border-amber-500/20",
     "CRITICAL": "text-red-500 bg-red-500/10 border-red-500/20"
   };
+
+  const minCoh = Math.max(1, size - 5);
+  const maxCoh = size + 5;
 
   return (
     <div className="bg-card border border-border rounded-2xl p-6 shadow-sm relative overflow-hidden group">
@@ -286,9 +328,24 @@ function BenchmarkCard({ result }: { result: ProcessedAuditResult }) {
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Your AI spend per developer is <strong className="text-foreground">${Math.round(result.totalCurrentSpend / (result.companySize || 1)).toLocaleString()}</strong> — 
+          Your AI spend per developer is <strong className="text-foreground">${Math.round(result.totalCurrentSpend / size).toLocaleString()}</strong> — 
           peer companies your size average <strong className="text-foreground">${benchmark.averageForStage.toLocaleString()}</strong>.
         </p>
+
+        {/* Benchmarked Cohort Box */}
+        <div className="bg-secondary/20 rounded-xl p-3 border border-border/30">
+          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-2">
+            Real-Time Peer Cohort (Size: {minCoh}-{maxCoh})
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
+            {peers.slice(0, 4).map((p, i) => (
+              <div key={i} className="flex items-center justify-between text-muted-foreground border-b border-border/5 pb-0.5 last:border-0 last:pb-0">
+                <span className="font-semibold text-foreground/90">{p.name}</span>
+                <span className="text-muted-foreground text-[9px]">{p.size} emp</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="pt-4 border-t border-border/50">
           <div className="flex items-center gap-2 mb-2">
