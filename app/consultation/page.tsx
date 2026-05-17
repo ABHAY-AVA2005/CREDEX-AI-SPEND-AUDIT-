@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Calendar, Shield, Zap, ArrowRight, CheckCircle2, 
-  MessageSquare, User, Building, Mail, ArrowLeft
+  MessageSquare, User, Mail, ArrowLeft
 } from "lucide-react";
 import Link from "next/link";
 import { FluxoraLogo } from "@/components/Logo";
@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 export default function ConsultationPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [reason, setReason] = useState("GENERAL");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,40 +131,29 @@ export default function ConsultationPage() {
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             
-            <h2 className="text-2xl font-black mb-8 tracking-tight flex items-center gap-3">
-              <MessageSquare className="w-6 h-6 text-primary" /> Request Access
+            <h2 className="text-2xl font-black mb-2 tracking-tight flex items-center gap-3">
+              <MessageSquare className="w-6 h-6 text-primary" /> We’re Always Here to Help!
             </h2>
+            <p className="text-xs text-muted-foreground mb-8">
+              If you have any questions, please fill the form, we will get back to you asap.
+            </p>
 
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Full Name</label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      required 
-                      className="w-full bg-secondary/50 border border-white/5 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-background transition-all" 
-                      placeholder="Jane Doe"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Company</label>
-                  <div className="relative">
-                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      required 
-                      className="w-full bg-secondary/50 border border-white/5 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-background transition-all" 
-                      placeholder="Acme Inc"
-                    />
-                  </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Name</label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input 
+                    type="text" 
+                    required 
+                    className="w-full bg-secondary/50 border border-white/5 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-background transition-all" 
+                    placeholder="Enter your name"
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Work Email</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input 
@@ -175,11 +165,44 @@ export default function ConsultationPage() {
                 </div>
               </div>
 
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1 flex items-center gap-1">
+                  👉 Reason of Contact
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    { value: "GENERAL", label: "General" },
+                    { value: "LINK_INSERTION", label: "Link Insertion" },
+                    { value: "BUY_SITE", label: "Want to Buy the Site" }
+                  ].map((option) => (
+                    <label 
+                      key={option.value}
+                      className={`flex items-center justify-center p-3 rounded-2xl border text-[11px] font-bold cursor-pointer transition-all ${
+                        reason === option.value 
+                          ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25" 
+                          : "bg-secondary/40 border-white/5 hover:border-white/20 text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <input 
+                        type="radio" 
+                        name="reason" 
+                        value={option.value} 
+                        checked={reason === option.value}
+                        onChange={() => setReason(option.value)}
+                        className="sr-only" 
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Briefly describe your goals</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Your Message</label>
                 <textarea 
+                  required
                   className="w-full bg-secondary/50 border border-white/5 rounded-2xl py-4 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-background transition-all min-h-[120px] resize-none" 
-                  placeholder="e.g. Consolidating our LLM stack and liquidating 50+ Cursor licenses..."
+                  placeholder="Your Message"
                 />
               </div>
 

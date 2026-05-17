@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Footer } from "@/components/Footer";
+import { ScrollFix } from "@/components/ScrollFix";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <ScrollFix />
           <div className="min-h-screen bg-transparent text-foreground selection:bg-primary/20 relative">
             <main className="flex-grow relative">
               {children}
