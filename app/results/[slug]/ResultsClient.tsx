@@ -817,7 +817,7 @@ export default function ResultsClient({
             </h2>
           </div>
           
-          <div className="max-w-4xl mx-auto w-full">
+          <div className="lg:w-3/5 mx-auto w-full">
             <WeightsTuner onWeightsChange={handleWeightsChange} />
           </div>
 
