@@ -58,9 +58,58 @@ export default function LandingPage() {
       <main className="flex-grow z-10 pt-4">
         <section className="relative pt-12 pb-32 md:pt-16 md:pb-40 overflow-hidden">
           
-          {/* Abstract background blobs for a bit of premium depth */}
-          <div className="absolute top-1/4 -left-20 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
-          <div className="absolute bottom-1/4 -right-20 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl opacity-50 -z-10"></div>
+          {/* Grid background with a smooth gradient mask */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(120,119,198,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(120,119,198,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
+
+          {/* Symmetrical top grid line with subtle pulse animation */}
+          <motion.div 
+            animate={{ opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent -z-10" 
+          />
+
+          {/* Sleek, smooth animated ambient background glow blobs */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            <motion.div
+              animate={{
+                x: [0, 45, -20, 0],
+                y: [0, -35, 45, 0],
+                scale: [1, 1.15, 0.9, 1],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/4 -left-20 w-80 h-80 md:w-[480px] md:h-[480px] bg-primary/10 rounded-full blur-[80px] opacity-60 dark:opacity-40"
+            />
+            <motion.div
+              animate={{
+                x: [0, -45, 35, 0],
+                y: [0, 55, -35, 0],
+                scale: [1, 0.9, 1.15, 1],
+              }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute bottom-1/3 -right-20 w-80 h-80 md:w-[480px] md:h-[480px] bg-accent/10 rounded-full blur-[80px] opacity-60 dark:opacity-40"
+            />
+            <motion.div
+              animate={{
+                x: [0, 35, -35, 0],
+                y: [0, 45, 25, 0],
+                scale: [1, 1.05, 0.95, 1],
+              }}
+              transition={{
+                duration: 28,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/2 left-1/3 w-64 h-64 bg-secondary/15 rounded-full blur-[80px] opacity-40 dark:opacity-25"
+            />
+          </div>
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             {/* The Badge */}
