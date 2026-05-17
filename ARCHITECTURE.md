@@ -71,3 +71,44 @@ If this thing goes viral, I'd have to change a few things:
 - **Redis:** I'd add a cache layer so I'm not hitting Postgres for every single public link view.
 - **Edge Runtimes:** Move the logic to the Edge to lower latency for users in different regions.
 - **Direct Auth:** Instead of manual input, I'd eventually need a **Plaid** or **Mercury** integration to just "read" the spend automatically.
+
+---
+
+## 📈 Fluxora v2: The CFO Revenue Mapping & Tuning Layer
+
+In our **v2 Release (May 17, 2026)**, we introduced three advanced architectural modules designed to elevate the audit from a diagnostic list of recommendations to an interactive, CFO-grade boardroom asset.
+
+```mermaid
+graph TD
+    A[User Form V2] -->|Intakes MRR / ARR / Stage| B(Zod Schema V2)
+    B -->|Type-Safe Object| C(Deterministic Core Engine)
+    C -->|Output Recommendations| D(Revenue Context Scorer)
+    D -->|Add ROI / Payback / Burn Medians| E(Recommendation Weights Tuner)
+    E -->|Apply Cost, Safety, Cap, Velocity Weights| F(Client-Side State)
+    F -->|Interactively Re-orders Cards| G[Results Dashboard UI]
+```
+
+### 1. Zod Schema V2 Layer (`schemas/audit-v2.ts`)
+* **Strategy:** Additive composition. We leverage Zod’s `.extend()` syntax to build `AuditFormSchemaV2` from the original `AuditFormSchema`.
+* **Details:** This layers on a `revenueContext` object (MRR, ARR, growth rates, runway) and a `fundingStage` enum (`PRE_SEED`, `SEED`, `SERIES_A`, `SERIES_B`, `LATE_STAGE`) as optional inputs, preserving 100% backward-compatibility for basic audits.
+
+### 2. CFO Revenue Context & ROI Core (`core/revenue-context/index.ts`)
+* **Calculations:** Takes raw dollar savings and converts them into metrics that resonate with startup investors:
+  * **AI Spend as % of MRR:** Total monthly spend vs. Monthly Recurring Revenue.
+  * **Annualized ARR Savings:** Scaled yearly recovery potential against ARR.
+  * **Stage-based Peer Benchmarking:** Pulls real-time peer medians mapped from SaaS spending databases:
+    * *Pre-Seed:* 12.0% of MRR
+    * *Seed:* 8.5% of MRR
+    * *Series A:* 5.0% of MRR
+    * *Series B:* 3.2% of MRR
+    * *Late Stage:* 1.8% of MRR
+  * **Individual Payback Periods:** Calculates the time (in months) required to recover setup/resettling friction costs for proposed tool switches.
+
+### 3. Interactive Weights Tuner (`core/recommendation-weights/index.ts`)
+* **Philosophy:** Dynamic client-side agency. We avoid server-side round trips and database rewrites to maintain zero-latency re-ranking.
+* **Algorithm:** Assigns a composite score ($0.0 - 10.0$) to each recommendation based on four weighted vectors:
+  1. **Cost Savings:** Scaled dollar amounts against the maximum savings found in the audit.
+  2. **Migration Safety:** Action-type heuristics (e.g. `KEEP` = 10, downgrade/rightsize = 7, direct replacement `REPLACE` = 3).
+  3. **Capability Gain:** Flags upgrade value (e.g. switching to premium ecosystems like Claude/Cursor = 10).
+  4. **Team Velocity:** Evaluates tooling friction and team retraining time.
+* **Component:** `WeightsTuner` houses pre-calculated preset chips ("Runway is Critical", "Don't Break My Team", "Upgrade Stack") and live-syncs slider values to the `displayedRecs` state hook in `ResultsClient`.

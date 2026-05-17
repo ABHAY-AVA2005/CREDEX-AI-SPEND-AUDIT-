@@ -3,9 +3,12 @@
 Fluxora is a "CFO-grade" deterministic audit platform designed for high-growth startups to uncover hidden AI tool sprawl and recover liquid capital. It transforms complex SaaS subscription data into an actionable recovery roadmap in under 60 seconds—no login required.
 
 ## 🌟 Key Features
-- **Category-Based Redundancy Detection:** Automatically flags overlapping tool subscriptions (e.g., Cursor + Copilot) to eliminate wastage.
-- **Stage-Based Peer Benchmarking:** Compare your AI spend-per-employee against industry averages for Pre-Seed, Seed, and Series A teams.
-- **Seat vs. API Tracking:** Distinct monitoring for per-seat licenses and usage-based API spend (token-level tracking) to catch unexpected cost spikes.
+- **📊 CFO Revenue Context & ROI Scorer (v2):** Map raw dollar savings directly to MRR and ARR percentages (the language investors and CFOs read).
+- **🎛️ Live Sliders Weight-Tuning (v2):** Dynamically re-rank recommendations client-side based on Cost, Safety, Capability, and Team Velocity.
+- **🔍 90+ AI Niche Tools Registry (v2):** Extended tool knowledge base (Tabnine, Devin, Midjourney, Groq, Mistral, Runway, etc.) with fuzzy name matching.
+- **📉 Category-Based Redundancy Detection:** Automatically flags overlapping tool subscriptions (e.g., Cursor + Copilot) to eliminate wastage.
+- **📊 Stage-Based Peer Benchmarking:** Compare your AI spend-per-employee against industry averages for Pre-Seed, Seed, Series A, Series B, and Late Stage teams.
+- **🛡️ Seat vs. API Tracking:** Distinct monitoring for per-seat licenses and usage-based API spend to prevent surprise cost overruns.
 - **Deterministic Audit Engine:** Hardcoded math based on verified 2026 pricing registry data.
 - **CFO-Ready PDF Reports:** Generate professional financial memos with shareable, anonymous URLs.
 
@@ -73,13 +76,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## 📊 Comprehensive Documentation
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)**: Technical pipeline and scalability plan.
-*   **[DEVLOG.md](./DEVLOG.md)**: 7-day development history and arc.
-*   **[REFLECTION.md](./REFLECTION.md)**: Deep dive into the hardest bugs and strategic pivots.
-*   **[TESTS.md](./TESTS.md)**: Breakdown of the 7 automated audit engine tests.
-*   **[PRICING_DATA.md](./PRICING_DATA.md)**: Verified May 2026 pricing sources.
-*   **[GTM.md](./GTM.md)**: Go-to-market and user acquisition strategy.
-*   **[ECONOMICS.md](./ECONOMICS.md)**: Business model and LTV projections.
-*   **[USER_INTERVIEWS.md](./USER_INTERVIEWS.md)**: Direct feedback from early user tests.
+- **[DEVLOG.md](./DEVLOG.md)**: 8-day development history, including the V2 upgrades sprint.
+- **[RECOVERY_GUIDE.md](./RECOVERY_GUIDE.md)**: Standard operating recovery guidelines and Git rollback states.
+- **[PRICING_DATA.md](./PRICING_DATA.md)**: Extended pricing database verified for all 90+ tools.
+- **[REFLECTION.md](./REFLECTION.md)**: Deep dive into the hardest bugs and strategic pivots.
+- **[TESTS.md](./TESTS.md)**: Breakdown of the automated audit engine tests.
+- **[GTM.md](./GTM.md)**: Go-to-market and user acquisition strategy.
+- **[ECONOMICS.md](./ECONOMICS.md)**: Business model and LTV projections.
+- **[USER_INTERVIEWS.md](./USER_INTERVIEWS.md)**: Direct feedback from early user tests.
 
 ## 🔗 Links
 - **GitHub:** [https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-](https://github.com/ABHAY-AVA2005/CREDEX-AI-SPEND-AUDIT-)
