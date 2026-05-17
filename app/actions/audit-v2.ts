@@ -18,7 +18,7 @@
 
 import { AuditFormSchemaV2, AuditFormInputV2, AuditResultV2 } from "@/schemas/audit-v2";
 import { runAuditEngine } from "@/core/audit-engine";
-import { enrichWithRevenueContext } from "@/core/revenue-context";
+import { enrichWithRevenueContext, RevenueContext } from "@/core/revenue-context";
 import { applyWeightsAndRank, DEFAULT_WEIGHTS } from "@/core/recommendation-weights";
 import { generateAuditSummaryV2 } from "@/lib/gemini-v2";
 import { nanoid } from "nanoid";
@@ -51,12 +51,16 @@ export async function processAuditActionV2(
 
   // 3. Revenue enrichment (optional)
   let revenueEnrichment: AuditResultV2["revenueEnrichment"] | undefined;
-  if (input.revenueContext && input.revenueContext.mrr > 0) {
+  if (
+    input.revenueContext &&
+    typeof input.revenueContext.mrr === "number" &&
+    input.revenueContext.mrr > 0
+  ) {
     const enriched = enrichWithRevenueContext(
       baseResult.totalCurrentSpend,
       baseResult.totalOptimizedSpend,
       baseResult.recommendations,
-      input.revenueContext,
+      input.revenueContext as RevenueContext,
       input.fundingStage ?? "SEED"
     );
     revenueEnrichment = {

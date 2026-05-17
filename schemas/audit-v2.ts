@@ -13,25 +13,27 @@ import { AuditFormSchema, AuditResult } from "./audit"; // your existing schema
 // ─── Revenue Context Schema ────────────────────────────────────────────────────
 export const RevenueContextSchema = z.object({
   mrr: z
-    .number()
-    .min(0, "MRR must be a positive number")
+    .preprocess((val) => (val === "" || val === null || val === undefined || isNaN(Number(val)) ? undefined : Number(val)), z.number().min(0).optional())
     .describe("Monthly Recurring Revenue in USD"),
   arr: z
-    .number()
-    .min(0, "ARR must be a positive number")
+    .preprocess((val) => (val === "" || val === null || val === undefined || isNaN(Number(val)) ? undefined : Number(val)), z.number().min(0).optional())
     .describe("Annual Recurring Revenue in USD"),
   growthRateMoM: z
-    .number()
-    .min(-1)
-    .max(10)
-    .optional()
+    .preprocess((val) => (val === "" || val === null || val === undefined || isNaN(Number(val)) ? undefined : Number(val)), z.number().min(-1).max(10).optional())
     .describe("Month-over-month growth rate, e.g. 0.15 = 15%"),
   runwayMonths: z
-    .number()
-    .min(0)
-    .max(120)
-    .optional()
+    .preprocess((val) => (val === "" || val === null || val === undefined || isNaN(Number(val)) ? undefined : Number(val)), z.number().min(0).max(120).optional())
     .describe("Remaining runway in months"),
+}).transform((data) => {
+  // If arr is missing but mrr is present, calculate it
+  if (data.mrr && !data.arr) {
+    data.arr = data.mrr * 12;
+  }
+  // If mrr is missing but arr is present, calculate it
+  if (data.arr && !data.mrr) {
+    data.mrr = data.arr / 12;
+  }
+  return data;
 });
 
 export type RevenueContextInput = z.infer<typeof RevenueContextSchema>;
