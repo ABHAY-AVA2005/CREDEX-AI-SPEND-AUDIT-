@@ -117,7 +117,7 @@ export default function WeightsTuner({ onWeightsChange }: Props) {
       </div>
 
       {/* Sliders */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
         {SLIDER_CONFIG.map(({ key, label, description }) => (
           <div key={key} className="space-y-1">
             <div className="flex items-center justify-between">

@@ -817,7 +817,9 @@ export default function ResultsClient({
             </h2>
           </div>
           
-          <WeightsTuner onWeightsChange={handleWeightsChange} />
+          <div className="max-w-4xl mx-auto w-full">
+            <WeightsTuner onWeightsChange={handleWeightsChange} />
+          </div>
 
           <div className="grid grid-cols-1 gap-6">
             {displayedRecs.map((rec, i) => (
