@@ -1,10 +1,25 @@
 # How Fluxora actually works (The Architecture)
 
-## 🛠️ The Tech Choices
-I went with a pretty standard but "modern" stack to move fast:
-1. **Next.js 15:** Use it mostly for **Server Actions**. I don't want any of the audit math or DB keys to ever touch the browser. It’s safer and faster.
-2. **TypeScript:** Since I'm doing financial math, I need types. I don't want `undefined` bugs when telling a CEO they're wasting $10k.
-3. **Tailwind CSS:** No templates here. Hand-coded everything to get that "CFO Blueprint" look. It’s much lighter and easier to customize.
+## 🛠️ The Comprehensive Tech Stack Breakdown
+
+Every single technology inside Fluxora is selected to enforce B2B CFO-grade security, mathematical determinism, and ultra-high-fidelity premium user interfaces:
+
+| Technology | Layer | Exact Purpose in Fluxora |
+| :--- | :--- | :--- |
+| **Next.js 15 (React 19)** | App Meta-Framework | Coordinates both the highly reactive React frontend and the secure Node.js backend. We rely heavily on **Next.js Server Actions** to securely process all database queries, Resend transactional emails, and Gemini AI API communications without exposing credentials or logic to the browser. |
+| **React 19** | Component UI Engine | Handles stateful, dynamic client rendering. Drives the multi-step audit questionnaire state, dynamic local storage autosaves, dynamic benchmarking charts, and dynamic sliders. |
+| **TypeScript** | Language Standard | Enforces strong compile-time type-safety. Crucial for financial math, ensuring tool calculations, pricing schemas, and Zod objects never result in NaN, undefined, or run-time crashes. |
+| **Tailwind CSS (v4)** | Styling & Design System | Implements our premium, desaturated "Midnight Blueprint" theme, featuring 0.5px layout grids, radial background masks, customized brand color scales, and responsive container blocks (60% width standard desktop constraint). |
+| **Framer Motion** | Animation Library | Powers subtle, elegant client-side visual transitions, staggered checklist entry animations, card hover-glows, and step slider visual transitions. |
+| **Recharts** | Visual Data Engine | Renders our primary benchmarking chart (Current vs. Optimized spend comparison) using high-performance SVG bars with desaturated visual gradient fills. |
+| **Prisma ORM (v6)** | Database Client | A type-safe Node.js Database Client that maps PostgreSQL schemas into clean TypeScript types, facilitating safe write/read transactions with Supabase. |
+| **Supabase (PostgreSQL)** | Managed Database | Houses saved audit reports, company sizes, tool listings, captured sales leads, and unique anonymized nanoid slug indexes. |
+| **Google Gemini API (`gemini-2.0-flash`)** | AI Summarization Layer | Acts strictly as an executive memo generator. We NEVER let it perform the math; it takes structured, isolated JSON calculations from our deterministic TypeScript engine and turns them into a highly concise, authoritative 3-sentence CFO board summary. |
+| **Resend API** | Transactional Mail Infrastructure | Delivers generated PDF reports and CSV spreadsheet exports directly to the user's inbox on lead form submission. |
+| **Zod** | Runtime Input Validation | Serves as our front-line security bouncer. Enforces strict types on incoming company data, stacks, email configurations, and stops prompt injection payloads from ever reaching the Gemini API. |
+| **Vitest** | Automated Testing Core | Runs our automated vitest grounding suites, sentence count validators, edge-case financial variance ($0 and $100k+ savings) runs, and simulated empty revenue environments. |
+| **Lucide React** | Visual Asset Toolkit | Provides desaturated fintech iconography (DollarSign, Shield, Zap, TrendingDown, Layers, etc.) matching our Midnight Blueprint aesthetics. |
+| **Nanoid** | Cryptographic URL Generator | Generates lightweight, secure 10-character slugs (e.g. `/results/3x7f9j2k8m`) for anonymous public result sharing. |
 
 ## 🏗️ High-Level Flow
 
