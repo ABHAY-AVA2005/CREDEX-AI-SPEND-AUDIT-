@@ -1,25 +1,34 @@
 # How Fluxora actually works (The Architecture)
 
-## 🛠️ The Comprehensive Tech Stack Breakdown
+## 🛠️ The Detailed Tech Stack Breakdown
 
 Every single technology inside Fluxora is selected to enforce B2B CFO-grade security, mathematical determinism, and ultra-high-fidelity premium user interfaces:
 
-| Technology | Layer | Exact Purpose in Fluxora |
-| :--- | :--- | :--- |
-| **Next.js 15 (React 19)** | App Meta-Framework | Coordinates both the highly reactive React frontend and the secure Node.js backend. We rely heavily on **Next.js Server Actions** to securely process all database queries, Resend transactional emails, and Gemini AI API communications without exposing credentials or logic to the browser. |
-| **React 19** | Component UI Engine | Handles stateful, dynamic client rendering. Drives the multi-step audit questionnaire state, dynamic local storage autosaves, dynamic benchmarking charts, and dynamic sliders. |
-| **TypeScript** | Language Standard | Enforces strong compile-time type-safety. Crucial for financial math, ensuring tool calculations, pricing schemas, and Zod objects never result in NaN, undefined, or run-time crashes. |
-| **Tailwind CSS (v4)** | Styling & Design System | Implements our premium, desaturated "Midnight Blueprint" theme, featuring 0.5px layout grids, radial background masks, customized brand color scales, and responsive container blocks (60% width standard desktop constraint). |
-| **Framer Motion** | Animation Library | Powers subtle, elegant client-side visual transitions, staggered checklist entry animations, card hover-glows, and step slider visual transitions. |
-| **Recharts** | Visual Data Engine | Renders our primary benchmarking chart (Current vs. Optimized spend comparison) using high-performance SVG bars with desaturated visual gradient fills. |
-| **Prisma ORM (v6)** | Database Client | A type-safe Node.js Database Client that maps PostgreSQL schemas into clean TypeScript types, facilitating safe write/read transactions with Supabase. |
-| **Supabase (PostgreSQL)** | Managed Database | Houses saved audit reports, company sizes, tool listings, captured sales leads, and unique anonymized nanoid slug indexes. |
-| **Google Gemini API (`gemini-2.0-flash`)** | AI Summarization Layer | Acts strictly as an executive memo generator. We NEVER let it perform the math; it takes structured, isolated JSON calculations from our deterministic TypeScript engine and turns them into a highly concise, authoritative 3-sentence CFO board summary. |
-| **Resend API** | Transactional Mail Infrastructure | Delivers generated PDF reports and CSV spreadsheet exports directly to the user's inbox on lead form submission. |
-| **Zod** | Runtime Input Validation | Serves as our front-line security bouncer. Enforces strict types on incoming company data, stacks, email configurations, and stops prompt injection payloads from ever reaching the Gemini API. |
-| **Vitest** | Automated Testing Core | Runs our automated vitest grounding suites, sentence count validators, edge-case financial variance ($0 and $100k+ savings) runs, and simulated empty revenue environments. |
-| **Lucide React** | Visual Asset Toolkit | Provides desaturated fintech iconography (DollarSign, Shield, Zap, TrendingDown, Layers, etc.) matching our Midnight Blueprint aesthetics. |
-| **Nanoid** | Cryptographic URL Generator | Generates lightweight, secure 10-character slugs (e.g. `/results/3x7f9j2k8m`) for anonymous public result sharing. |
+### 🎨 Frontend UI/UX Stack
+| Technology | Exact Purpose in Fluxora |
+| :--- | :--- |
+| **React 19** | Handles stateful, dynamic client rendering. Drives the multi-step audit questionnaire state, dynamic local storage autosaves, dynamic benchmarking charts, and dynamic sliders. |
+| **Tailwind CSS (v4)** | Implements our premium, desaturated "Midnight Blueprint" theme, featuring 0.5px layout grids, radial background masks, customized brand color scales, and responsive container blocks. |
+| **Framer Motion** | Powers subtle, elegant client-side visual transitions, staggered checklist entry animations, card hover-glows, and step slider visual transitions. |
+| **Recharts** | Renders our primary benchmarking chart (Current vs. Optimized spend comparison) using high-performance SVG bars with desaturated visual gradient fills. |
+| **Lucide React** | Provides desaturated fintech iconography (DollarSign, Shield, Zap, TrendingDown, Layers, etc.) matching our Midnight Blueprint aesthetics. |
+
+### ⚙️ Backend Architecture Stack
+| Technology | Exact Purpose in Fluxora |
+| :--- | :--- |
+| **Next.js 15** | App Meta-Framework that coordinates both the highly reactive React frontend and the secure Node.js backend. We rely heavily on **Next.js Server Actions** to securely process all database queries, Resend transactional emails, and Gemini AI API communications without exposing credentials or logic to the browser. |
+| **TypeScript** | Enforces strong compile-time type-safety across the entire server. Crucial for financial math, ensuring tool calculations, pricing schemas, and Zod objects never result in NaN, undefined, or run-time crashes. |
+| **Google Gemini API (`gemini-2.0-flash`)** | Acts strictly as an executive memo generator. We NEVER let it perform the math; it takes structured, isolated JSON calculations from our deterministic TypeScript engine and turns them into a highly concise, authoritative 3-sentence CFO board summary. |
+| **Resend API** | Delivers generated PDF reports and CSV spreadsheet exports directly to the user's inbox on lead form submission. |
+| **Zod** | Serves as our front-line security bouncer. Enforces strict types on incoming company data, stacks, email configurations, and stops prompt injection payloads from ever reaching the Gemini API. |
+| **Nanoid** | Generates lightweight, secure 10-character slugs (e.g. `/results/3x7f9j2k8m`) for anonymous public result sharing. |
+| **Vitest** | Runs our automated vitest grounding suites, sentence count validators, edge-case financial variance ($0 and $100k+ savings) runs, and simulated empty revenue environments. |
+
+### 🗄️ Database & Persistence Layer
+| Technology | Exact Purpose in Fluxora |
+| :--- | :--- |
+| **Prisma ORM (v6)** | A type-safe Node.js Database Client that maps PostgreSQL schemas into clean TypeScript types, facilitating safe write/read transactions with Supabase. |
+| **Supabase (PostgreSQL)** | Houses saved audit reports, company sizes, tool listings, captured sales leads, and unique anonymized nanoid slug indexes. |
 
 ## 🏗️ High-Level Flow
 

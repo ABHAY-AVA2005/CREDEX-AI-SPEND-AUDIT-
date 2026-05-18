@@ -30,7 +30,7 @@ Below are the exact checkpoints available in your repository. Use these identifi
 
 | Checkpoint Name / Type | Commit SHA | Description | Created Date / Status |
 | :--- | :--- | :--- | :--- |
-| **Tag:** `v2-cfo-robust-stable` <br> *Current Production HEAD* | `c953ed73b91e146a1d166ad4aea363f160df51ac` | Robust CFO 3-sentence summary, client-side fallback component, and Vitest suite | 2026-05-18 16:15 (IST) - **ACTIVE** |
+| **Tag:** `v2-cfo-robust-stable` <br> *Current Production HEAD* | `42d4b4e60de56247ebe65aad9afeb3df15c3ec3e` | Robust CFO 3-sentence summary, client-side fallback component, Vitest suite, and complete comprehensive tech stack docs | 2026-05-18 16:15 (IST) - **ACTIVE** |
 | **Tag:** `v2-elite-stable` | `77214305539bbc3fc401cead4d555519e3ad98e4` | Modern polished v2 Release with animations, scroll fixes, and marketplace removals | 2026-05-17 20:30 (IST) |
 | **Tag:** `pre-upgrade-v2` <br> *also: `checkpoint-v2`, `checkpoint-2026-05-17`* | `2cd8bea1487d264247ab5039e4007de56f857411` | Standard stable checkpoint following original v1 | 2026-05-17 16:05 (IST) |
 | **Branch:** `backup-before-upgrade-v2` | `2cd8bea1487d264247ab5039e4007de56f857411` | Lightweight backup branch bookmarking stable state | 2026-05-17 16:05 (IST) |
