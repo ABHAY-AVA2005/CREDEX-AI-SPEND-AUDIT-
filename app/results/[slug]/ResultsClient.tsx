@@ -772,7 +772,26 @@ export default function ResultsClient({
                 Executive Audit Summary
               </h2>
               <div className="text-lg text-muted-foreground space-y-6 leading-relaxed relative z-10">
-                {result.aiSummary.split('\n').map((para, i) => <p key={i} className="first-letter:text-4xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">{para}</p>)}
+                {(result.aiSummary || "").trim() ? (
+                  result.aiSummary.split('\n').map((para, i) => (
+                    <p key={i} className="first-letter:text-4xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
+                      {para}
+                    </p>
+                  ))
+                ) : (
+                  <div className="space-y-4">
+                    <p className="first-letter:text-4xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
+                      Our deterministic audit has completed a comprehensive analysis of {result.companyName}&apos;s active SaaS stack. 
+                      The engine identified a verified path to reduce your monthly AI operational expenditure from <strong>${result.totalCurrentSpend.toLocaleString()}/mo</strong> to <strong>${result.totalOptimizedSpend.toLocaleString()}/mo</strong>.
+                    </p>
+                    <p>
+                      This immediate correction recovers <strong>${result.monthlySavings.toLocaleString()}/mo</strong> (representing a forecasted annualized bottom-line saving of <strong>${result.annualSavings.toLocaleString()}/yr</strong>){result.revenueEnrichment ? `, reclaiming ${result.revenueEnrichment.savingsAsMrrPercent}% of MRR and ${result.revenueEnrichment.annualSavingsAsArrPercent}% of ARR` : ""}.
+                    </p>
+                    <p>
+                      To capture this capital recovery without delaying team momentum, we recommend immediately right-sizing your enterprise license allocations, consolidating overlapping developer environments, and implementing commitment-based tier contract optimizations.
+                    </p>
+                  </div>
+                )}
               </div>
               
               <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-6 bg-secondary/20 -mx-10 -mb-10 p-10">
