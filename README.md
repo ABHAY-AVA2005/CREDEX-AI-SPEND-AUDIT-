@@ -160,6 +160,43 @@ An ordered list of actionable tool cards (re-sorted live by the Sliders Weight T
 
 ---
 
+## ✨ Above & Beyond: Advanced Features Implemented (CFO v2 Elite)
+
+To make Fluxora a complete, professional, and investor-grade B2B fintech product, we designed and built several premium features that go far beyond standard MVP specifications:
+
+### 1. Interactive 4-Vector Client-Side Weights Tuner
+* **The Control:** Surfaces pre-calculated presets (*Balanced*, *Maximise Savings*, *Capability First*, *Protect Team Flow*) alongside live sliders adjusting priorities for **Cost Savings**, **Migration Safety**, **Capability Upgrades**, and **Team Velocity**.
+* **Zero-Latency Re-Sort:** Works completely on the client-side using `applyWeightsAndRank` from `core/recommendation-weights`. It normalizes user weights (0 to 10) to sum to 1.0, scores every tool recommendation, and re-ranks the cards instantly with **0 database queries or API roundtrips**.
+
+### 2. CFO Revenue-Aware ROI Calculator Core
+* **The Math:** Ingests optional MRR, ARR, growth rates, and runway to compute high-level indicators like **AI Spend as % of MRR**, **Savings as % of MRR**, and a stage-weighted **Burn Efficiency Score** mapped to SaaS peer medians.
+* **Migration Friction Integration:** Factors in a standard transition friction cost ($300 per tool, representing 2 hours of engineer time at $150/h) to display the **Payback Period (Months to break even)** and **Annualized ROI** for each replacement card.
+
+### 3. Frictionless Zero-Friction Preprocessing & Transforms
+* **Transforms:** In `schemas/audit-v2.ts`, MRR/ARR inputs are automatically sanitized from empty strings into `undefined` to prevent validation errors.
+* **Auto-Scaling:** An active transform auto-calculates ARR if only MRR is filled ($ARR = MRR \times 12$), and vice-versa, minimizing form attrition.
+
+### 4. Trackpad Swipe & Scroll Protection (`components/ScrollFix.tsx`)
+* **The Fix:** Implements a passive global scroll wheel event interceptor. When a user focuses a numeric stack input and begins scrolling the page, the hook intercepts the wheel event and immediately calls `.blur()` on the input. This prevents annoying accidental mouse wheel/trackpad value adjustments during page navigation.
+
+### 5. Inbound Concierge Consultation Router (`app/consultation/page.tsx`)
+* **The Funnel:** A high-conversion consultation page featuring dynamic visual radio select cards that route queries by reason for contact (*General*, *Link Insertion*, *Want to Buy the Site*), offering an elite consultation intake.
+
+### 6. Living Ambient Grid Canvas & High-End visual Polish
+* **The Wow-Factor:** Features desaturated thin 0.5px radial structural grids, top-pulsing layouts, and drifting high-contrast Framer Motion neon blobs paired with floating interactive background particles.
+* **Backdrop Stack Layering:** Resolves Safari/Webkit backdrop-filter bugs by grouping background stacks in `z-0` wrappers and explicitly raising foreground panels to `relative z-10`.
+
+### 7. CFO Hardening (Full Marketplace De-integration)
+* **Institutional Trust:** Completely removed all secondary reseller redirects (`credex.rocks`) and links. The rules engine, Gemini prompts, and notification systems are tuned 100% for self-contained software right-sizing, contract negotiation, and commitment planning to ensure zero conflict of interest.
+
+### 8. Dynamic Venture Peer Cohorts (±5 Emp Range)
+* **Contextual Benchmarking:** Beyond a simple stage average, it filters and displays actual tech peer companies (e.g. *Dub.co, Resend, Loops, Clerk, Cal.com, PostHog, Vercel*) matching the startup's workforce size within a tight $\pm 5$ employee window.
+
+### 9. Multi-Format Tabular Exporter
+* **CSV Exporter:** Added a client-side exporter that structures and downloads all recommendations, action categories, plan targets, and exact logic trace equations into a perfectly escaped CSV spreadsheet directly from the dashboard.
+
+---
+
 ## 🛠️ The Detailed Tech Stack Breakdown
 
 Every single technology inside Fluxora is selected to enforce B2B CFO-grade security, mathematical determinism, and ultra-high-fidelity premium user interfaces:

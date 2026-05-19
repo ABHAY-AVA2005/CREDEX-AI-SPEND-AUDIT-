@@ -10,6 +10,128 @@
 import { AuditFormInput, AuditResult, AuditRecommendation } from "@/schemas/audit";
 import { KNOWN_TOOLS } from "./knowledge";
 
+interface EvaluationResult {
+  action: AuditRecommendation["action"];
+  newCost: number;
+  suggestedTool?: string;
+  suggestedPlan?: string;
+  suggestedCostPerSeat?: number;
+  suggestedTotalCost?: number;
+  reasoning: string;
+}
+
+/**
+ * Checks deterministic rules sequentially and returns the optimized configuration.
+ * Using helper functions and guard clauses avoids nested if-else structures.
+ */
+function evaluateTool(
+  tool: AuditFormInput["tools"][0],
+  allTools: AuditFormInput["tools"],
+  currentRecommendations: AuditRecommendation[]
+): EvaluationResult {
+  const toolNameLower = tool.toolName.toLowerCase();
+  const useCasesLower = tool.useCases.map(u => u.toLowerCase());
+  const currentCost = tool.monthlySpend;
+
+  // Rule 1: Redundancy / Consolidation (Jasper / Copy.ai)
+  if (toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) {
+    const hasClaude = allTools.some(t => t.toolName.toLowerCase().includes("claude"));
+    if (hasClaude) {
+      return {
+        action: "CONSOLIDATE",
+        newCost: 0,
+        suggestedTotalCost: 0,
+        reasoning: `You already have Claude. Paying for ${tool.toolName} is basically lighting money on fire.`
+      };
+    }
+    const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
+    const costPerSeat = rec?.costPerSeat ?? 17;
+    return {
+      action: "REPLACE",
+      suggestedTool: "Claude",
+      suggestedPlan: "Pro",
+      suggestedCostPerSeat: costPerSeat,
+      newCost: costPerSeat * tool.seats,
+      suggestedTotalCost: costPerSeat * tool.seats,
+      reasoning: `Claude 3.5 Sonnet is just better and cheaper than legacy writing wrappers.`
+    };
+  }
+
+  // Rule 2: Cursor vs. Copilot (Coding tool consolidation)
+  if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
+    const hasCursor = allTools.some(t => t.toolName.toLowerCase().includes("cursor"));
+    const alreadyRecommendedCursor = currentRecommendations.some(r => r.suggestedTool === "Cursor");
+    if (hasCursor || alreadyRecommendedCursor) {
+      return {
+        action: "CONSOLIDATE",
+        newCost: 0,
+        suggestedTotalCost: 0,
+        reasoning: `Cursor natively includes Claude 3.5 and specialized coding models. Keeping ${tool.toolName} is redundant.`
+      };
+    }
+    const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
+    const costPerSeat = rec?.costPerSeat ?? 20;
+    return {
+      action: "REPLACE",
+      suggestedTool: "Cursor",
+      suggestedPlan: "Pro",
+      suggestedCostPerSeat: costPerSeat,
+      newCost: costPerSeat * tool.seats,
+      suggestedTotalCost: costPerSeat * tool.seats,
+      reasoning: `Cursor is the gold standard right now. It replaces Copilot and separate ChatGPT coding subs.`
+    };
+  }
+
+  // Rule 3: API Gateway vs. Seats (Ryan Das Insight)
+  if (tool.seats >= 10 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
+    const planLower = tool.currentPlan.toLowerCase();
+    if (planLower.includes("plus") || planLower.includes("pro") || planLower.includes("team")) {
+      return {
+        action: "REPLACE",
+        suggestedTool: "API Gateway (TypingMind)",
+        suggestedPlan: "Team / API based (BYOK)",
+        newCost: currentCost * 0.4, // 60% savings
+        suggestedTotalCost: currentCost * 0.4,
+        reasoning: `For teams of ${tool.seats}+, paying per-seat for consumer-grade AI is inefficient. An API Gateway with BYOK saves ~60% and provides better management.`
+      };
+    }
+  }
+
+  // Extra Check: Consolidate standalone Claude if they have Cursor
+  if (toolNameLower.includes("claude")) {
+    const hasCursor = allTools.some(t => t.toolName.toLowerCase().includes("cursor")) ||
+                      currentRecommendations.some(r => r.suggestedTool === "Cursor");
+    if (hasCursor) {
+      return {
+        action: "CONSOLIDATE",
+        newCost: 0,
+        suggestedTotalCost: 0,
+        reasoning: "You are using Cursor, which already provides access to Claude 3.5 Sonnet. This standalone subscription is redundant."
+      };
+    }
+  }
+
+  // Rule 4: The Enterprise Commitment Plan
+  if (toolNameLower.includes("openai") || toolNameLower.includes("aws") || toolNameLower.includes("anthropic")) {
+    const discountFactor = 0.20;
+    return {
+      action: "REPLACE",
+      suggestedTool: `${tool.toolName} (via Commitment Optimization)`,
+      suggestedPlan: "Annual Commitment",
+      newCost: currentCost * (1 - discountFactor),
+      suggestedTotalCost: currentCost * (1 - discountFactor),
+      reasoning: `We can negotiate a 20% discount on your ${tool.toolName} contract by switching to enterprise commitment tiers.`
+    };
+  }
+
+  // Fallback
+  return {
+    action: "KEEP",
+    newCost: currentCost,
+    reasoning: "Tool is well-priced and necessary for your current workflow."
+  };
+}
+
 export function runAuditEngine(input: AuditFormInput): AuditResult {
   let totalCurrentSpend = 0;
   let totalOptimizedSpend = 0;
@@ -43,98 +165,8 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     const currentCost = tool.monthlySpend;
     totalCurrentSpend += currentCost;
 
-    let action: AuditRecommendation["action"] = "KEEP";
-    let newCost = currentCost;
-    let suggestedTool: string | undefined = undefined;
-    let suggestedPlan: string | undefined = undefined;
-    let suggestedCostPerSeat: number | undefined = undefined;
-    let suggestedTotalCost: number | undefined = undefined;
-    let reasoning = "Tool is well-priced and necessary for your current workflow.";
-
-    const toolNameLower = tool.toolName.toLowerCase();
-    const useCasesLower = tool.useCases.map(u => u.toLowerCase());
-
-    // Rule 1: Redundancy / Consolidation (Rami Insight)
-    if (toolNameLower.includes("jasper") || toolNameLower.includes("copy.ai")) {
-      const hasClaude = input.tools.some(t => t.toolName.toLowerCase().includes("claude"));
-      if (hasClaude) {
-        action = "CONSOLIDATE";
-        newCost = 0;
-        suggestedTotalCost = 0;
-        reasoning = `You already have Claude. Paying for ${tool.toolName} is basically lighting money on fire.`;
-      } else {
-        const rec = KNOWN_TOOLS.find(t => t.name === "Claude" && t.plan === "Pro");
-        action = "REPLACE";
-        suggestedTool = "Claude";
-        suggestedPlan = "Pro";
-        suggestedCostPerSeat = rec?.costPerSeat ?? 17;
-        newCost = suggestedCostPerSeat * tool.seats;
-        suggestedTotalCost = newCost;
-        reasoning = `Claude 3.5 Sonnet is just better and cheaper than legacy writing wrappers.`;
-      }
-    }
-
-    // Rule 2: Cursor vs. Copilot (Coding tool consolidation)
-    else if (toolNameLower.includes("copilot") || (toolNameLower.includes("chatgpt") && useCasesLower.includes("coding"))) {
-      const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor"));
-      // Also check if we already recommended Cursor in this run
-      const alreadyRecommendedCursor = recommendations.some(r => r.suggestedTool === "Cursor");
-
-      if (hasCursor || alreadyRecommendedCursor) {
-        action = "CONSOLIDATE";
-        newCost = 0;
-        suggestedTotalCost = 0;
-        reasoning = `Cursor natively includes Claude 3.5 and specialized coding models. Keeping ${tool.toolName} is redundant.`;
-      } else {
-        const rec = KNOWN_TOOLS.find(t => t.name === "Cursor" && t.plan === "Pro");
-        action = "REPLACE";
-        suggestedTool = "Cursor";
-        suggestedPlan = "Pro";
-        suggestedCostPerSeat = rec?.costPerSeat ?? 20;
-        newCost = suggestedCostPerSeat * tool.seats;
-        suggestedTotalCost = newCost;
-        reasoning = `Cursor is the gold standard right now. It replaces Copilot and separate ChatGPT coding subs.`;
-      }
-    }
-
-    // Rule 3: API Gateway vs. Seats (Ryan Das Insight)
-    else if (tool.seats >= 10 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
-      // Check if they are on a Pro/Plus plan (consumer)
-      if (tool.currentPlan.toLowerCase().includes("plus") || tool.currentPlan.toLowerCase().includes("pro") || tool.currentPlan.toLowerCase().includes("team")) {
-        action = "REPLACE";
-        suggestedTool = "API Gateway (TypingMind)";
-        suggestedPlan = "Team / API based (BYOK)";
-        newCost = currentCost * 0.4; // 60% savings
-        suggestedTotalCost = newCost;
-        reasoning = `For teams of ${tool.seats}+, paying per-seat for consumer-grade AI is inefficient. An API Gateway with BYOK saves ~60% and provides better management.`;
-      }
-    }
-    
-    // Extra Check: Consolidate standalone Claude if they have Cursor
-    else if (toolNameLower.includes("claude")) {
-      const hasCursor = input.tools.some(t => t.toolName.toLowerCase().includes("cursor")) || 
-                        recommendations.some(r => r.suggestedTool === "Cursor");
-      if (hasCursor) {
-        action = "CONSOLIDATE";
-        newCost = 0;
-        suggestedTotalCost = 0;
-        reasoning = "You are using Cursor, which already provides access to Claude 3.5 Sonnet. This standalone subscription is redundant.";
-      }
-    }
-
-    // Rule 4: The Enterprise Commitment Plan
-    else if (toolNameLower.includes("openai") || toolNameLower.includes("aws") || toolNameLower.includes("anthropic")) {
-      const discountFactor = 0.20;
-      action = "REPLACE";
-      suggestedTool = `${tool.toolName} (via Commitment Optimization)`;
-      suggestedPlan = "Annual Commitment";
-      newCost = currentCost * (1 - discountFactor);
-      suggestedTotalCost = newCost;
-      reasoning = `We can negotiate a 20% discount on your ${tool.toolName} contract by switching to enterprise commitment tiers.`;
-    }
-
-    const savings = currentCost - newCost;
-    totalOptimizedSpend += newCost;
+    const evaluation = evaluateTool(tool, input.tools, recommendations);
+    totalOptimizedSpend += evaluation.newCost;
 
     recommendations.push({
       originalTool: tool.toolName,
@@ -142,14 +174,14 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
       originalSeats: tool.seats,
       originalTokens: tool.tokens,
       originalMonthlyCost: currentCost,
-      action,
-      suggestedTool,
-      suggestedPlan,
-      suggestedCostPerSeat,
-      suggestedTotalCost,
-      savings,
-      newCost,
-      reasoning
+      action: evaluation.action,
+      suggestedTool: evaluation.suggestedTool,
+      suggestedPlan: evaluation.suggestedPlan,
+      suggestedCostPerSeat: evaluation.suggestedCostPerSeat,
+      suggestedTotalCost: evaluation.suggestedTotalCost,
+      savings: currentCost - evaluation.newCost,
+      newCost: evaluation.newCost,
+      reasoning: evaluation.reasoning
     });
   });
 
@@ -157,10 +189,14 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
   const spendPerEmp = totalCurrentSpend / (input.companySize || 1);
   const stageBenchmark = 150; // Standardized benchmark for 2026 AI Intensity
   
-  let status: "EXCELLENT" | "GOOD" | "OVERSPENDING" | "CRITICAL" = "GOOD";
-  if (spendPerEmp > stageBenchmark * 1.5) status = "CRITICAL";
-  else if (spendPerEmp > stageBenchmark) status = "OVERSPENDING";
-  else if (spendPerEmp < stageBenchmark * 0.5) status = "EXCELLENT";
+  const status: "EXCELLENT" | "GOOD" | "OVERSPENDING" | "CRITICAL" =
+    spendPerEmp > stageBenchmark * 1.5
+      ? "CRITICAL"
+      : spendPerEmp > stageBenchmark
+        ? "OVERSPENDING"
+        : spendPerEmp < stageBenchmark * 0.5
+          ? "EXCELLENT"
+          : "GOOD";
 
   const percentile = Math.min(99, Math.max(1, Math.round((1 - (spendPerEmp / (stageBenchmark * 2))) * 100)));
 
