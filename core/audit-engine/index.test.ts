@@ -69,7 +69,7 @@ describe('Audit Engine', () => {
     expect(result.recommendations[1].newCost).toBe(0);
   });
 
-  test('Rule 3: Recommends API gateway for >=10 seats on consumer plans', () => {
+  test('Rule 3: Recommends secure enterprise plan for >=10 seats on consumer plans', () => {
     const input = {
       companyName: 'Test',
       companySize: '10-50' as const,
@@ -84,8 +84,8 @@ describe('Audit Engine', () => {
     };
     const result = runAuditEngine(input as any);
     expect(result.recommendations[0].action).toBe('REPLACE');
-    expect(result.recommendations[0].suggestedPlan).toContain('Team / API');
-    expect(result.recommendations[0].newCost).toBeLessThan(400); // Should be ~60% savings
+    expect(result.recommendations[0].suggestedPlan).toContain('Enterprise Plan / BAA Contract');
+    expect(result.recommendations[0].newCost).toBeLessThan(400); // Should be ~30% savings (400 * 0.7 = 280)
   });
 
   test('Keeps tools that do not match rules and calculates totals correctly', () => {

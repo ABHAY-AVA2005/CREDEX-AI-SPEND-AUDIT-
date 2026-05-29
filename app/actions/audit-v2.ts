@@ -49,6 +49,12 @@ export async function processAuditActionV2(
   // 2. Deterministic audit engine (unchanged — no hallucination)
   const baseResult = runAuditEngine(input);
 
+  // 2b. Dynamic database cohort benchmarking
+  const spendPerEmp = baseResult.totalCurrentSpend / (input.companySize || 1);
+  const { calculateRealCohortPercentile } = await import("@/lib/benchmarks");
+  const groundedBenchmark = await calculateRealCohortPercentile(input.companySize, spendPerEmp);
+  baseResult.benchmarkComparison = groundedBenchmark;
+
   // 3. Revenue enrichment (optional)
   let revenueEnrichment: AuditResultV2["revenueEnrichment"] | undefined;
   if (

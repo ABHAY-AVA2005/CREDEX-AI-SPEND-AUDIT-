@@ -16,7 +16,7 @@ import { ProcessedAuditResultV2 } from "@/app/actions/audit-v2";
 import WeightsTuner from "@/components/audit/WeightsTuner";
 import RevenueInsightCard from "@/components/results/RevenueInsightCard";
 import { applyWeightsAndRank } from "@/core/recommendation-weights";
-import type { RecommendationWeights } from "@/core/recommendation-weights";
+import { getTransitionSecurityImpact } from "@/lib/compliance";
 
 
 
@@ -27,6 +27,9 @@ function ToolIcon({ name }: { name: string }) {
 
 function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: number }) {
   const isReplace = rec.action === "REPLACE" || rec.action === "DOWNGRADE" || rec.action === "CONSOLIDATE";
+  const securityDelta = rec.suggestedTool 
+    ? getTransitionSecurityImpact(rec.originalTool, rec.suggestedTool)
+    : null;
 
   return (
     <motion.div
@@ -144,6 +147,38 @@ function RecommendationCard({ rec, index }: { rec: AuditRecommendation; index: n
                       </li>
                     </ul>
                   </div>
+
+                  {/* Security & Compliance Trade-Off Matrix */}
+                  {securityDelta && (securityDelta.lost.length > 0 || securityDelta.gained.length > 0) && (
+                    <div className="bg-background/50 rounded-xl p-4 border border-white/5">
+                      <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest mb-3 flex items-center justify-between">
+                        <span className="flex items-center gap-2">
+                          <Shield className="w-3 h-3 text-primary" /> CFO Security Compliance Delta
+                        </span>
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                          securityDelta.riskRating === "HIGH" ? "bg-red-500/10 text-red-400 border border-red-500/20" :
+                          securityDelta.riskRating === "MEDIUM" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
+                          "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        }`}>
+                          Risk: {securityDelta.riskRating}
+                        </span>
+                      </h4>
+                      <div className="space-y-2">
+                        {securityDelta.lost.length > 0 && (
+                          <div className="text-[11px] text-red-400/90 leading-tight">
+                            <span className="font-bold">⚠️ Lost Controls: </span>
+                            {securityDelta.lost.join(", ")}
+                          </div>
+                        )}
+                        {securityDelta.gained.length > 0 && (
+                          <div className="text-[11px] text-emerald-400/90 leading-tight">
+                            <span className="font-bold">🛡️ Gained Controls: </span>
+                            {securityDelta.gained.join(", ")}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
