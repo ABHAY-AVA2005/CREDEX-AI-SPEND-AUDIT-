@@ -31,12 +31,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AuditFormSchemaV2, AuditFormInputV2 } from "@/schemas/audit-v2";
 import { processAuditActionV2 } from "@/app/actions/audit-v2";
 import RevenueContextStep from "./RevenueContextStep";
-import { 
-  discoverPlaidTransactions,
-  discoverRampTransactions,
-  discoverIdentityProvisioning,
-  buildDiscoveredStack
-} from "@/lib/integrations";
+import { buildDiscoveredStack } from "@/lib/integrations";
 
 // We store the draft in localStorage so founders don't lose their 
 // progress if they accidentally close the tab while looking up pricing.
@@ -62,6 +57,36 @@ export default function AuditForm() {
   const [rampTx, setRampTx] = useState<any[]>([]);
   const [directoryUsers, setDirectoryUsers] = useState<any[]>([]);
 
+  // Interactive OAuth Modal States
+  const [activeModal, setActiveModal] = useState<"PLAID" | "RAMP" | "SSO" | null>(null);
+  
+  // Custom sandbox/mock inputs for premium realism
+  const [plaidBank, setPlaidBank] = useState("SVB (Silicon Valley Bank)");
+  const [rampToken, setRampToken] = useState("ramp_live_oauth_token_...");
+  const [ssoProvider, setSsoProvider] = useState("Google Workspace");
+
+  // Custom sandbox items that the user can edit/toggle inside the modal!
+  const [plaidItems, setPlaidItems] = useState([
+    { name: "GitHub Copilot", amount: 190, checked: true },
+    { name: "Claude", amount: 200, checked: true },
+    { name: "OpenAI API", amount: 4500, checked: true },
+    { name: "Cursor", amount: 300, checked: true },
+    { name: "Copy.ai", amount: 40, checked: true },
+  ]);
+
+  const [rampItems, setRampItems] = useState([
+    { name: "GitHub Copilot", amount: 190, checked: true },
+    { name: "Cursor", amount: 300, checked: true },
+    { name: "Copy.ai", amount: 40, checked: true },
+    { name: "OpenAI API", amount: 5000, checked: true },
+  ]);
+
+  const [ssoItems, setSsoItems] = useState([
+    { name: "Cursor", seats: 3, checked: true },
+    { name: "GitHub Copilot", seats: 3, checked: true },
+    { name: "Copy.ai", seats: 1, checked: true },
+  ]);
+
   const [discoveryStats, setDiscoveryStats] = useState<{
     transactionsCount: number;
     seatsVerified: number;
@@ -74,12 +99,22 @@ export default function AuditForm() {
       setPlaidTx([]);
       return;
     }
+    setActiveModal("PLAID");
+  };
+
+  const handleAuthorizePlaid = async () => {
     setConnectingPlaid(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     try {
-      const tx = await discoverPlaidTransactions("mock-token");
+      const activeItems = plaidItems.filter(i => i.checked);
+      const tx = activeItems.map(i => ({
+        date: "2026-05-29",
+        amount: i.amount,
+        merchantName: i.name
+      }));
       setPlaidTx(tx);
       setPlaidConnected(true);
+      setActiveModal(null);
     } catch (err) {
       console.error(err);
       alert("Failed to connect to Plaid. Sandbox is offline.");
@@ -94,12 +129,23 @@ export default function AuditForm() {
       setRampTx([]);
       return;
     }
+    setActiveModal("RAMP");
+  };
+
+  const handleAuthorizeRamp = async () => {
     setConnectingRamp(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     try {
-      const tx = await discoverRampTransactions("mock-token");
+      const activeItems = rampItems.filter(i => i.checked);
+      const tx = activeItems.map((i, index) => ({
+        transactionId: `tx_custom_${index}`,
+        amount: i.amount,
+        merchantName: i.name,
+        recurring: true
+      }));
       setRampTx(tx);
       setRampConnected(true);
+      setActiveModal(null);
     } catch (err) {
       console.error(err);
       alert("Failed to sync Ramp card items.");
@@ -114,12 +160,27 @@ export default function AuditForm() {
       setDirectoryUsers([]);
       return;
     }
+    setActiveModal("SSO");
+  };
+
+  const handleAuthorizeGoogle = async () => {
     setConnectingGoogle(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     try {
-      const users = await discoverIdentityProvisioning("mock-token");
-      setDirectoryUsers(users);
+      const activeItems = ssoItems.filter(i => i.checked);
+      const directory: any[] = [];
+      activeItems.forEach(item => {
+        for (let s = 1; s <= item.seats; s++) {
+          directory.push({
+            userEmail: `dev${s}@company.com`,
+            appName: item.name,
+            lastActiveDaysAgo: s * 2
+          });
+        }
+      });
+      setDirectoryUsers(directory);
       setGoogleConnected(true);
+      setActiveModal(null);
     } catch (err) {
       console.error(err);
       alert("Google Workspace connection rejected: permission denied.");
@@ -719,6 +780,317 @@ export default function AuditForm() {
           </button>
         </section>
       </form>
+
+      {/* ── Interactive Integration OAuth Modals ── */}
+      {activeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <motion.div 
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-md bg-card/95 border-2 border-primary/30 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden text-left max-h-[90vh] overflow-y-auto"
+          >
+            {/* Decorative Matrix Grid */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:14px_14px] pointer-events-none" />
+
+            {activeModal === "PLAID" && (
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-center gap-3 border-b border-border/80 pb-4">
+                  <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400">
+                    <Layers className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-foreground">Secure Plaid Link</h3>
+                    <p className="text-xs text-muted-foreground">Read-Only Financial Ingestion</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">Select Your Bank</label>
+                    <select 
+                      value={plaidBank} 
+                      onChange={e => setPlaidBank(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                    >
+                      <option>SVB (Silicon Valley Bank)</option>
+                      <option>Brex Bank</option>
+                      <option>J.P. Morgan Chase</option>
+                      <option>Mercury</option>
+                      <option>First Republic Bank</option>
+                    </select>
+                  </div>
+
+                  {/* CUSTOM TRANSACTION EDITOR */}
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground">Customize Sandbox Ingestion</label>
+                    <div className="bg-secondary/40 border border-border rounded-xl p-3 space-y-2">
+                      {plaidItems.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between gap-3 text-xs">
+                          <label className="flex items-center gap-2 cursor-pointer font-bold text-foreground">
+                            <input 
+                              type="checkbox" 
+                              checked={item.checked} 
+                              onChange={e => {
+                                const newItems = [...plaidItems];
+                                newItems[idx].checked = e.target.checked;
+                                setPlaidItems(newItems);
+                              }}
+                              className="rounded border-border text-accent focus:ring-accent bg-background"
+                            />
+                            {item.name}
+                          </label>
+                          <div className="relative w-24">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-[10px]">$</span>
+                            <input 
+                              type="number" 
+                              value={item.amount}
+                              onChange={e => {
+                                const newItems = [...plaidItems];
+                                newItems[idx].amount = parseFloat(e.target.value) || 0;
+                                setPlaidItems(newItems);
+                              }}
+                              className="w-full p-1.5 pl-6 rounded border border-border bg-background text-foreground text-right text-xs focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 flex items-start gap-2.5">
+                  <Lock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-muted-foreground leading-normal">
+                    This sandbox connection uses simulated read-only credentials. No live funds are accessed. Ingested data is fully encrypted.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="flex-1 py-3 border border-border rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary text-muted-foreground transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAuthorizePlaid}
+                    disabled={connectingPlaid}
+                    className="flex-1 py-3 bg-accent text-accent-foreground rounded-xl text-xs font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-accent/20"
+                  >
+                    {connectingPlaid ? (
+                      <>
+                        <Loader2 className="w-4.5 h-4.5 animate-spin" /> Ingesting...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-4 h-4" /> Link Bank
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeModal === "RAMP" && (
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-center gap-3 border-b border-border/80 pb-4">
+                  <div className="p-2.5 bg-violet-500/10 border border-violet-500/30 rounded-xl text-violet-400">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-foreground">Sync Card Ingestion</h3>
+                    <p className="text-xs text-muted-foreground">Ramp & Brex Spend Webhooks</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">Corporate Card Token</label>
+                    <input 
+                      type="text" 
+                      value={rampToken}
+                      onChange={e => setRampToken(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  {/* CUSTOM RAMP EDITOR */}
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground">Customize Sandbox Ingestion</label>
+                    <div className="bg-secondary/40 border border-border rounded-xl p-3 space-y-2">
+                      {rampItems.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between gap-3 text-xs">
+                          <label className="flex items-center gap-2 cursor-pointer font-bold text-foreground">
+                            <input 
+                              type="checkbox" 
+                              checked={item.checked} 
+                              onChange={e => {
+                                const newItems = [...rampItems];
+                                newItems[idx].checked = e.target.checked;
+                                setRampItems(newItems);
+                              }}
+                              className="rounded border-border text-accent focus:ring-accent bg-background"
+                            />
+                            {item.name}
+                          </label>
+                          <div className="relative w-24">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-[10px]">$</span>
+                            <input 
+                              type="number" 
+                              value={item.amount}
+                              onChange={e => {
+                                const newItems = [...rampItems];
+                                newItems[idx].amount = parseFloat(e.target.value) || 0;
+                                setRampItems(newItems);
+                              }}
+                              className="w-full p-1.5 pl-6 rounded border border-border bg-background text-foreground text-right text-xs focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 flex items-start gap-2.5">
+                  <Lock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-muted-foreground leading-normal">
+                    Secure link via Ramp Developer Portal webhook APIs. Standard read-only OAuth credentials.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="flex-1 py-3 border border-border rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary text-muted-foreground transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAuthorizeRamp}
+                    disabled={connectingRamp}
+                    className="flex-1 py-3 bg-accent text-accent-foreground rounded-xl text-xs font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-accent/20"
+                  >
+                    {connectingRamp ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" /> Ingesting...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-4 h-4" /> Sync Card Spend
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeModal === "SSO" && (
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-center gap-3 border-b border-border/80 pb-4">
+                  <div className="p-2.5 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-400">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-foreground">SSO Directory Sync</h3>
+                    <p className="text-xs text-muted-foreground">Google Workspace & Okta</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">SSO Provider</label>
+                    <select 
+                      value={ssoProvider} 
+                      onChange={e => setSsoProvider(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                    >
+                      <option>Google Workspace</option>
+                      <option>Okta Enterprise</option>
+                      <option>Microsoft Entra ID (Azure AD)</option>
+                    </select>
+                  </div>
+
+                  {/* CUSTOM SSO SEAT EDITOR */}
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-muted-foreground">Customize Sandbox Directory</label>
+                    <div className="bg-secondary/40 border border-border rounded-xl p-3 space-y-2">
+                      {ssoItems.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between gap-3 text-xs">
+                          <label className="flex items-center gap-2 cursor-pointer font-bold text-foreground">
+                            <input 
+                              type="checkbox" 
+                              checked={item.checked} 
+                              onChange={e => {
+                                const newItems = [...ssoItems];
+                                newItems[idx].checked = e.target.checked;
+                                setSsoItems(newItems);
+                              }}
+                              className="rounded border-border text-accent focus:ring-accent bg-background"
+                            />
+                            {item.name}
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <input 
+                              type="number" 
+                              value={item.seats}
+                              onChange={e => {
+                                const newItems = [...ssoItems];
+                                newItems[idx].seats = parseInt(e.target.value) || 0;
+                                setSsoItems(newItems);
+                              }}
+                              className="w-16 p-1.5 rounded border border-border bg-background text-foreground text-right text-xs focus:outline-none"
+                            />
+                            <span className="text-[10px] text-muted-foreground font-bold uppercase">Seats</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 flex items-start gap-2.5">
+                  <Lock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-muted-foreground leading-normal">
+                    Binds via Workspace Admin SDK scopes to map employee directories and identify inactive/abandoned accounts.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="flex-1 py-3 border border-border rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary text-muted-foreground transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAuthorizeGoogle}
+                    disabled={connectingGoogle}
+                    className="flex-1 py-3 bg-accent text-accent-foreground rounded-xl text-xs font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-accent/20"
+                  >
+                    {connectingGoogle ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" /> Syncing...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-4 h-4" /> Authorize SSO
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
