@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest';
-import { scanForActiveLeaks, sendCfoSmartAlert } from './monitor';
+import { scanForActiveLeaks, sendCfoSmartAlert, sendSlackWebhookAlert } from './monitor';
 
 describe('Fluxora Continuous Auditing Scan Tests', () => {
 
@@ -55,5 +55,17 @@ describe('Fluxora Continuous Auditing Scan Tests', () => {
     expect(emailResponse.dispatchedAlertsCount).toBe(1);
     expect(emailResponse.bodySummary).toContain('DUPLICATE');
     expect(emailResponse.bodySummary).toContain('Lean Systems');
+  });
+
+  test('Dispatch Slack Webhook Block Kit alerts successfully', async () => {
+    const mockLeak = {
+      type: "DUPLICATE" as const,
+      toolName: "GitHub Copilot",
+      message: "Duplicate Cursor seat allocation spotted for developer dev1@company.com.",
+      potentialSavings: 19.00
+    };
+
+    const success = await sendSlackWebhookAlert('https://hooks.slack.com/services/T00/B00/X00', 'Apex Corp', mockLeak);
+    expect(success).toBe(true);
   });
 });

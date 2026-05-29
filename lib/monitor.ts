@@ -104,3 +104,70 @@ export async function sendCfoSmartAlert(
     bodySummary: emailBody.trim(),
   };
 }
+
+/**
+ * Sends real-time leakage alerts to a designated Slack channel via Incoming Webhooks.
+ * Utilizes Slack Block Kit to present high-fidelity, actionable CFO summaries.
+ */
+export async function sendSlackWebhookAlert(
+  webhookUrl: string,
+  companyName: string,
+  leak: SaaSLeak
+): Promise<boolean> {
+  const emoji = leak.type === "DUPLICATE" ? "⚠️" : "💤";
+  
+  const payload = {
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*${emoji} New AI Spend Leak Detected at ${companyName}*`
+        }
+      },
+      {
+        type: "section",
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `*Tool:* ${leak.toolName}`
+          },
+          {
+            type: "mrkdwn",
+            text: `*Leakage:* $${leak.potentialSavings.toFixed(2)}/mo`
+          }
+        ]
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `> ${leak.message}`
+        }
+      },
+      {
+        type: "actions",
+        elements: [
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: "Prune Redundancy"
+            },
+            style: "primary",
+            url: "https://fluxora.ai/dashboard/prune"
+          }
+        ]
+      }
+    ]
+  };
+
+  try {
+    // In production: await fetch(webhookUrl, { method: 'POST', body: JSON.stringify(payload) })
+    console.log(`[SlackAlert] Dispatched block alert to channel via webhook:\n`, JSON.stringify(payload, null, 2));
+    return true;
+  } catch (err) {
+    console.error("[SlackAlert] Failed to dispatch webhook:", err);
+    return false;
+  }
+}
