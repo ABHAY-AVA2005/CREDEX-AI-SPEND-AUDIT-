@@ -321,6 +321,31 @@ export default function AuditForm() {
     }
   };
 
+  const getDiscoveryFeedbackMessage = () => {
+    const sources = [];
+    if (plaidConnected) sources.push("Plaid Ledger");
+    if (rampConnected) sources.push("Ramp Cards");
+    if (googleConnected) sources.push("SSO Directory");
+    
+    if (sources.length === 0) {
+      return "No automated ingestion sources linked yet.";
+    }
+    
+    if (sources.length === 1) {
+      if (plaidConnected) {
+        return "Parsed your Plaid ledger transactions and mapped them to the unified pricing catalog.";
+      }
+      if (rampConnected) {
+        return "Ingested and parsed corporate card spend telemetry from Ramp & Brex cards.";
+      }
+      if (googleConnected) {
+        return "Reconciled active seat licenses directly from your SSO user directory.";
+      }
+    }
+    
+    return `Synthesized and mapped telemetry from active sources: ${sources.join(" + ")}.`;
+  };
+
   if (!isClient) return null;
 
   return (
@@ -518,7 +543,7 @@ export default function AuditForm() {
                 </div>
                 <div>
                   <h4 className="font-black text-sm text-foreground">Discovery Pipeline Synced</h4>
-                  <p className="text-xs text-muted-foreground">We parsed your ledger transactions and mapped them to the unified pricing catalog.</p>
+                  <p className="text-xs text-muted-foreground">{getDiscoveryFeedbackMessage()}</p>
                 </div>
               </div>
               <div className="flex gap-4 sm:gap-6 text-right">
