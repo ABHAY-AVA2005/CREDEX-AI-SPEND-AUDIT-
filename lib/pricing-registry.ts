@@ -1,5 +1,5 @@
 import { getPrismaClient } from "./prisma";
-import { ALL_KNOWN_TOOLS, KnownTool } from "@/core/audit-engine/knowledge";
+import { ALL_KNOWN_TOOLS, KnownTool } from "../core/audit-engine/knowledge";
 
 /**
  * Production-grade Pricing Registry Manager.
