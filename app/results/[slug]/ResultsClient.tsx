@@ -15,7 +15,7 @@ import { ProcessedAuditResult } from "@/app/actions/audit";
 import { ProcessedAuditResultV2 } from "@/app/actions/audit-v2";
 import WeightsTuner from "@/components/audit/WeightsTuner";
 import RevenueInsightCard from "@/components/results/RevenueInsightCard";
-import { applyWeightsAndRank } from "@/core/recommendation-weights";
+import { applyWeightsAndRank, RecommendationWeights } from "@/core/recommendation-weights";
 import { getTransitionSecurityImpact } from "@/lib/compliance";
 
 

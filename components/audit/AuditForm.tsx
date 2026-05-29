@@ -128,48 +128,7 @@ export default function AuditForm() {
     }
   };
 
-  // Dynamic stack builder auto-filler
-  useEffect(() => {
-    const combinedTx = [
-      ...plaidTx.map(t => ({ merchantName: t.merchantName, amount: t.amount })),
-      ...rampTx.map(t => ({ merchantName: t.merchantName, amount: t.amount }))
-    ];
-    
-    if (combinedTx.length > 0 || directoryUsers.length > 0) {
-      const discovered = buildDiscoveredStack(combinedTx, directoryUsers);
-      
-      if (discovered.length > 0) {
-        const toolsInput = discovered.map(d => ({
-          toolName: d.toolName,
-          currentPlan: d.currentPlan,
-          seats: d.seats,
-          tokens: d.tokens,
-          monthlySpend: d.monthlySpend,
-          type: d.type,
-          useCases: d.useCases
-        }));
-        
-        form.setValue("tools", toolsInput);
-        
-        if (directoryUsers.length > 0) {
-          form.setValue("companyName", "Acme Corp");
-          form.setValue("companySize", 18);
-          form.setValue("industry", "Fintech SaaS");
-        }
-        
-        const totalMonthly = discovered.reduce((acc, t) => acc + t.monthlySpend, 0);
-        const totalSeats = discovered.reduce((acc, t) => acc + t.seats, 0);
-        setDiscoveryStats({
-          transactionsCount: combinedTx.length,
-          seatsVerified: totalSeats,
-          estimatedMonthlySpend: totalMonthly
-        });
-      }
-    } else {
-      setDiscoveryStats(null);
-    }
-  }, [plaidTx, rampTx, directoryUsers, form]);
-  
+
   // Dynamically build TOOL_CONFIG based on our unified tool registry
   const TOOL_CONFIG = React.useMemo(() => {
     const config: Record<string, string[]> = {};
@@ -211,6 +170,48 @@ export default function AuditForm() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Dynamic stack builder auto-filler
+  useEffect(() => {
+    const combinedTx = [
+      ...plaidTx.map(t => ({ merchantName: t.merchantName, amount: t.amount })),
+      ...rampTx.map(t => ({ merchantName: t.merchantName, amount: t.amount }))
+    ];
+    
+    if (combinedTx.length > 0 || directoryUsers.length > 0) {
+      const discovered = buildDiscoveredStack(combinedTx, directoryUsers);
+      
+      if (discovered.length > 0) {
+        const toolsInput = discovered.map(d => ({
+          toolName: d.toolName,
+          currentPlan: d.currentPlan,
+          seats: d.seats,
+          tokens: d.tokens,
+          monthlySpend: d.monthlySpend,
+          type: d.type,
+          useCases: d.useCases
+        }));
+        
+        form.setValue("tools", toolsInput);
+        
+        if (directoryUsers.length > 0) {
+          form.setValue("companyName", "Acme Corp");
+          form.setValue("companySize", 18);
+          form.setValue("industry", "Fintech SaaS");
+        }
+        
+        const totalMonthly = discovered.reduce((acc, t) => acc + t.monthlySpend, 0);
+        const totalSeats = discovered.reduce((acc, t) => acc + t.seats, 0);
+        setDiscoveryStats({
+          transactionsCount: combinedTx.length,
+          seatsVerified: totalSeats,
+          estimatedMonthlySpend: totalMonthly
+        });
+      }
+    } else {
+      setDiscoveryStats(null);
+    }
+  }, [plaidTx, rampTx, directoryUsers, form]);
 
   // Anti-spam honeypot. Keep it simple and effective.
   const [honeypot, setHoneypot] = useState("");
