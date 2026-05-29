@@ -28,8 +28,39 @@ export async function generateAuditSummaryV2(
     return fallback;
   }
 
+  const prompt = result.monthlySavings <= 0
+    ? `
+    System Prompt:
+    You are an elite B2B SaaS CFO and financial auditor. Your writing is highly authoritative, analytical, and direct.
+    Your task is to write an executive summary based ONLY on the verified JSON data below.
+    
+    STRICT CONSTRAINTS:
+    1. Write EXACTLY THREE (3) sentences. No more, no less.
+    2. Actively avoid run-on sentences. Keep each sentence punchy and high-impact.
+    3. Do NOT invent, extrapolate, round, or alter any numbers. Use the verified values verbatim.
+    4. Focus entirely on capital efficiency, operational ROI, and benchmark excellence.
+    
+    Verified Financial JSON Ingestion:
+    {
+      "companyName": "${companyName}",
+      "totalCurrentSpend": ${result.totalCurrentSpend},
+      "totalOptimizedSpend": ${result.totalOptimizedSpend},
+      "monthlySavings": ${result.monthlySavings},
+      "annualSavings": ${result.annualSavings},
+      "aiSpendAsMrrPercent": ${revenueEnrichment ? revenueEnrichment.aiSpendAsMrrPercent : null},
+      "burnEfficiencyScore": ${revenueEnrichment ? revenueEnrichment.burnEfficiencyScore : null},
+      "percentileRank": ${result.benchmarkComparison?.percentile ?? null},
+      "benchmarkStatus": "${result.benchmarkComparison?.status ?? "EXCELLENT"}",
+      "redundancies": ${JSON.stringify(result.redundancyWarnings)},
+      "recommendedActions": ${JSON.stringify(result.recommendations.map(r => `${r.action} ${r.originalTool}`))}
+    }
 
-  const prompt = `
+    Instruction for sentences:
+    Sentence 1: Commend the company's exceptional AI spend discipline, confirming that their monthly AI expenditure is fully optimized at $${result.totalCurrentSpend}/mo with $0/mo in wasteful redundancy.
+    Sentence 2: Highlight their highly efficient benchmark ranking in the ${result.benchmarkComparison?.percentile ?? "top"}th percentile (${result.benchmarkComparison?.status ?? "EXCELLENT"})${revenueEnrichment ? `, indicating stellar burn efficiency (score: ${revenueEnrichment.burnEfficiencyScore}) with AI spend accounting for just ${revenueEnrichment.aiSpendAsMrrPercent}% of MRR` : ""}.
+    Sentence 3: Issue a CFO directive to maintain this lean allocation model and establish regular usage checks to sustain this high operational baseline as operations scale.
+  `
+  : `
     System Prompt:
     You are an elite B2B SaaS CFO and financial auditor. Your writing is highly authoritative, analytical, and direct.
     Your task is to write an executive summary based ONLY on the verified JSON data below.
@@ -84,6 +115,17 @@ function buildFallback(
   result: AuditResult,
   rev?: AuditResultV2["revenueEnrichment"]
 ): string {
+  if (result.monthlySavings <= 0) {
+    const revLine = rev
+      ? `, representing a highly efficient ${rev.aiSpendAsMrrPercent}% of MRR`
+      : "";
+    return (
+      `Our deterministic engine has audited ${companyName}'s SaaS stack and confirmed that your AI spend is fully optimized at $${result.totalCurrentSpend.toLocaleString()}/mo, leaving $0/mo in wasteful redundancy${revLine}. ` +
+      `No overlapping seat licenses or duplicate subscriptions were identified. ` +
+      `We recommend maintaining your current lean software allocation to preserve this excellent operational efficiency.`
+    );
+  }
+
   const revLine = rev
     ? `, reclaiming ${rev.savingsAsMrrPercent}% of MRR and ${rev.annualSavingsAsArrPercent}% of ARR`
     : "";
