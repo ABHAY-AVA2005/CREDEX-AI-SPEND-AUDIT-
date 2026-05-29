@@ -5,8 +5,6 @@
  * duplicate accounts, or abandoned software licenses.
  */
 
-import { buildDiscoveredStack, DiscoveredTool } from "./integrations";
-
 export interface SaaSLeak {
   type: "DUPLICATE" | "ABANDONED" | "PRICE_SPIKE";
   toolName: string;
@@ -24,7 +22,7 @@ export async function scanForActiveLeaks(
   directory: Array<{ userEmail: string; appName: string; lastActiveDaysAgo: number }>
 ): Promise<SaaSLeak[]> {
   const leaks: SaaSLeak[] = [];
-  const discoveredTools = buildDiscoveredStack(transactions, directory);
+  // Active leakage checks
 
   // Heuristic 1: Spot Duplicate Licenses (Devs with both Cursor & GitHub Copilot)
   const cursorUserEmails = directory

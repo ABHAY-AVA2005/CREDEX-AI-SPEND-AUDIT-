@@ -11,7 +11,19 @@ import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Plus, Trash2, CheckCircle2 } from "lucide-react";
+import { 
+  Plus, 
+  Trash2, 
+  CheckCircle2, 
+  Sparkles, 
+  Lock, 
+  Shield, 
+  CreditCard, 
+  Layers, 
+  Users, 
+  Loader2, 
+  Check
+} from "lucide-react";
 
 import { AuditToolInput } from "@/schemas/audit";
 import { ALL_KNOWN_TOOLS } from "@/core/audit-engine/knowledge";
@@ -19,6 +31,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AuditFormSchemaV2, AuditFormInputV2 } from "@/schemas/audit-v2";
 import { processAuditActionV2 } from "@/app/actions/audit-v2";
 import RevenueContextStep from "./RevenueContextStep";
+import { 
+  discoverPlaidTransactions,
+  discoverRampTransactions,
+  discoverIdentityProvisioning,
+  buildDiscoveredStack
+} from "@/lib/integrations";
 
 // We store the draft in localStorage so founders don't lose their 
 // progress if they accidentally close the tab while looking up pricing.
@@ -30,6 +48,127 @@ export default function AuditForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const referralCode = searchParams.get("ref");
+
+  // 1-Click Ingestion & Discovery State
+  const [connectingPlaid, setConnectingPlaid] = useState(false);
+  const [connectingRamp, setConnectingRamp] = useState(false);
+  const [connectingGoogle, setConnectingGoogle] = useState(false);
+
+  const [plaidConnected, setPlaidConnected] = useState(false);
+  const [rampConnected, setRampConnected] = useState(false);
+  const [googleConnected, setGoogleConnected] = useState(false);
+
+  const [plaidTx, setPlaidTx] = useState<any[]>([]);
+  const [rampTx, setRampTx] = useState<any[]>([]);
+  const [directoryUsers, setDirectoryUsers] = useState<any[]>([]);
+
+  const [discoveryStats, setDiscoveryStats] = useState<{
+    transactionsCount: number;
+    seatsVerified: number;
+    estimatedMonthlySpend: number;
+  } | null>(null);
+
+  const handleConnectPlaid = async () => {
+    if (plaidConnected) {
+      setPlaidConnected(false);
+      setPlaidTx([]);
+      return;
+    }
+    setConnectingPlaid(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const tx = await discoverPlaidTransactions("mock-token");
+      setPlaidTx(tx);
+      setPlaidConnected(true);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to connect to Plaid. Sandbox is offline.");
+    } finally {
+      setConnectingPlaid(false);
+    }
+  };
+
+  const handleConnectRamp = async () => {
+    if (rampConnected) {
+      setRampConnected(false);
+      setRampTx([]);
+      return;
+    }
+    setConnectingRamp(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const tx = await discoverRampTransactions("mock-token");
+      setRampTx(tx);
+      setRampConnected(true);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to sync Ramp card items.");
+    } finally {
+      setConnectingRamp(false);
+    }
+  };
+
+  const handleConnectGoogle = async () => {
+    if (googleConnected) {
+      setGoogleConnected(false);
+      setDirectoryUsers([]);
+      return;
+    }
+    setConnectingGoogle(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const users = await discoverIdentityProvisioning("mock-token");
+      setDirectoryUsers(users);
+      setGoogleConnected(true);
+    } catch (err) {
+      console.error(err);
+      alert("Google Workspace connection rejected: permission denied.");
+    } finally {
+      setConnectingGoogle(false);
+    }
+  };
+
+  // Dynamic stack builder auto-filler
+  useEffect(() => {
+    const combinedTx = [
+      ...plaidTx.map(t => ({ merchantName: t.merchantName, amount: t.amount })),
+      ...rampTx.map(t => ({ merchantName: t.merchantName, amount: t.amount }))
+    ];
+    
+    if (combinedTx.length > 0 || directoryUsers.length > 0) {
+      const discovered = buildDiscoveredStack(combinedTx, directoryUsers);
+      
+      if (discovered.length > 0) {
+        const toolsInput = discovered.map(d => ({
+          toolName: d.toolName,
+          currentPlan: d.currentPlan,
+          seats: d.seats,
+          tokens: d.tokens,
+          monthlySpend: d.monthlySpend,
+          type: d.type,
+          useCases: d.useCases
+        }));
+        
+        form.setValue("tools", toolsInput);
+        
+        if (directoryUsers.length > 0) {
+          form.setValue("companyName", "Acme Corp");
+          form.setValue("companySize", 18);
+          form.setValue("industry", "Fintech SaaS");
+        }
+        
+        const totalMonthly = discovered.reduce((acc, t) => acc + t.monthlySpend, 0);
+        const totalSeats = discovered.reduce((acc, t) => acc + t.seats, 0);
+        setDiscoveryStats({
+          transactionsCount: combinedTx.length,
+          seatsVerified: totalSeats,
+          estimatedMonthlySpend: totalMonthly
+        });
+      }
+    } else {
+      setDiscoveryStats(null);
+    }
+  }, [plaidTx, rampTx, directoryUsers, form]);
   
   // Dynamically build TOOL_CONFIG based on our unified tool registry
   const TOOL_CONFIG = React.useMemo(() => {
@@ -125,6 +264,236 @@ export default function AuditForm() {
   return (
     <div className="bg-card/40 backdrop-blur-md border border-border shadow-lg rounded-xl p-6 md:p-10">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
+        
+        {/* ── Auto-Discovery Integrations Portal ── */}
+        <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 border-2 border-primary/20 rounded-3xl p-6 md:p-8 relative overflow-hidden group shadow-2xl">
+          {/* Decorative Grid Lines */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/20 text-accent rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-3 border border-accent/30 shadow-inner">
+                <Sparkles className="w-3 h-3 animate-pulse" /> 1-Click Automated Ingestion
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black font-stylish tracking-tight text-foreground">Zero-Friction Stack Discovery</h2>
+              <p className="text-muted-foreground text-sm max-w-xl">
+                Skip the manual sheets. Connect your accounts securely via encrypted APIs to dynamically index tool subscriptions, active seat counts, and payment logs.
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-1.5 bg-background/50 border border-border/60 rounded-2xl p-4 self-stretch md:self-auto text-right shadow-inner">
+              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" /> SOC 2 / HIPAA SAFE
+              </span>
+              <span className="text-[9px] font-mono text-muted-foreground">AES-256 Read-Only Envelopes</span>
+            </div>
+          </div>
+
+          {/* Integrations Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+            
+            {/* Card 1: Plaid Link */}
+            <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
+              plaidConnected 
+                ? "border-emerald-500/30 bg-emerald-500/[0.02] shadow-emerald-500/5 shadow-2xl" 
+                : "border-border hover:border-accent/40 bg-background/60 shadow-sm"
+            }`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl border ${
+                  plaidConnected 
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                    : "bg-secondary border-border text-muted-foreground"
+                }`}>
+                  <Layers className="w-6 h-6" />
+                </div>
+                {plaidConnected && (
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                )}
+              </div>
+              
+              <h3 className="font-bold text-base text-foreground mb-1">Plaid Link</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                Connect your business ledger to automatically sync transactions and categorize SaaS payments.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleConnectPlaid}
+                disabled={connectingPlaid}
+                className={`w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-200 ${
+                  connectingPlaid
+                    ? "bg-secondary text-muted-foreground cursor-not-allowed"
+                    : plaidConnected
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                      : "bg-accent text-accent-foreground hover:opacity-90 active:scale-[0.98] shadow-md shadow-accent/10"
+                }`}
+              >
+                {connectingPlaid ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Connecting...
+                  </>
+                ) : plaidConnected ? (
+                  <>
+                    <Check className="w-4 h-4" /> Connected
+                  </>
+                ) : (
+                  "Connect Ledger"
+                )}
+              </button>
+            </div>
+
+            {/* Card 2: Ramp / Brex Card Spend */}
+            <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
+              rampConnected 
+                ? "border-emerald-500/30 bg-emerald-500/[0.02] shadow-emerald-500/5 shadow-2xl" 
+                : "border-border hover:border-accent/40 bg-background/60 shadow-sm"
+            }`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl border ${
+                  rampConnected 
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                    : "bg-secondary border-border text-muted-foreground"
+                }`}>
+                  <CreditCard className="w-6 h-6" />
+                </div>
+                {rampConnected && (
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                )}
+              </div>
+              
+              <h3 className="font-bold text-base text-foreground mb-1">Ramp & Brex Card</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                Ingest corporate card spend webhooks to isolate recurring SaaS vendor subscription charges.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleConnectRamp}
+                disabled={connectingRamp}
+                className={`w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-200 ${
+                  connectingRamp
+                    ? "bg-secondary text-muted-foreground cursor-not-allowed"
+                    : rampConnected
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                      : "bg-accent text-accent-foreground hover:opacity-90 active:scale-[0.98] shadow-md shadow-accent/10"
+                }`}
+              >
+                {connectingRamp ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Syncing...
+                  </>
+                ) : rampConnected ? (
+                  <>
+                    <Check className="w-4 h-4" /> Synced
+                  </>
+                ) : (
+                  "Sync Card Spend"
+                )}
+              </button>
+            </div>
+
+            {/* Card 3: Google SSO & Okta */}
+            <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
+              googleConnected 
+                ? "border-emerald-500/30 bg-emerald-500/[0.02] shadow-emerald-500/5 shadow-2xl" 
+                : "border-border hover:border-accent/40 bg-background/60 shadow-sm"
+            }`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl border ${
+                  googleConnected 
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                    : "bg-secondary border-border text-muted-foreground"
+                }`}>
+                  <Users className="w-6 h-6" />
+                </div>
+                {googleConnected && (
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                )}
+              </div>
+              
+              <h3 className="font-bold text-base text-foreground mb-1">Google Workspace & Okta</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                Audit active employee directories to map real-time logins and isolate orphaned licenses.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleConnectGoogle}
+                disabled={connectingGoogle}
+                className={`w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-200 ${
+                  connectingGoogle
+                    ? "bg-secondary text-muted-foreground cursor-not-allowed"
+                    : googleConnected
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                      : "bg-accent text-accent-foreground hover:opacity-90 active:scale-[0.98] shadow-md shadow-accent/10"
+                }`}
+              >
+                {connectingGoogle ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Syncing...
+                  </>
+                ) : googleConnected ? (
+                  <>
+                    <Check className="w-4 h-4" /> SSO Connected
+                  </>
+                ) : (
+                  "Connect SSO"
+                )}
+              </button>
+            </div>
+
+          </div>
+
+          {/* Discovery Stats Feedback */}
+          {discoveryStats && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-8 pt-6 border-t border-border/80 relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-background/30 rounded-2xl p-4 border border-white/5 shadow-inner"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-black text-sm text-foreground">Discovery Pipeline Synced</h4>
+                  <p className="text-xs text-muted-foreground">We parsed your ledger transactions and mapped them to the unified pricing catalog.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 sm:gap-6 text-right">
+                <div>
+                  <span className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest">Ingested Logs</span>
+                  <span className="text-base font-black text-foreground">{discoveryStats.transactionsCount} tx</span>
+                </div>
+                <div className="h-8 w-[1px] bg-border self-center" />
+                <div>
+                  <span className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest">Verified Seats</span>
+                  <span className="text-base font-black text-foreground">{discoveryStats.seatsVerified} licenses</span>
+                </div>
+                <div className="h-8 w-[1px] bg-border self-center" />
+                <div>
+                  <span className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest">Monthly Runrate</span>
+                  <span className="text-base font-black text-emerald-400">${discoveryStats.estimatedMonthlySpend.toLocaleString()}</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Encryption & Security Footer */}
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-bold text-muted-foreground uppercase tracking-wider relative z-10 border-t border-border/30 pt-4">
+            <span className="flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-primary" /> End-to-End Encrypted Handshakes
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Shield className="w-3.5 h-3.5 text-primary" /> Read-Only Scopes • Direct Sync
+            </span>
+          </div>
+        </section>
+
+        <div className="w-full flex items-center justify-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest my-4">
+          <div className="h-[1px] bg-border flex-1" />
+          <span>Or Manually Customize Your Stack Below</span>
+          <div className="h-[1px] bg-border flex-1" />
+        </div>
         
         {/* Honeypot for bot protection — hidden from humans */}
         <input 

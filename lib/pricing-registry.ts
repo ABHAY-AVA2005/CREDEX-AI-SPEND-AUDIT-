@@ -1,5 +1,5 @@
 import { getPrismaClient } from "./prisma";
-import { ALL_KNOWN_TOOLS, KnownTool } from "../core/audit-engine/knowledge";
+import { ALL_KNOWN_TOOLS, KnownTool, Capability } from "../core/audit-engine/knowledge";
 
 /**
  * Production-grade Pricing Registry Manager.
@@ -24,7 +24,7 @@ export async function getLivePricingRegistry(): Promise<KnownTool[]> {
       name: t.toolName,
       plan: t.planName,
       costPerSeat: t.costPerSeat,
-      capabilities: t.capabilities as any,
+      capabilities: t.capabilities as Capability[],
       isEnterprise: t.isEnterprise
     }));
   } catch (err) {

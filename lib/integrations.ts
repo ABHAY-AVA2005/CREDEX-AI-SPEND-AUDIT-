@@ -26,9 +26,7 @@ export interface DiscoveryReport {
  * Syncs bank transaction logs and auto-categorizes payments to known SaaS providers.
  */
 export async function discoverPlaidTransactions(
-  accessToken: string,
-  startDate: string,
-  endDate: string
+  accessToken: string
 ): Promise<Array<{ date: string; amount: number; merchantName: string }>> {
   // In production, this would call the Plaid client: client.transactionsGet({ access_token, start_date, end_date })
   // For sandbox and staging, we provide a robust mock parser that identifies SaaS transaction patterns

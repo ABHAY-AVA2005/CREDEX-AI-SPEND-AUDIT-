@@ -8,14 +8,14 @@ import {
 describe('Fluxora Ingestion Discovery Pipeline', () => {
 
   test('Sync Plaid ledger discoveries and map transactions', async () => {
-    const transactions = await discoverPlaidTransactions('access-token-sandbox', '2026-05-01', '2026-05-30');
+    const transactions = await discoverPlaidTransactions('access-token-sandbox');
     expect(transactions.length).toBeGreaterThan(0);
     expect(transactions[0].merchantName).toContain('Github');
     expect(transactions[0].amount).toBe(190.00);
   });
 
   test('Reject invalid tokens gracefully in Plaid & Okta sync', async () => {
-    await expect(discoverPlaidTransactions('mock-error', '2026-05-01', '2026-05-30'))
+    await expect(discoverPlaidTransactions('mock-error'))
       .rejects.toThrow('Plaid OAuth connection failed');
 
     await expect(discoverIdentityProvisioning('mock-error'))

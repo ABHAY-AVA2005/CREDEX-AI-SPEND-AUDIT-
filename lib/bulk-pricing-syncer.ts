@@ -79,7 +79,15 @@ export async function syncAllRegistryPricing(): Promise<BulkSyncReport> {
         .replace(/```$/, "")
         .trim() || "[]";
 
-      const parsedPlans: any[] = JSON.parse(cleanJsonText);
+      interface ScrapedBulkPlan {
+        toolName: string;
+        planName: string;
+        costPerSeat?: number;
+        capabilities?: string[];
+        isEnterprise?: boolean;
+      }
+
+      const parsedPlans: ScrapedBulkPlan[] = JSON.parse(cleanJsonText);
 
       if (Array.isArray(parsedPlans) && parsedPlans.length > 0) {
         for (const plan of parsedPlans) {
@@ -106,9 +114,10 @@ export async function syncAllRegistryPricing(): Promise<BulkSyncReport> {
       logs
     };
 
-  } catch (err: any) {
-    console.error("[BulkSync] Critical error during bulk pricing sync:", err);
-    logs.push(`Critical Sync Error: ${err.message || "Unknown error"}`);
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error("[BulkSync] Critical error during bulk pricing sync:", error);
+    logs.push(`Critical Sync Error: ${error.message || "Unknown error"}`);
     return {
       success: false,
       totalSynced: totalSyncedCount,
