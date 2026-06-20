@@ -8,8 +8,7 @@
  */
 
 import { AuditFormInput, AuditResult, AuditRecommendation } from "@/schemas/audit";
-import { KNOWN_TOOLS, ALL_KNOWN_TOOLS } from "./knowledge";
-import { resolveFuzzyToolName } from "../../lib/fuzzy-matching";
+import { KNOWN_TOOLS } from "./knowledge";
 
 interface EvaluationResult {
   action: AuditRecommendation["action"];
@@ -83,17 +82,17 @@ function evaluateTool(
     };
   }
 
-  // Rule 3: Enterprise SSO & Privacy Consolidation vs. Scattered Consumer Seats (Hardened Security)
+  // Rule 3: API Gateway vs. Seats (Ryan Das Insight)
   if (tool.seats >= 10 && (toolNameLower.includes("chatgpt") || toolNameLower.includes("claude"))) {
     const planLower = tool.currentPlan.toLowerCase();
     if (planLower.includes("plus") || planLower.includes("pro") || planLower.includes("team")) {
       return {
         action: "REPLACE",
-        suggestedTool: `${tool.toolName} Enterprise / Azure OpenAI (SSO Enforced)`,
-        suggestedPlan: "Enterprise Plan / BAA Contract",
-        newCost: currentCost * 0.7, // 30% savings + full SOC 2 security compliance
-        suggestedTotalCost: currentCost * 0.7,
-        reasoning: `For teams of ${tool.seats}+, running scattered consumer Plus/Pro seats is a compliance leak. We recommend consolidating to an Enterprise tier or Azure OpenAI. This enforces SAML SSO, secures SOC 2 Type II compliance, signs a HIPAA BAA, and guarantees zero-data retention (ZDR) on corporate inputs while capturing a ~30% volume discount.`
+        suggestedTool: "API Gateway (TypingMind)",
+        suggestedPlan: "Team / API based (BYOK)",
+        newCost: currentCost * 0.4, // 60% savings
+        suggestedTotalCost: currentCost * 0.4,
+        reasoning: `For teams of ${tool.seats}+, paying per-seat for consumer-grade AI is inefficient. An API Gateway with BYOK saves ~60% and provides better management.`
       };
     }
   }
@@ -141,17 +140,8 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
 
   const toolCategories: Record<string, string[]> = {};
 
-  const knownToolNames = Array.from(new Set(ALL_KNOWN_TOOLS.map(t => t.name)));
-  const cleanedTools = input.tools.map(tool => {
-    const fuzzyName = resolveFuzzyToolName(tool.toolName, knownToolNames);
-    return {
-      ...tool,
-      toolName: fuzzyName
-    };
-  });
-
   // Pre-pass: Identify tool categories and basic redundancies
-  cleanedTools.forEach(tool => {
+  input.tools.forEach(tool => {
     const name = tool.toolName.toLowerCase();
     const categories = [];
     if (name.includes("cursor") || name.includes("copilot")) categories.push("CODE");
@@ -171,11 +161,11 @@ export function runAuditEngine(input: AuditFormInput): AuditResult {
     }
   });
 
-  cleanedTools.forEach((tool) => {
+  input.tools.forEach((tool) => {
     const currentCost = tool.monthlySpend;
     totalCurrentSpend += currentCost;
 
-    const evaluation = evaluateTool(tool, cleanedTools, recommendations);
+    const evaluation = evaluateTool(tool, input.tools, recommendations);
     totalOptimizedSpend += evaluation.newCost;
 
     recommendations.push({
